@@ -1,5 +1,6 @@
 package uk.ac.standrews.cs.storage.implementations.filesystem;
 
+import org.apache.commons.io.FileUtils;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
@@ -108,10 +109,20 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
     public void remove(String name) throws BindingAbsentException {
         java.io.File candidate = new java.io.File(realFile, name);
         if (!candidate.exists()) {
-            throw new BindingAbsentException("file " + name + " not present");
+            throw new BindingAbsentException("File/directory " + name + " not present");
         }
 
-        candidate.delete(); // Ignore result - nothing to do with it.
+        try {
+            if (candidate.isDirectory()) {
+                FileUtils.deleteDirectory(candidate);
+            } else {
+                candidate.delete(); // Ignore result - nothing to do with it.
+            }
+        } catch (IOException e) {
+            throw new BindingAbsentException("Unable to delete file/directory " + name);
+        }
+
+
     }
 
     @Override

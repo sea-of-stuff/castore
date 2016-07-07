@@ -41,12 +41,12 @@ public class AWSStorageImmutableTest {
 
     @Test
     public void createFile() throws PersistenceException, IOException {
-        File file = storage.createFile(storage.getTestDirectory(), "test-immutable.txt", TEST_DATA);
+        File file = storage.createFile(storage.getRoot(), "test-immutable.txt", TEST_DATA);
         file.persist();
 
         long lastModified = file.lastModified();
 
-        File cloneFile = storage.createFile(storage.getTestDirectory(), "test-immutable.txt", TEST_DATA);
+        File cloneFile = storage.createFile(storage.getRoot(), "test-immutable.txt", TEST_DATA);
         cloneFile.persist();
         long lastModifiedClone = cloneFile.lastModified();
 

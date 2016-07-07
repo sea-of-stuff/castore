@@ -27,8 +27,7 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
         root = new FileBasedDirectory(rootDirectory);
         try {
             root.persist();
-            createSOSDirectories();
-        } catch (PersistenceException | IOException e) {
+        } catch (PersistenceException e) {
             throw new StorageException(e);
         }
         this.isImmutable = isImmutable;

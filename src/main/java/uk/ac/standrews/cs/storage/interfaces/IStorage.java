@@ -22,24 +22,6 @@ public interface IStorage {
     Directory getRoot();
 
     /**
-     * Get the directory where data is stored
-     * @return
-     */
-    Directory getDataDirectory() throws IOException;
-
-    /**
-     * Get the directory where manifests are stored
-     * @return
-     */
-    Directory getManifestDirectory() throws IOException;
-
-    /**
-     * Get a directory that can be used for any test purposes
-     * @return
-     */
-    Directory getTestDirectory() throws IOException;
-
-    /**
      * Create a directory within the specified parent and with the given name
      * @param parent
      * @param name

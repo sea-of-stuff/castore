@@ -13,14 +13,11 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
-import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStorage;
 import uk.ac.standrews.cs.storage.interfaces.Directory;
 import uk.ac.standrews.cs.storage.interfaces.File;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
-
-import java.io.IOException;
 
 /**
  * AWSStorage abstracts the AWS S3 complexity. In doing so, it is possible to use
@@ -43,32 +40,22 @@ public class AWSStorage extends CommonStorage implements IStorage {
     public AWSStorage(String bucketName, boolean isImmutable) throws StorageException {
         super(isImmutable);
 
-        try {
-            s3Client = new AmazonS3Client();
-            s3Client.setRegion(region);
-            createAndSetBucket(bucketName);
+        s3Client = new AmazonS3Client();
+        s3Client.setRegion(region);
+        createAndSetBucket(bucketName);
 
-            createRoot();
-            createSOSDirectories();
-        } catch (PersistenceException | IOException e) {
-            throw new StorageException(e);
-        }
+        createRoot();
     }
 
     public AWSStorage(String accessKeyId, String secretAccessKey, String bucketName, boolean isImmutable) throws StorageException {
         super(isImmutable);
 
-        try {
-            BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, secretAccessKey);
-            s3Client = new AmazonS3Client(awsCreds);
-            s3Client.setRegion(region);
-            createAndSetBucket(bucketName);
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, secretAccessKey);
+        s3Client = new AmazonS3Client(awsCreds);
+        s3Client.setRegion(region);
+        createAndSetBucket(bucketName);
 
-            createRoot();
-            createSOSDirectories();
-        } catch (PersistenceException | IOException e) {
-            throw new StorageException(e);
-        }
+        createRoot();
     }
 
     @Override

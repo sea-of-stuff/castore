@@ -38,7 +38,7 @@ public class StorageFactory {
                 storage = new AWSStorage(root, immutable);
                 break;
             default:
-                log.log(Level.SEVERE, "IStorage type: " + type + " is unknown. Impossible to create a storage.");
+                log.log(Level.SEVERE, "Storage type: " + type + " is unknown. Impossible to create a storage.");
                 throw new StorageException();
         }
 

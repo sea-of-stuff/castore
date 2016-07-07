@@ -26,8 +26,9 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
             this.persisted = true;
         } else {
             this.persisted = false;
-            this.data = new FileData(realFile);
         }
+
+        this.data = new FileData(realFile);
     }
 
     public FileBasedFile(Directory parent, String name, Data data, boolean isImmutable) throws IOException {
@@ -36,6 +37,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
 
         if (isImmutable && exists()) {
             this.persisted = true;
+            this.data = new FileData(realFile);
         } else {
             this.persisted = false;
             this.data = data;
