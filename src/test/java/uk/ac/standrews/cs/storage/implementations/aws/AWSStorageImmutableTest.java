@@ -39,7 +39,7 @@ public class AWSStorageImmutableTest {
         Thread.sleep(TEST_DELAY);
     }
 
-    @Test
+    @Test (enabled = false)
     public void createFile() throws PersistenceException, IOException {
         File file = storage.createFile(storage.getRoot(), "test-immutable.txt", TEST_DATA);
         file.persist();
