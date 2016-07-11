@@ -45,22 +45,22 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
 
 
     @Override
-    public Directory createDirectory(Directory parent, String name) throws IOException {
+    public Directory createDirectory(Directory parent, String name) throws StorageException {
         return new FileBasedDirectory(parent, name, isImmutable);
     }
 
     @Override
-    public Directory createDirectory(String name) throws IOException {
+    public Directory createDirectory(String name) throws StorageException {
         return new FileBasedDirectory(root, name, isImmutable);
     }
 
     @Override
-    public File createFile(Directory parent, String filename) throws IOException {
+    public File createFile(Directory parent, String filename) throws StorageException {
         return new FileBasedFile(parent, filename, isImmutable);
     }
 
     @Override
-    public File createFile(Directory parent, String filename, Data data) throws IOException {
+    public File createFile(Directory parent, String filename, Data data) throws StorageException {
         return new FileBasedFile(parent, filename, data, isImmutable);
     }
 

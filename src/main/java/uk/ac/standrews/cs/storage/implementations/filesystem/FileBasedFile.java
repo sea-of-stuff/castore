@@ -4,6 +4,7 @@ import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.FileData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.interfaces.Directory;
 import uk.ac.standrews.cs.storage.interfaces.File;
 
@@ -18,9 +19,14 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
     private Data data;
     private boolean persisted;
 
-    public FileBasedFile(Directory parent, String name, boolean isImmutable) throws IOException {
+    public FileBasedFile(Directory parent, String name, boolean isImmutable) throws StorageException {
         super(parent, name, isImmutable);
-        realFile = new java.io.File(parent.toFile(), name);
+
+        try {
+            realFile = new java.io.File(parent.toFile(), name);
+        } catch (IOException e) {
+            throw new StorageException("Unable to create file " + name, e);
+        }
 
         if (isImmutable && exists()) {
             this.persisted = true;
@@ -31,9 +37,14 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
         this.data = new FileData(realFile);
     }
 
-    public FileBasedFile(Directory parent, String name, Data data, boolean isImmutable) throws IOException {
+    public FileBasedFile(Directory parent, String name, Data data, boolean isImmutable) throws StorageException {
         super(parent, name, isImmutable);
-        realFile = new java.io.File(parent.toFile(), name);
+
+        try {
+            realFile = new java.io.File(parent.toFile(), name);
+        } catch (IOException e) {
+            throw new StorageException("Unable to create file " + name, e);
+        }
 
         if (isImmutable && exists()) {
             this.persisted = true;

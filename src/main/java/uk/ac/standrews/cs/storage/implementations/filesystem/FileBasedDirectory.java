@@ -3,9 +3,9 @@ package uk.ac.standrews.cs.storage.implementations.filesystem;
 import org.apache.commons.io.FileUtils;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
 import uk.ac.standrews.cs.storage.interfaces.Directory;
-import uk.ac.standrews.cs.storage.interfaces.File;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 
@@ -21,9 +21,14 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
 
     private static final Logger log = Logger.getLogger(FileBasedDirectory.class.getName());
 
-    public FileBasedDirectory(Directory parent, String name, boolean isImmutable) throws IOException {
+    public FileBasedDirectory(Directory parent, String name, boolean isImmutable) throws StorageException {
         super(parent, name, isImmutable);
-        realFile = new java.io.File(parent.toFile(), name);
+
+        try {
+            realFile = new java.io.File(parent.toFile(), name);
+        } catch (IOException e) {
+            throw new StorageException("Unable to create directory " + name, e);
+        }
     }
 
     public FileBasedDirectory(java.io.File directory) {
@@ -82,7 +87,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
             } else if (candidate.isDirectory()) {
                 return new FileBasedDirectory(this, name, isImmutable);
             }
-        } catch (IOException e) {
+        } catch (StorageException e) {
             throw new BindingAbsentException("Unable to get file/directory " + name + " at " + getPathname());
         }
 
@@ -93,16 +98,6 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
     public boolean contains(String name) {
         java.io.File candidate = new java.io.File(realFile, name);
         return candidate.exists();
-    }
-
-    @Override
-    public void addSOSFile(File file, String name) {
-        // Don't need to do anything since file can't be created in isolation from parent directory.
-    }
-
-    @Override
-    public void addSOSDirectory(Directory directory, String name) {
-        // Don't need to do anything since directory can't be created in isolation from parent directory.
     }
 
     @Override
@@ -121,7 +116,6 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
         } catch (IOException e) {
             throw new BindingAbsentException("Unable to delete file/directory " + name);
         }
-
 
     }
 

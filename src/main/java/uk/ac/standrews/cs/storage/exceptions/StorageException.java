@@ -17,4 +17,7 @@ public class StorageException extends Exception {
         super(throwable);
     }
 
+    public StorageException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

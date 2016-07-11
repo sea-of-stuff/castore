@@ -7,7 +7,6 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
 import uk.ac.standrews.cs.storage.interfaces.Directory;
-import uk.ac.standrews.cs.storage.interfaces.File;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 
@@ -121,16 +120,6 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
         }
     }
 
-    @Override
-    public void addSOSFile(File file, String name) {
-        // TODO
-    }
-
-    @Override
-    public void addSOSDirectory(Directory directory, String name) {
-        // TODO
-    }
-
     /**
      * Remove a file or a folder and its subfolders
      * @param name
@@ -155,16 +144,12 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
         Iterator<NameObjectBinding> iterator = new DirectoryIterator(name, true);
         while(iterator.hasNext()) {
             NameObjectBinding objectBinding = iterator.next();
-
-            try {
-                String objectToDeleteName = objectBinding.getName();
-                if (!isDirectory(objectToDeleteName)) {
-                    remove(objectToDeleteName);
-                } else {
-                    deleteObject(objectToDeleteName);
-                }
-            } catch (BindingAbsentException e) {
-                e.printStackTrace();
+            String objectToDeleteName = objectBinding.getName();
+            
+            if (!isDirectory(objectToDeleteName)) {
+                remove(objectToDeleteName);
+            } else {
+                deleteObject(objectToDeleteName);
             }
         }
     }

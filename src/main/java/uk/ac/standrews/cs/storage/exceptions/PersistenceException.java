@@ -5,7 +5,7 @@ package uk.ac.standrews.cs.storage.exceptions;
  *
  * @author graham
  */
-public class PersistenceException extends Exception {
+public class PersistenceException extends StorageException {
 
     public PersistenceException(String msg) {
         super(msg);

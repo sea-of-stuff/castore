@@ -56,7 +56,7 @@ public class AWSFile extends AWSStatefulObject implements File {
             if (e.getStatusCode() == RESOURCE_NOT_FOUND) {
                 return false;
             }
-            e.printStackTrace();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

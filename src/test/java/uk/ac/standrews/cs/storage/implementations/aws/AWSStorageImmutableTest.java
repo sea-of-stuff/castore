@@ -6,12 +6,9 @@ import org.testng.annotations.Test;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.StringData;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
-import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.interfaces.File;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
-
-import java.io.IOException;
 
 import static org.testng.Assert.assertEquals;
 
@@ -40,7 +37,7 @@ public class AWSStorageImmutableTest {
     }
 
     @Test (enabled = false)
-    public void createFile() throws PersistenceException, IOException {
+    public void createFile() throws StorageException {
         File file = storage.createFile(storage.getRoot(), "test-immutable.txt", TEST_DATA);
         file.persist();
 

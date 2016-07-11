@@ -2,17 +2,18 @@ package uk.ac.standrews.cs.storage.interfaces;
 
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
-
-import java.io.IOException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 
 /**
- * This interface allow SOS implementations to interact with different
- * types of storage implementations
  *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public interface IStorage {
 
+    /**
+     * Returns true if this storage is immutable
+     * @return
+     */
     boolean isImmutable();
 
     /**
@@ -27,24 +28,36 @@ public interface IStorage {
      * @param name
      * @return
      */
-    Directory createDirectory(Directory parent, String name) throws IOException;
+    Directory createDirectory(Directory parent, String name) throws StorageException;
 
     /**
      * Create a directory at the root of this storage with the given name
      * @param name
      * @return
      */
-    Directory createDirectory(String name) throws IOException;
+    Directory createDirectory(String name) throws StorageException;
 
     /**
-     * Create a file a the specified parent directory
+     * Create a file at the specified parent directory
      * @param parent
      * @param filename
      * @return
      */
-    File createFile(Directory parent, String filename) throws IOException;
+    File createFile(Directory parent, String filename) throws StorageException;
 
-    File createFile(Directory parent, String filename, Data data) throws IOException;
+    /**
+     * Create a file with some given data at the specified directory
+     * @param parent
+     * @param filename
+     * @param data
+     * @return
+     * @throws StorageException
+     */
+    File createFile(Directory parent, String filename, Data data) throws StorageException;
 
+    /**
+     * Destroy this storage
+     * @throws DestroyException
+     */
     void destroy() throws DestroyException;
 }

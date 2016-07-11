@@ -13,10 +13,6 @@ public interface Directory extends StatefulObject {
 
     boolean contains(String name);
 
-    void addSOSFile(File file, String name);
-
-    void addSOSDirectory(Directory directory, String name);
-
     void remove(String name) throws BindingAbsentException;
 
     /**
