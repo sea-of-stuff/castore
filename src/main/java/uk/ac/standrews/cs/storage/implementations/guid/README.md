@@ -1,0 +1,1 @@
+The guid based storage will be based on the storebased storage originally developed in the asa project
