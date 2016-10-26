@@ -14,12 +14,10 @@ public abstract class FileBasedStatefulObject implements StatefulObject {
     protected Directory logicalParent;
     protected String name;
     protected File realFile;
-    protected boolean isImmutable;
 
-    public FileBasedStatefulObject(Directory parent, String name, boolean isImmutable) {
+    public FileBasedStatefulObject(Directory parent, String name) {
         this.logicalParent = parent;
         this.name = name;
-        this.isImmutable = isImmutable;
     }
 
     public FileBasedStatefulObject() {

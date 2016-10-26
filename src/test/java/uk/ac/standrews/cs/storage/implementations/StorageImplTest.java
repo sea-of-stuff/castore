@@ -125,7 +125,7 @@ public class StorageImplTest extends StorageBaseTest {
         Iterator<NameObjectBinding> it = directory.getIterator();
         while(it.hasNext()) {
             String name = it.next().getName();
-            // System.out.println(name);
+            System.out.println(name);
             testCounter++;
         }
 
@@ -133,7 +133,7 @@ public class StorageImplTest extends StorageBaseTest {
     }
 
     @Test
-    public void folderWithFileTest() throws StorageException {
+    public void folderWithFileTest() throws StorageException, InterruptedException {
         Directory directory = storage.createDirectory(storage.getRoot(), "folder_with_file");
         storage.createFile(directory, "empty_file.txt").persist();
 
@@ -142,7 +142,7 @@ public class StorageImplTest extends StorageBaseTest {
     }
 
     @Test
-    public void emptyFolderTest() throws StorageException {
+    public void emptyFolderTest() throws StorageException, InterruptedException {
         storage.createDirectory(storage.getRoot(), "empty_folder");
 
         boolean contains = storage.getRoot().contains("empty_folder/");
@@ -150,7 +150,7 @@ public class StorageImplTest extends StorageBaseTest {
     }
 
     @Test
-    public void emptyFolderPersistedTest() throws StorageException {
+    public void emptyFolderPersistedTest() throws StorageException, InterruptedException {
         storage.createDirectory(storage.getRoot(), "empty_folder").persist();
 
         boolean contains = storage.getRoot().contains("empty_folder/");

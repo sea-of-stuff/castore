@@ -25,8 +25,7 @@ public class NetworkBasedStorage extends CommonStorage implements IStorage {
      * @param mountPoint
      * @param rootPath
      */
-    public NetworkBasedStorage(String mountPoint, String rootPath, boolean isImmutable) {
-        super(isImmutable);
+    public NetworkBasedStorage(String mountPoint, String rootPath) {
 
         if (mountPoint != null && !mountPoint.isEmpty() &&
                 rootPath != null && !rootPath.isEmpty()) {

@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.storage.implementations.aws;
+package uk.ac.standrews.cs.storage.implementations.aws.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
@@ -30,16 +30,13 @@ public abstract class AWSStatefulObject implements StatefulObject {
     protected String name;
     protected Data data;
     protected GetObjectRequest getObjectRequest;
-    protected boolean isImmutable;
-    protected boolean persisted;
 
     public AWSStatefulObject(AmazonS3 s3Client, String bucketName,
-                             Directory parent, String name, boolean isImmutable) {
+                             Directory parent, String name) {
         this.s3Client = s3Client;
         this.bucketName = bucketName;
         this.logicalParent = parent;
         this.name = name;
-        this.isImmutable = isImmutable;
 
         String objectPath = getPathname();
         getObjectRequest = new GetObjectRequest(bucketName, objectPath);
@@ -96,9 +93,6 @@ public abstract class AWSStatefulObject implements StatefulObject {
 
     @Override
     public void persist() throws PersistenceException {
-        if (isImmutable && persisted) {
-            return;
-        }
 
         try (InputStream inputStream = getInputStream()) {
 
@@ -107,9 +101,9 @@ public abstract class AWSStatefulObject implements StatefulObject {
 
             PutObjectRequest putObjectRequest =
                     new PutObjectRequest(bucketName, objectPath, inputStream, metadata);
+
             s3Client.putObject(putObjectRequest);
 
-            persisted = true;
         } catch (IOException e) {
             e.printStackTrace();
         }

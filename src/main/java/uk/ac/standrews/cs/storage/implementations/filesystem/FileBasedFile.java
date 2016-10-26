@@ -17,28 +17,21 @@ import java.io.IOException;
 public class FileBasedFile extends FileBasedStatefulObject implements File {
 
     private Data data;
-    private boolean persisted;
 
-    public FileBasedFile(Directory parent, String name, boolean isImmutable) throws StorageException {
-        super(parent, name, isImmutable);
+    public FileBasedFile(Directory parent, String name) throws StorageException {
+        super(parent, name);
 
         try {
             realFile = new java.io.File(parent.toFile(), name);
         } catch (IOException e) {
             throw new StorageException("Unable to create file " + name, e);
-        }
-
-        if (isImmutable && exists()) {
-            this.persisted = true;
-        } else {
-            this.persisted = false;
         }
 
         this.data = new FileData(realFile);
     }
 
-    public FileBasedFile(Directory parent, String name, Data data, boolean isImmutable) throws StorageException {
-        super(parent, name, isImmutable);
+    public FileBasedFile(Directory parent, String name, Data data) throws StorageException {
+        super(parent, name);
 
         try {
             realFile = new java.io.File(parent.toFile(), name);
@@ -46,14 +39,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
             throw new StorageException("Unable to create file " + name, e);
         }
 
-        if (isImmutable && exists()) {
-            this.persisted = true;
-            this.data = new FileData(realFile);
-        } else {
-            this.persisted = false;
-            this.data = data;
-        }
-
+        this.data = data;
     }
 
     @Override
@@ -63,14 +49,10 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
 
     @Override
     public void persist() throws PersistenceException {
-        if (isImmutable && persisted) {
-            return;
-        }
 
         createParentFolderIfNone();
         createFile();
         writeData();
-        persisted = true;
     }
 
     private void createParentFolderIfNone() throws PersistenceException {
@@ -86,7 +68,8 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
             }
         } else {
             try {
-                if (!realFile.createNewFile()) {
+                boolean newFileCreated = realFile.createNewFile();
+                if (!newFileCreated) {
                     throw new PersistenceException("Could not create the file at " + realFile.getAbsolutePath() + " files in dir " + toString(realFile.getParentFile().list()));
                 }
             } catch (IOException e) {
@@ -118,11 +101,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
 
     @Override
     public void setData(Data data) throws DataException {
-        if (!persisted) {
-            this.data = data;
-        } else {
-            throw new DataException("Could not set data for file " + getPathname());
-        }
+        this.data = data;
     }
 
     @Override

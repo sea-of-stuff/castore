@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.storage.implementations.aws;
+package uk.ac.standrews.cs.storage.implementations.aws.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
@@ -35,17 +35,10 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
      * @param bucketName
      * @param parent
      * @param name
-     * @param isImmutable
      */
     public AWSDirectory(AmazonS3 s3Client, String bucketName,
-                        Directory parent, String name, boolean isImmutable) {
-        super(s3Client, bucketName, parent, name, isImmutable);
-
-        if (isImmutable && exists()) {
-            this.persisted = true;
-        } else {
-            this.persisted = false;
-        }
+                        Directory parent, String name) {
+        super(s3Client, bucketName, parent, name);
     }
 
     /**
@@ -74,9 +67,9 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
         StatefulObject obj;
         if (isDirectory(name)) {
             name = name.substring(0, name.length() - 1);
-            obj = new AWSDirectory(s3Client, bucketName, this, name, isImmutable);
+            obj = new AWSDirectory(s3Client, bucketName, this, name);
         } else {
-            obj = new AWSFile(s3Client, bucketName, this, name, isImmutable);
+            obj = new AWSFile(s3Client, bucketName, this, name);
         }
 
         return obj;
@@ -267,7 +260,7 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
 
 
         private void skipThisFolder() {
-            if (!allLevels && persisted && summary.hasNext()) {
+            if (!allLevels && summary.hasNext()) {
                 summary.next();
                 allLevels = true;
             }

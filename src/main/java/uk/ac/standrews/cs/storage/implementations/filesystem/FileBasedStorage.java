@@ -19,10 +19,8 @@ import java.io.IOException;
 public class FileBasedStorage extends CommonStorage implements IStorage {
 
     private Directory root;
-    private boolean isImmutable;
 
-    public FileBasedStorage(java.io.File rootDirectory, boolean isImmutable) throws StorageException {
-        super(isImmutable);
+    public FileBasedStorage(java.io.File rootDirectory) throws StorageException {
 
         root = new FileBasedDirectory(rootDirectory);
         try {
@@ -30,12 +28,6 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
         } catch (PersistenceException e) {
             throw new StorageException(e);
         }
-        this.isImmutable = isImmutable;
-    }
-
-    @Override
-    public boolean isImmutable() {
-        return isImmutable;
     }
 
     @Override
@@ -43,25 +35,24 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
         return root;
     }
 
-
     @Override
     public Directory createDirectory(Directory parent, String name) throws StorageException {
-        return new FileBasedDirectory(parent, name, isImmutable);
+        return new FileBasedDirectory(parent, name);
     }
 
     @Override
     public Directory createDirectory(String name) throws StorageException {
-        return new FileBasedDirectory(root, name, isImmutable);
+        return new FileBasedDirectory(root, name);
     }
 
     @Override
     public File createFile(Directory parent, String filename) throws StorageException {
-        return new FileBasedFile(parent, filename, isImmutable);
+        return new FileBasedFile(parent, filename);
     }
 
     @Override
     public File createFile(Directory parent, String filename, Data data) throws StorageException {
-        return new FileBasedFile(parent, filename, data, isImmutable);
+        return new FileBasedFile(parent, filename, data);
     }
 
     @Override

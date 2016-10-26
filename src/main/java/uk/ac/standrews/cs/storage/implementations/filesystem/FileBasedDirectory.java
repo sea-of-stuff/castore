@@ -21,8 +21,8 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
 
     private static final Logger log = Logger.getLogger(FileBasedDirectory.class.getName());
 
-    public FileBasedDirectory(Directory parent, String name, boolean isImmutable) throws StorageException {
-        super(parent, name, isImmutable);
+    public FileBasedDirectory(Directory parent, String name) throws StorageException {
+        super(parent, name);
 
         try {
             realFile = new java.io.File(parent.toFile(), name);
@@ -83,9 +83,9 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
 
         try {
             if (candidate.isFile()) {
-                return new FileBasedFile(this, name, isImmutable);
+                return new FileBasedFile(this, name);
             } else if (candidate.isDirectory()) {
-                return new FileBasedDirectory(this, name, isImmutable);
+                return new FileBasedDirectory(this, name);
             }
         } catch (StorageException e) {
             throw new BindingAbsentException("Unable to get file/directory " + name + " at " + getPathname());

@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.storage.implementations.aws;
+package uk.ac.standrews.cs.storage.implementations.aws.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
@@ -17,31 +17,20 @@ import java.io.IOException;
 public class AWSFile extends AWSStatefulObject implements File {
 
     public AWSFile(AmazonS3 s3Client, String bucketName, Directory parent,
-                   String name, boolean isImmutable) {
-        super(s3Client, bucketName, parent, name, isImmutable);
+                   String name) {
+        super(s3Client, bucketName, parent, name);
 
         if (exists()) {
             retrieveData();
-
-            if (isImmutable) {
-                this.persisted = true;
-            } else {
-                this.persisted = false;
-            }
         }
 
     }
 
     public AWSFile(AmazonS3 s3Client, String bucketName, Directory parent,
-                   String name, Data data, boolean isImmutable) {
-        super(s3Client, bucketName, parent, name, isImmutable);
+                   String name, Data data) {
+        super(s3Client, bucketName, parent, name);
 
-        if (isImmutable && exists()) {
-            this.persisted = true;
-        } else {
-            this.persisted = false;
-            this.data = data;
-        }
+        this.data = data;
     }
 
     @Override
@@ -71,11 +60,7 @@ public class AWSFile extends AWSStatefulObject implements File {
 
     @Override
     public void setData(Data data) throws DataException {
-        if (!persisted) {
-            this.data = data;
-        } else {
-            throw new DataException("Could not set data for file " + getPathname());
-        }
+        this.data = data;
     }
 
     @Override

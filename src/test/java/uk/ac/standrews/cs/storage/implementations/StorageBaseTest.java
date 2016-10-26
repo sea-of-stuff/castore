@@ -5,7 +5,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
-import uk.ac.standrews.cs.storage.implementations.aws.AWSStorage;
+import uk.ac.standrews.cs.storage.implementations.aws.s3.AWSStorage;
 import uk.ac.standrews.cs.storage.implementations.filesystem.FileBasedStorage;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
 
@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.AWS;
 import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.LOCAL;
 
 /**
@@ -24,7 +25,6 @@ public abstract class StorageBaseTest {
     private static final File ROOT_TEST_DIRECTORY = new File("/tmp/storage/");
 
     private static final int TEST_DELAY = 1000; // Needed to allow any background ops
-
 
     protected abstract STORAGE_TYPE getStorageType();
     protected IStorage storage;
@@ -46,7 +46,7 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-                {LOCAL} /* Disabled , {AWS} */
+                {LOCAL, AWS}
         };
     }
 
@@ -59,9 +59,9 @@ public abstract class StorageBaseTest {
         public IStorage getStorage(STORAGE_TYPE type) throws StorageException {
             switch(type) {
                 case LOCAL:
-                    return new FileBasedStorage(ROOT_TEST_DIRECTORY, false);
+                    return new FileBasedStorage(ROOT_TEST_DIRECTORY);
                 case AWS:
-                    return new AWSStorage(AWS_S3_TEST_BUCKET, false);
+                    return new AWSStorage(AWS_S3_TEST_BUCKET);
             }
             return null;
         }

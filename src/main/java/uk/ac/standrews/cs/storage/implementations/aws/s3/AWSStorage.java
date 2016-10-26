@@ -1,7 +1,6 @@
-package uk.ac.standrews.cs.storage.implementations.aws;
+package uk.ac.standrews.cs.storage.implementations.aws.s3;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -23,7 +22,6 @@ import uk.ac.standrews.cs.storage.interfaces.IStorage;
  * AWSStorage abstracts the AWS S3 complexity. In doing so, it is possible to use
  * AWS as any normal data storage.
  *
- *
  * TODO - check if files are cached
  *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -37,8 +35,7 @@ public class AWSStorage extends CommonStorage implements IStorage {
     private String bucketName;
     private Region region = DEFAULT_REGION;
 
-    public AWSStorage(String bucketName, boolean isImmutable) throws StorageException {
-        super(isImmutable);
+    public AWSStorage(String bucketName) throws StorageException {
 
         s3Client = new AmazonS3Client();
         s3Client.setRegion(region);
@@ -47,8 +44,7 @@ public class AWSStorage extends CommonStorage implements IStorage {
         createRoot();
     }
 
-    public AWSStorage(String accessKeyId, String secretAccessKey, String bucketName, boolean isImmutable) throws StorageException {
-        super(isImmutable);
+    public AWSStorage(String accessKeyId, String secretAccessKey, String bucketName) throws StorageException {
 
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, secretAccessKey);
         s3Client = new AmazonS3Client(awsCreds);
@@ -60,22 +56,22 @@ public class AWSStorage extends CommonStorage implements IStorage {
 
     @Override
     public Directory createDirectory(Directory parent, String name) {
-        return new AWSDirectory(s3Client, bucketName, parent, name, isImmutable);
+        return new AWSDirectory(s3Client, bucketName, parent, name);
     }
 
     @Override
     public Directory createDirectory(String name) {
-        return new AWSDirectory(s3Client, bucketName, root, name, isImmutable);
+        return new AWSDirectory(s3Client, bucketName, root, name);
     }
 
     @Override
     public File createFile(Directory parent, String filename) {
-        return new AWSFile(s3Client, bucketName, parent, filename, isImmutable);
+        return new AWSFile(s3Client, bucketName, parent, filename);
     }
 
     @Override
     public File createFile(Directory parent, String filename, Data data) {
-        return new AWSFile(s3Client, bucketName, parent, filename, data, isImmutable);
+        return new AWSFile(s3Client, bucketName, parent, filename, data);
     }
 
     @Override
@@ -93,7 +89,7 @@ public class AWSStorage extends CommonStorage implements IStorage {
                     root.remove(objectSummary.getKey());
                 }
                 req.setContinuationToken(result.getNextContinuationToken());
-            } while (result.isTruncated() == true);
+            } while (result.isTruncated());
 
             s3Client.deleteBucket(bucketName);
         } catch (BindingAbsentException e) {
@@ -108,11 +104,10 @@ public class AWSStorage extends CommonStorage implements IStorage {
                 s3Client.createBucket(bucketName);
             }
             this.bucketName = bucketName;
-        } catch (AmazonServiceException ase) {
-            throw new StorageException(ase);
         } catch (AmazonClientException ace) {
             throw new StorageException(ace);
         }
+
     }
 
     private void createRoot() {

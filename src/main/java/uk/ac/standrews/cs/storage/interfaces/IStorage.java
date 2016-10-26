@@ -11,12 +11,6 @@ import uk.ac.standrews.cs.storage.exceptions.StorageException;
 public interface IStorage {
 
     /**
-     * Returns true if this storage is immutable
-     * @return
-     */
-    boolean isImmutable();
-
-    /**
      * Get the root directory of this storage
      * @return
      */

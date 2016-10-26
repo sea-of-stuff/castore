@@ -10,7 +10,7 @@ import uk.ac.standrews.cs.storage.interfaces.File;
  */
 public class NetworkBasedFile extends FileBasedFile implements File {
 
-    public NetworkBasedFile(Directory parent, String name, boolean isImmutable) throws StorageException {
-        super(parent, name, isImmutable);
+    public NetworkBasedFile(Directory parent, String name) throws StorageException {
+        super(parent, name);
     }
 }
