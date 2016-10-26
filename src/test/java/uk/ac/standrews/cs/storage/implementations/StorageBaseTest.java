@@ -46,7 +46,7 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-                {LOCAL, AWS}
+                {LOCAL}, {AWS}
         };
     }
 
