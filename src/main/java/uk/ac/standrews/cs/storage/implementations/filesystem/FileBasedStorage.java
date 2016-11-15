@@ -47,12 +47,18 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
 
     @Override
     public File createFile(Directory parent, String filename) throws StorageException {
-        return new FileBasedFile(parent, filename);
+        File file = new FileBasedFile(parent, filename);
+        file.persist();
+
+        return file;
     }
 
     @Override
     public File createFile(Directory parent, String filename, Data data) throws StorageException {
-        return new FileBasedFile(parent, filename, data);
+        File file = new FileBasedFile(parent, filename, data);
+        file.persist();
+
+        return file;
     }
 
     @Override
