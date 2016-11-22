@@ -59,10 +59,8 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
 
     @Override
     public void persist() throws PersistenceException {
-        if (realFile.exists()) {
-            if (!realFile.isDirectory()) {
-                throw new PersistenceException(realFile.getAbsolutePath() + " is not a directory");
-            }
+        if (realFile.exists() && !realFile.isDirectory()) {
+            throw new PersistenceException(realFile.getAbsolutePath() + " is not a directory");
         } else {
             createDirectory();
         }
@@ -129,7 +127,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
         private String[] names;
         private int index;
 
-        public DirectoryIterator(java.io.File realFile) {
+        DirectoryIterator(java.io.File realFile) {
             names = realFile.list();
             if (names == null) {
                 log.log(Level.FINE, "File " + realFile.getPath() + " is not a directory");
@@ -148,9 +146,8 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
             }
 
             try {
-                String name = names[index];
+                String name = names[index]; index++;
                 StatefulObject obj = get(name);
-                index++;
 
                 return new NameObjectBindingImpl(name, obj);
             } catch (BindingAbsentException e) {

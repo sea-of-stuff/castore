@@ -1,6 +1,5 @@
 package uk.ac.standrews.cs.storage.implementations.filesystem;
 
-
 import org.apache.commons.io.FileUtils;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
@@ -48,7 +47,6 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
     @Override
     public File createFile(Directory parent, String filename) throws StorageException {
         File file = new FileBasedFile(parent, filename);
-        file.persist();
 
         return file;
     }
@@ -56,7 +54,6 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
     @Override
     public File createFile(Directory parent, String filename, Data data) throws StorageException {
         File file = new FileBasedFile(parent, filename, data);
-        file.persist();
 
         return file;
     }

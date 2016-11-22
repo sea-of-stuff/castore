@@ -23,7 +23,6 @@ public class AWSFile extends AWSStatefulObject implements File {
         if (exists()) {
             retrieveData();
         }
-
     }
 
     public AWSFile(AmazonS3 s3Client, String bucketName, Directory parent,
@@ -35,22 +34,19 @@ public class AWSFile extends AWSStatefulObject implements File {
 
     @Override
     public boolean exists() {
+        boolean objectExists = false;
 
         try (S3Object s3Object = s3Client.getObject(getObjectRequest)) {
-            boolean objectExists = s3Object != null;
-            // updateData(s3Object, objectExists); // FIXME - have this somewhere else?
-
-            return objectExists;
+            objectExists = s3Object != null;
         } catch (AmazonS3Exception e) {
             if (e.getStatusCode() == RESOURCE_NOT_FOUND) {
-                return false;
+                objectExists = false;
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return objectExists;
     }
 
     @Override
@@ -73,9 +69,7 @@ public class AWSFile extends AWSStatefulObject implements File {
             boolean objectExists = s3Object != null;
             updateData(s3Object, objectExists);
 
-        } catch (AmazonS3Exception e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (AmazonS3Exception | IOException e) {
             e.printStackTrace();
         }
     }

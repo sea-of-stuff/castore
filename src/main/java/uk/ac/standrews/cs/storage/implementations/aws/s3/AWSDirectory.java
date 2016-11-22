@@ -39,6 +39,8 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
     public AWSDirectory(AmazonS3 s3Client, String bucketName,
                         Directory parent, String name) {
         super(s3Client, bucketName, parent, name);
+
+        // TODO - if folder exists, then load it
     }
 
     /**
@@ -213,7 +215,7 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
 
         @Override
         public boolean hasNext() {
-            skipThisFolder();
+            // skipThisFolder();
 
             boolean next = summary.hasNext() || !folders.isEmpty();
 
@@ -234,7 +236,7 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
 
         @Override
         public NameObjectBinding next() {
-            skipThisFolder();
+            // skipThisFolder();
 
             if(!hasNext()) {
                 return null;

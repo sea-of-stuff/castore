@@ -37,59 +37,49 @@ public class StorageImplTest extends StorageBaseTest {
 
     @Test
     public void createFile() throws StorageException {
-        File file = storage.createFile(storage.getRoot(), "test.txt", TEST_DATA);
+        File file = storage.createFile(storage.getRoot(), "0-test.txt", TEST_DATA);
         file.persist();
         assertTrue(file.exists());
     }
 
     @Test
     public void checkFileInDirectory() throws StorageException {
-        File file = storage.createFile(storage.getRoot(), "test.txt", TEST_DATA);
+        File file = storage.createFile(storage.getRoot(), "1-test.txt", TEST_DATA);
         file.persist();
-        assertTrue(storage.getRoot().contains("test.txt"));
+        assertTrue(storage.getRoot().contains("1-test.txt"));
     }
 
     @Test
     public void checkFileInDirectoryFails() throws StorageException {
-        Directory dirA = storage.createDirectory(storage.getRoot(), "folderA");
+        Directory dirA = storage.createDirectory(storage.getRoot(), "2-folderA");
         dirA.persist();
 
-        Directory dirB = storage.createDirectory(storage.getRoot(), "folderB");
+        Directory dirB = storage.createDirectory(storage.getRoot(), "2-folderB");
         dirB.persist();
 
-        File file = storage.createFile(dirA, "test.txt", TEST_DATA);
+        File file = storage.createFile(dirA, "2-test.txt", TEST_DATA);
         file.persist();
 
         // Checking file in the wrong directory
-        assertFalse(dirB.contains("test.txt"));
+        assertFalse(dirB.contains("2-test.txt"));
     }
 
     @Test
     public void fileInDirectoryDeletion() throws StorageException {
-        File file = storage.createFile(storage.getRoot(), "test.txt", TEST_DATA);
+        File file = storage.createFile(storage.getRoot(), "3-test.txt", TEST_DATA);
         file.persist();
-        assertTrue(storage.getRoot().contains("test.txt"));
+        assertTrue(storage.getRoot().contains("3-test.txt"));
 
-        storage.getRoot().remove("test.txt");
-        assertFalse(storage.getRoot().contains("test.txt"));
-    }
-
-    @Test
-    public void directoryDeletion() throws StorageException {
-        storage.createDirectory(storage.getRoot(), "folder").persist();
-        assertTrue(storage.getRoot().contains("folder/"));
-
-        storage.getRoot().remove("folder/");
-        Iterator iterator = storage.getRoot().getIterator();
-        assertFalse(iterator.hasNext());
+        storage.getRoot().remove("3-test.txt");
+        assertFalse(storage.getRoot().contains("3-test.txt"));
     }
 
     @Test
     public void getFileFromDirectory() throws StorageException {
-        File file = storage.createFile(storage.getRoot(), "test.txt", TEST_DATA);
+        File file = storage.createFile(storage.getRoot(), "4-test.txt", TEST_DATA);
         file.persist();
 
-        StatefulObject object = storage.getRoot().get("test.txt");
+        StatefulObject object = storage.getRoot().get("4-test.txt");
         assertTrue(object instanceof File);
     }
 
@@ -98,7 +88,7 @@ public class StorageImplTest extends StorageBaseTest {
 
         // Populate folder
         for(int i = 0 ; i < 15; i++) {
-            storage.createFile(storage.getRoot(), "test-" + i + ".txt", TEST_DATA).persist();
+            storage.createFile(storage.getRoot(), "5-test-" + i + ".txt", TEST_DATA).persist();
         }
 
         int testCounter = 0;
@@ -114,11 +104,11 @@ public class StorageImplTest extends StorageBaseTest {
     @Test
     public void iteratorInFolderTest() throws StorageException {
 
-        Directory directory = storage.createDirectory(storage.getRoot(), "folder_with_files");
+        Directory directory = storage.createDirectory(storage.getRoot(), "6-folder_with_files");
 
         // Populate folder
         for(int i = 0 ; i < 15; i++) {
-            storage.createFile(directory, "test-" + i + ".txt", TEST_DATA).persist();
+            storage.createFile(directory, "6-test-" + i + ".txt", TEST_DATA).persist();
         }
 
         int testCounter = 0;
@@ -134,74 +124,83 @@ public class StorageImplTest extends StorageBaseTest {
 
     @Test
     public void folderWithFileTest() throws StorageException, InterruptedException {
-        Directory directory = storage.createDirectory(storage.getRoot(), "folder_with_file");
-        storage.createFile(directory, "empty_file.txt").persist();
+        Directory directory = storage.createDirectory(storage.getRoot(), "7-folder_with_file");
+        storage.createFile(directory, "7-empty_file.txt").persist();
 
-        boolean contains = storage.getRoot().contains("folder_with_file/");
+        boolean contains = storage.getRoot().contains("7-folder_with_file/");
         assertTrue(contains);
     }
 
     @Test
     public void emptyFolderTest() throws StorageException, InterruptedException {
-        storage.createDirectory(storage.getRoot(), "empty_folder");
+        storage.createDirectory(storage.getRoot(), "8-empty_folder");
 
-        boolean contains = storage.getRoot().contains("empty_folder/");
+        boolean contains = storage.getRoot().contains("8-empty_folder/");
         assertFalse(contains);
     }
 
     @Test
     public void emptyFolderPersistedTest() throws StorageException, InterruptedException {
-        storage.createDirectory(storage.getRoot(), "empty_folder").persist();
+        storage.createDirectory(storage.getRoot(), "9-empty_folder").persist();
 
-        boolean contains = storage.getRoot().contains("empty_folder/");
+        boolean contains = storage.getRoot().contains("9-empty_folder/");
         assertTrue(contains);
     }
 
     @Test
     public void folderWithFolderTest() throws StorageException {
-        Directory directory = storage.createDirectory(storage.getRoot(), "folder_with_folder");
-        storage.createDirectory(directory, "inner_folder");
+        Directory directory = storage.createDirectory(storage.getRoot(), "10-folder_with_folder");
+        storage.createDirectory(directory, "10-inner_folder");
 
-        boolean contains = storage.getRoot().contains("folder_with_folder/");
+        boolean contains = storage.getRoot().contains("10-folder_with_folder/");
         assertFalse(contains);
 
-        boolean containsInner = directory.contains("inner_folder/");
+        boolean containsInner = directory.contains("10-inner_folder/");
         assertFalse(containsInner);
     }
 
     @Test
     public void nestedFolderWithFileTest() throws StorageException {
-        Directory directory = storage.createDirectory(storage.getRoot(), "folder_with_folder");
-        Directory innerDirectory = storage.createDirectory(directory, "inner_folder");
-        File file = storage.createFile(innerDirectory, "test.txt", TEST_DATA);
+        Directory directory = storage.createDirectory(storage.getRoot(), "11-folder_with_folder");
+        Directory innerDirectory = storage.createDirectory(directory, "11-inner_folder");
+        File file = storage.createFile(innerDirectory, "11-test.txt", TEST_DATA);
         file.persist();
 
-        boolean contains = storage.getRoot().contains("folder_with_folder/");
+        boolean contains = storage.getRoot().contains("11-folder_with_folder/");
         assertTrue(contains);
 
-        boolean containsInner = directory.contains("inner_folder/");
+        boolean containsInner = directory.contains("11-inner_folder/");
         assertTrue(containsInner);
     }
 
     @Test
     public void nestedFolderPersistedTest() throws StorageException {
-        Directory directory = storage.createDirectory(storage.getRoot(), "folder_with_folder");
-        storage.createDirectory(directory, "inner_folder").persist();
+        Directory directory = storage.createDirectory(storage.getRoot(), "12-folder_with_folder");
+        storage.createDirectory(directory, "12-inner_folder").persist();
 
-        boolean contains = storage.getRoot().contains("folder_with_folder/");
+        boolean contains = storage.getRoot().contains("12-folder_with_folder/");
         assertTrue(contains);
 
-        boolean containsInner = directory.contains("inner_folder/");
+        boolean containsInner = directory.contains("12-inner_folder/");
         assertTrue(containsInner);
     }
 
     @Test
     public void getDataTest() throws StorageException {
-        File file = storage.createFile(storage.getRoot(), "test.txt", TEST_DATA);
+        File file = storage.createFile(storage.getRoot(), "13-test.txt", TEST_DATA);
         file.persist();
 
-        File retrievedFile = storage.createFile(storage.getRoot(), "test.txt");
+        File retrievedFile = storage.createFile(storage.getRoot(), "13-test.txt");
         assertNotNull(retrievedFile.getData());
     }
 
+    @Test
+    public void directoryDeletion() throws StorageException {
+        storage.createDirectory(storage.getRoot(), "14-folder").persist();
+        assertTrue(storage.getRoot().contains("14-folder/"));
+
+        storage.getRoot().remove("14-folder/");
+        Iterator iterator = storage.getRoot().getIterator();
+        assertFalse(iterator.hasNext());
+    }
 }

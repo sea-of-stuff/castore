@@ -35,6 +35,23 @@ public class AWSStorage extends CommonStorage implements IStorage {
     private String bucketName;
     private Region region = DEFAULT_REGION;
 
+    /**
+     * Crea an AWS S3 Storage using default credentials.
+     *
+     * From the AWS S3 SDK Documentation:
+     * A credentials provider chain will be used that searches for credentials in
+     * this order:
+     * <ul>
+     * <li>Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_KEY</li>
+     * <li>Java System Properties - aws.accessKeyId and aws.secretKey</li>
+     * <li>Credential profiles file at the default location (~/.aws/credentials) shared by all AWS SDKs and the AWS CLI</li>
+     * <li>Instance Profile Credentials - delivered through the Amazon EC2
+     * metadata service</li>
+     * </ul>
+     *
+     * @param bucketName
+     * @throws StorageException
+     */
     public AWSStorage(String bucketName) throws StorageException {
 
         s3Client = new AmazonS3Client();
@@ -81,13 +98,14 @@ public class AWSStorage extends CommonStorage implements IStorage {
             final ListObjectsV2Request req = new ListObjectsV2Request()
                     .withBucketName(bucketName)
                     .withMaxKeys(KEYS_PER_ITERATION);
+
             ListObjectsV2Result result;
             do {
                 result = s3Client.listObjectsV2(req);
-
                 for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
                     root.remove(objectSummary.getKey());
                 }
+
                 req.setContinuationToken(result.getNextContinuationToken());
             } while (result.isTruncated());
 
@@ -103,9 +121,21 @@ public class AWSStorage extends CommonStorage implements IStorage {
             if (!bucketExist) {
                 s3Client.createBucket(bucketName);
             }
+
             this.bucketName = bucketName;
+
+            while(true) {
+                if (s3Client.doesBucketExist(bucketName))
+                    break;
+
+                System.out.println("Wait for bucket creation");
+                Thread.sleep(1000);
+            }
+            System.out.println("BUCKET NOW EXISTS");
         } catch (AmazonClientException ace) {
             throw new StorageException(ace);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }

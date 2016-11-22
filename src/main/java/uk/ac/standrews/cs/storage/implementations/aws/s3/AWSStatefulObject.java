@@ -81,10 +81,12 @@ public abstract class AWSStatefulObject implements StatefulObject {
         try {
             final File tempFile = File.createTempFile(TMP_FILE_PREFIX, TMP_FILE_SUFFIX);
             tempFile.deleteOnExit();
+
             try (FileOutputStream output = new FileOutputStream(tempFile)) {
                 InputStream input = s3Client.getObject(getObjectRequest).getObjectContent();
                 IOUtils.copy(input, output);
             }
+
             return tempFile;
         } catch (AmazonS3Exception e) {
             throw new IOException(e);
@@ -99,9 +101,7 @@ public abstract class AWSStatefulObject implements StatefulObject {
             String objectPath = getPathname();
             ObjectMetadata metadata = getObjectMetadata();
 
-            PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(bucketName, objectPath, inputStream, metadata);
-
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectPath, inputStream, metadata);
             s3Client.putObject(putObjectRequest);
 
         } catch (IOException e) {
@@ -109,11 +109,11 @@ public abstract class AWSStatefulObject implements StatefulObject {
         }
     }
 
-    protected InputStream getInputStream() throws IOException {
+    private InputStream getInputStream() throws IOException {
         return data != null ? data.getInputStream() : new NullInputStream(0);
     }
 
-    protected ObjectMetadata getObjectMetadata() {
+    private ObjectMetadata getObjectMetadata() {
         long contentLength = data != null ? data.getSize() : 0;
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(contentLength);

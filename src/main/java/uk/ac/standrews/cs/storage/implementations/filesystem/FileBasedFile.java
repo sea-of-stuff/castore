@@ -49,7 +49,6 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
 
     @Override
     public void persist() throws PersistenceException {
-
         createParentFolderIfNone();
         createFile();
         writeData();
@@ -70,20 +69,12 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
             try {
                 boolean newFileCreated = realFile.createNewFile();
                 if (!newFileCreated) {
-                    throw new PersistenceException("Could not create the file at " + realFile.getAbsolutePath() + " files in dir " + toString(realFile.getParentFile().list()));
+                    throw new PersistenceException("Could not create the file at " + realFile.getAbsolutePath());
                 }
             } catch (IOException e) {
                 throw new PersistenceException("IO Exception while creating the file at " + realFile.getAbsolutePath(), e);
             }
         }
-    }
-
-    private String toString(String[] list ) {
-        String retval = "";
-        for(String s : list) {
-            retval += s + ", ";
-        }
-        return retval;
     }
 
     private void writeData() throws PersistenceException {
