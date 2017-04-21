@@ -18,6 +18,8 @@ import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IFile;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
 
+import java.util.logging.Logger;
+
 /**
  * AWSStorage abstracts the AWS S3 complexity. In doing so, it is possible to use
  * AWS as any normal data storage.
@@ -27,6 +29,8 @@ import uk.ac.standrews.cs.storage.interfaces.IStorage;
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class AWSStorage extends CommonStorage implements IStorage {
+
+    static Logger log = Logger.getLogger(AWSStorage.class.getName());
 
     private static final Region DEFAULT_REGION = Region.getRegion(Regions.EU_WEST_1);
     private static final int KEYS_PER_ITERATION = 20;
@@ -128,10 +132,10 @@ public class AWSStorage extends CommonStorage implements IStorage {
                 if (s3Client.doesBucketExist(bucketName))
                     break;
 
-                System.out.println("Wait for bucket creation");
+                log.info("Waiting for bucket creation");
                 Thread.sleep(1000);
             }
-            System.out.println("BUCKET NOW EXISTS");
+
         } catch (AmazonClientException ace) {
             throw new StorageException(ace);
         } catch (InterruptedException e) {
