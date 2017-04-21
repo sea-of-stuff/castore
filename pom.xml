@@ -16,6 +16,10 @@
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <commons.io.version>2.5</commons.io.version>
 
+        <aws.s3.version>1.11.119</aws.s3.version>
+        <dropbox.version>3.0.2</dropbox.version>
+        <jedis.version>2.9.0</jedis.version>
+
         <!-- http://stackoverflow.com/questions/3017695/how-to-configure-encoding-in-maven -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -57,10 +61,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- How to import aws s3 via maven - https://github.com/aws/aws-sdk-java#getting-started -->
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-bom</artifactId>
-                <version>1.11.13</version>
+                <version>${aws.s3.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -87,7 +92,15 @@
         <dependency>
             <groupId>com.dropbox.core</groupId>
             <artifactId>dropbox-core-sdk</artifactId>
-            <version>2.0.6</version>
+            <version>${dropbox.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->
