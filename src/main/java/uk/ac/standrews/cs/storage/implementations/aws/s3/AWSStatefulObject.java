@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
+import uk.ac.standrews.cs.storage.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
@@ -18,7 +19,7 @@ import java.util.Date;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public abstract class AWSStatefulObject implements StatefulObject {
+public abstract class AWSStatefulObject extends CommonStatefulObject implements StatefulObject {
 
     protected static final int RESOURCE_NOT_FOUND = 404;
     private static final String TMP_FILE_PREFIX = "aws";
@@ -56,9 +57,6 @@ public abstract class AWSStatefulObject implements StatefulObject {
     public String getName() {
         return name;
     }
-
-    @Override
-    public abstract String getPathname();
 
     @Override
     public long lastModified() {

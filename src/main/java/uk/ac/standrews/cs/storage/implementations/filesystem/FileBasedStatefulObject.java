@@ -1,5 +1,6 @@
 package uk.ac.standrews.cs.storage.implementations.filesystem;
 
+import uk.ac.standrews.cs.storage.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
@@ -9,7 +10,7 @@ import java.io.File;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public abstract class FileBasedStatefulObject implements StatefulObject {
+public abstract class FileBasedStatefulObject extends CommonStatefulObject implements StatefulObject {
 
     protected IDirectory logicalParent;
     protected String name;
@@ -38,9 +39,6 @@ public abstract class FileBasedStatefulObject implements StatefulObject {
     public String getName() {
         return name;
     }
-
-    @Override
-    public abstract String getPathname();
 
     @Override
     public long lastModified() {

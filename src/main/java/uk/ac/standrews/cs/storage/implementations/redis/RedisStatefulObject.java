@@ -1,6 +1,7 @@
 package uk.ac.standrews.cs.storage.implementations.redis;
 
 import redis.clients.jedis.Jedis;
+import uk.ac.standrews.cs.storage.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
@@ -11,7 +12,7 @@ import java.io.IOException;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class RedisStatefulObject implements StatefulObject {
+public class RedisStatefulObject extends CommonStatefulObject implements StatefulObject {
 
     protected Jedis jedis;
 
@@ -36,7 +37,7 @@ public class RedisStatefulObject implements StatefulObject {
 
     @Override
     public String getPathname() {
-        return null;
+        return "";
     }
 
     @Override
