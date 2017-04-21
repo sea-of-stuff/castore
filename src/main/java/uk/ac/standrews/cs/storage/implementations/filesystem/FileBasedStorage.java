@@ -6,10 +6,11 @@ import uk.ac.standrews.cs.storage.exceptions.DestroyException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStorage;
-import uk.ac.standrews.cs.storage.interfaces.Directory;
-import uk.ac.standrews.cs.storage.interfaces.File;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
+import uk.ac.standrews.cs.storage.interfaces.IFile;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -17,9 +18,9 @@ import java.io.IOException;
  */
 public class FileBasedStorage extends CommonStorage implements IStorage {
 
-    private Directory root;
+    private IDirectory root;
 
-    public FileBasedStorage(java.io.File rootDirectory) throws StorageException {
+    public FileBasedStorage(File rootDirectory) throws StorageException {
 
         root = new FileBasedDirectory(rootDirectory);
         try {
@@ -30,27 +31,27 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
     }
 
     @Override
-    public Directory getRoot() {
+    public IDirectory getRoot() {
         return root;
     }
 
     @Override
-    public Directory createDirectory(Directory parent, String name) throws StorageException {
+    public IDirectory createDirectory(IDirectory parent, String name) throws StorageException {
         return new FileBasedDirectory(parent, name);
     }
 
     @Override
-    public Directory createDirectory(String name) throws StorageException {
+    public IDirectory createDirectory(String name) throws StorageException {
         return new FileBasedDirectory(root, name);
     }
 
     @Override
-    public File createFile(Directory parent, String filename) throws StorageException {
+    public IFile createFile(IDirectory parent, String filename) throws StorageException {
         return new FileBasedFile(parent, filename);
     }
 
     @Override
-    public File createFile(Directory parent, String filename, Data data) throws StorageException {
+    public IFile createFile(IDirectory parent, String filename, Data data) throws StorageException {
         return new FileBasedFile(parent, filename, data);
     }
 

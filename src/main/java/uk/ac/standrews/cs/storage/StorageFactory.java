@@ -18,6 +18,7 @@ public class StorageFactory {
     private static final Logger log = Logger.getLogger( StorageFactory.class.getName() );
 
     /**
+     *
      * @param type
      * @param root (location for LOCAL, NETWORK; bucketname for AWS)
      * @return

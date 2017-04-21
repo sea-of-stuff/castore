@@ -5,9 +5,10 @@ import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import java.util.Iterator;
 
 /**
+ *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public interface Directory extends StatefulObject {
+public interface IDirectory extends StatefulObject {
 
     StatefulObject get(String name) throws BindingAbsentException;
 

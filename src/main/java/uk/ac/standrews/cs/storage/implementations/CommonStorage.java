@@ -1,6 +1,6 @@
 package uk.ac.standrews.cs.storage.implementations;
 
-import uk.ac.standrews.cs.storage.interfaces.Directory;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
 
 /**
@@ -8,10 +8,10 @@ import uk.ac.standrews.cs.storage.interfaces.IStorage;
  */
 public abstract class CommonStorage implements IStorage {
 
-    protected Directory root;
+    protected IDirectory root;
 
     @Override
-    public Directory getRoot() {
+    public IDirectory getRoot() {
         return root;
     }
 

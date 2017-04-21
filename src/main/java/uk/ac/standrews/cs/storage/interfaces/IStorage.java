@@ -14,7 +14,7 @@ public interface IStorage {
      * Get the root directory of this storage
      * @return
      */
-    Directory getRoot();
+    IDirectory getRoot();
 
     /**
      * Create a directory within the specified parent and with the given name
@@ -22,14 +22,14 @@ public interface IStorage {
      * @param name
      * @return
      */
-    Directory createDirectory(Directory parent, String name) throws StorageException;
+    IDirectory createDirectory(IDirectory parent, String name) throws StorageException;
 
     /**
      * Create a directory at the root of this storage with the given name
      * @param name
      * @return
      */
-    Directory createDirectory(String name) throws StorageException;
+    IDirectory createDirectory(String name) throws StorageException;
 
     /**
      * Create a file at the specified parent directory
@@ -37,7 +37,7 @@ public interface IStorage {
      * @param filename
      * @return
      */
-    File createFile(Directory parent, String filename) throws StorageException;
+    IFile createFile(IDirectory parent, String filename) throws StorageException;
 
     /**
      * Create a file with some given data at the specified directory
@@ -47,7 +47,7 @@ public interface IStorage {
      * @return
      * @throws StorageException
      */
-    File createFile(Directory parent, String filename, Data data) throws StorageException;
+    IFile createFile(IDirectory parent, String filename, Data data) throws StorageException;
 
     /**
      * Destroy this storage

@@ -3,8 +3,8 @@ package uk.ac.standrews.cs.storage.implementations.network;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
 import uk.ac.standrews.cs.storage.implementations.CommonStorage;
-import uk.ac.standrews.cs.storage.interfaces.Directory;
-import uk.ac.standrews.cs.storage.interfaces.File;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
+import uk.ac.standrews.cs.storage.interfaces.IFile;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
 
 /**
@@ -16,7 +16,7 @@ public class NetworkBasedStorage extends CommonStorage implements IStorage {
     private String mountPoint;
     private String rootPath;
 
-    private Directory root;
+    private IDirectory root;
 
     /**
      * Create the IStorage for a mounted network folder.
@@ -38,22 +38,22 @@ public class NetworkBasedStorage extends CommonStorage implements IStorage {
     }
 
     @Override
-    public Directory createDirectory(Directory parent, String name) {
+    public IDirectory createDirectory(IDirectory parent, String name) {
         return null;
     }
 
     @Override
-    public Directory createDirectory(String name) {
+    public IDirectory createDirectory(String name) {
         return null;
     }
 
     @Override
-    public File createFile(Directory parent, String filename) {
+    public IFile createFile(IDirectory parent, String filename) {
         return null;
     }
 
     @Override
-    public File createFile(Directory parent, String filename, Data data) {
+    public IFile createFile(IDirectory parent, String filename, Data data) {
         return null;
     }
 

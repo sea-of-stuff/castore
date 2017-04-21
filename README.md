@@ -15,8 +15,6 @@ All you need to do is to add the following to your maven dependencies:
 
 This project is not available via a maven repository yet, so you will have to install this yourself `mvn install`.
 
-**TODO** install by profiles (e.g. amazon profile only?)
-
 Alternatively you can produce a `.jar` for the project and add it as a dependency for your project.
 
 ## The interface
@@ -40,11 +38,13 @@ The interface here provided is not complete.
 
 ### File Based
 
+This implementation is based on the local file system.
+
 ### Network Based
 
 You need to mount the network drive yourself.
 
-### AWS
+### AWS.s3
 
 - describe behaviour
 - give examples
@@ -59,10 +59,7 @@ export AWS_SECRET_KEY=<KEY>
 
 ### Dropbox
 
-### Network drive
-
-This current implementation expects the network storage to be already mounted under /Volumes (Unix-only)
-
+WIP
 
 ## Limitations
 

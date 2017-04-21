@@ -6,7 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
-import uk.ac.standrews.cs.storage.interfaces.Directory;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 
 import java.io.File;
@@ -26,13 +26,13 @@ public abstract class AWSStatefulObject implements StatefulObject {
 
     protected AmazonS3 s3Client;
     protected String bucketName;
-    protected Directory logicalParent;
+    protected IDirectory logicalParent;
     protected String name;
     protected Data data;
     protected GetObjectRequest getObjectRequest;
 
     public AWSStatefulObject(AmazonS3 s3Client, String bucketName,
-                             Directory parent, String name) {
+                             IDirectory parent, String name) {
         this.s3Client = s3Client;
         this.bucketName = bucketName;
         this.logicalParent = parent;
@@ -48,7 +48,7 @@ public abstract class AWSStatefulObject implements StatefulObject {
     }
 
     @Override
-    public Directory getParent() {
+    public IDirectory getParent() {
         return logicalParent;
     }
 

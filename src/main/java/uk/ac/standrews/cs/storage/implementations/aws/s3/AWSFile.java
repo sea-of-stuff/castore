@@ -6,17 +6,17 @@ import com.amazonaws.services.s3.model.S3Object;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.InputStreamData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
-import uk.ac.standrews.cs.storage.interfaces.Directory;
-import uk.ac.standrews.cs.storage.interfaces.File;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
+import uk.ac.standrews.cs.storage.interfaces.IFile;
 
 import java.io.IOException;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class AWSFile extends AWSStatefulObject implements File {
+public class AWSFile extends AWSStatefulObject implements IFile {
 
-    public AWSFile(AmazonS3 s3Client, String bucketName, Directory parent,
+    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent,
                    String name) {
         super(s3Client, bucketName, parent, name);
 
@@ -25,7 +25,7 @@ public class AWSFile extends AWSStatefulObject implements File {
         }
     }
 
-    public AWSFile(AmazonS3 s3Client, String bucketName, Directory parent,
+    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent,
                    String name, Data data) {
         super(s3Client, bucketName, parent, name);
 

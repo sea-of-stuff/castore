@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
-import uk.ac.standrews.cs.storage.interfaces.Directory;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 
@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class AWSDirectory extends AWSStatefulObject implements Directory {
+public class AWSDirectory extends AWSStatefulObject implements IDirectory {
 
     private static final String FOLDER_DELIMITER = "/";
     private static final String NO_DELIMITER = "";
@@ -37,7 +37,7 @@ public class AWSDirectory extends AWSStatefulObject implements Directory {
      * @param name
      */
     public AWSDirectory(AmazonS3 s3Client, String bucketName,
-                        Directory parent, String name) {
+                        IDirectory parent, String name) {
         super(s3Client, bucketName, parent, name);
 
         // TODO - if folder exists, then load it

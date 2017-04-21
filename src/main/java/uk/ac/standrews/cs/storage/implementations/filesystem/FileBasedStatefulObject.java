@@ -1,7 +1,7 @@
 package uk.ac.standrews.cs.storage.implementations.filesystem;
 
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
-import uk.ac.standrews.cs.storage.interfaces.Directory;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 
 import java.io.File;
@@ -11,11 +11,11 @@ import java.io.File;
  */
 public abstract class FileBasedStatefulObject implements StatefulObject {
 
-    protected Directory logicalParent;
+    protected IDirectory logicalParent;
     protected String name;
     protected File realFile;
 
-    public FileBasedStatefulObject(Directory parent, String name) {
+    public FileBasedStatefulObject(IDirectory parent, String name) {
         this.logicalParent = parent;
         this.name = name;
     }
@@ -25,7 +25,7 @@ public abstract class FileBasedStatefulObject implements StatefulObject {
     }
 
     @Override
-    public Directory getParent() {
+    public IDirectory getParent() {
         return logicalParent;
     }
 

@@ -7,6 +7,9 @@ public enum StorageType {
 
     LOCAL("local"),
     NETWORK("network"),
+    DROPBOX("dropbox"),
+    MEMORY("memory"),
+    REDIS("redis"),
     AWS_S3("aws_s3");
 
     private final String text;

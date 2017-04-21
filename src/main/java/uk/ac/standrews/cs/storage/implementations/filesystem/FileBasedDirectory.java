@@ -5,10 +5,11 @@ import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
-import uk.ac.standrews.cs.storage.interfaces.Directory;
+import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -17,27 +18,27 @@ import java.util.logging.Logger;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class FileBasedDirectory extends FileBasedStatefulObject implements Directory {
+public class FileBasedDirectory extends FileBasedStatefulObject implements IDirectory {
 
     private static final Logger log = Logger.getLogger(FileBasedDirectory.class.getName());
 
-    public FileBasedDirectory(Directory parent, String name) throws StorageException {
+    public FileBasedDirectory(IDirectory parent, String name) throws StorageException {
         super(parent, name);
 
         try {
-            realFile = new java.io.File(parent.toFile(), name);
+            realFile = new File(parent.toFile(), name);
         } catch (IOException e) {
             throw new StorageException("Unable to create directory " + name, e);
         }
     }
 
-    public FileBasedDirectory(java.io.File directory) {
+    public FileBasedDirectory(File directory) {
         super();
         realFile = directory;
     }
 
     @Override
-    public Directory getParent() {
+    public IDirectory getParent() {
         return logicalParent;
     }
 
@@ -74,7 +75,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
 
     @Override
     public StatefulObject get(String name) throws BindingAbsentException {
-        java.io.File candidate = new java.io.File(realFile, name);
+        File candidate = new File(realFile, name);
         if (!candidate.exists()) {
             throw new BindingAbsentException("Object " + name + " is not present");
         }
@@ -94,13 +95,13 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
 
     @Override
     public boolean contains(String name) {
-        java.io.File candidate = new java.io.File(realFile, name);
+        File candidate = new File(realFile, name);
         return candidate.exists();
     }
 
     @Override
     public void remove(String name) throws BindingAbsentException {
-        java.io.File candidate = new java.io.File(realFile, name);
+        File candidate = new File(realFile, name);
         if (!candidate.exists()) {
             throw new BindingAbsentException("File/directory " + name + " not present");
         }
@@ -139,7 +140,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements Direc
         private String[] names;
         private int index;
 
-        DirectoryIterator(java.io.File realFile) {
+        DirectoryIterator(File realFile) {
             names = realFile.list();
             if (names == null) {
                 log.log(Level.FINE, "File " + realFile.getPath() + " is not a directory");
