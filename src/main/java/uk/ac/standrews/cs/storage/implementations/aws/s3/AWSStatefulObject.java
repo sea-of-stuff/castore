@@ -80,8 +80,9 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
             final File tempFile = File.createTempFile(TMP_FILE_PREFIX, TMP_FILE_SUFFIX);
             tempFile.deleteOnExit();
 
-            try (FileOutputStream output = new FileOutputStream(tempFile)) {
-                InputStream input = s3Client.getObject(getObjectRequest).getObjectContent();
+            try (FileOutputStream output = new FileOutputStream(tempFile);
+                 InputStream input = s3Client.getObject(getObjectRequest).getObjectContent()) {
+
                 IOUtils.copy(input, output);
             }
 

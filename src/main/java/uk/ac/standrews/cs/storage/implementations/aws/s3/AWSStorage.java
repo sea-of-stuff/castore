@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class AWSStorage extends CommonStorage implements IStorage {
 
-    static Logger log = Logger.getLogger(AWSStorage.class.getName());
+    private static Logger log = Logger.getLogger(AWSStorage.class.getName());
 
     private static final Region DEFAULT_REGION = Region.getRegion(Regions.EU_WEST_1);
     private static final int KEYS_PER_ITERATION = 20;

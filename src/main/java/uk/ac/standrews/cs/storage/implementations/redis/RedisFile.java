@@ -17,11 +17,11 @@ public class RedisFile extends RedisStatefulObject implements IFile {
 
     @Override
     public void setData(Data data) throws DataException {
-
+        this.data = data;
     }
 
     @Override
     public Data getData() throws DataException {
-        return null;
+        return data;
     }
 }

@@ -18,6 +18,11 @@ public class RedisStorage extends CommonStorage implements IStorage {
 
     private JedisPool pool;
 
+    /**
+     * You should make sure that a redis instance is available
+     *
+     * @param hostname
+     */
     public RedisStorage(String hostname) {
         pool = new JedisPool(new JedisPoolConfig(), "localhost");
 
