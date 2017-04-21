@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.AWS;
+import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.LOCAL;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -45,7 +46,7 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-                {AWS}
+                {LOCAL} /*, {AWS} */
         };
     }
 

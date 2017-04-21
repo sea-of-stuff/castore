@@ -20,5 +20,4 @@ public interface Directory extends StatefulObject {
      * @return
      */
     Iterator<NameObjectBinding> getIterator();
-
 }

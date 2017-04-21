@@ -27,7 +27,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
             throw new StorageException("Unable to create file " + name, e);
         }
 
-        this.data = new FileData(realFile);
+        this.data = new FileData(realFile); // FIXME - read data on demand?
     }
 
     public FileBasedFile(Directory parent, String name, Data data) throws StorageException {
@@ -52,6 +52,11 @@ public class FileBasedFile extends FileBasedStatefulObject implements File {
         createParentFolderIfNone();
         createFile();
         writeData();
+    }
+
+    @Override
+    public long getSize() {
+        return data.getSize();
     }
 
     private void createParentFolderIfNone() throws PersistenceException {

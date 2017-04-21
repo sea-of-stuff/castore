@@ -24,4 +24,5 @@ public interface StatefulObject {
 
     void persist() throws PersistenceException;
 
+    long getSize();
 }

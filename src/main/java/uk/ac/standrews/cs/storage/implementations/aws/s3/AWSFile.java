@@ -55,6 +55,17 @@ public class AWSFile extends AWSStatefulObject implements File {
     }
 
     @Override
+    public long getSize() {
+        try (S3Object s3Object = s3Client.getObject(getObjectRequest)) {
+            return s3Object.getObjectMetadata().getContentLength();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
     public void setData(Data data) throws DataException {
         this.data = data;
     }
