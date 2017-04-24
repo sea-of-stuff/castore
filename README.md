@@ -1,4 +1,4 @@
-# storage-sta
+# castore
 
 This project provides a set of storage abstractions and implementations.
 
@@ -8,7 +8,7 @@ All you need to do is to add the following to your maven dependencies:
 ```
 <dependency>
     <groupId>uk.ac.standrews.cs</groupId>
-    <artifactId>storage-sta</artifactId>
+    <artifactId>castore</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
