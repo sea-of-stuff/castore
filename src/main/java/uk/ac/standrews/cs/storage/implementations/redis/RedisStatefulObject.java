@@ -29,12 +29,13 @@ public class RedisStatefulObject extends CommonStatefulObject implements Statefu
 
     protected Jedis jedis;
 
+    protected String name;
     protected String objectPath;
     protected Data data;
 
-    public RedisStatefulObject(Jedis jedis) {
+    public RedisStatefulObject(Jedis jedis, String name) {
         this.jedis = jedis;
-
+        this.name = name;
         this.objectPath = getPathname();
     }
 
@@ -50,12 +51,12 @@ public class RedisStatefulObject extends CommonStatefulObject implements Statefu
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public String getPathname() {
-        return "";
+        return "TODO";
     }
 
     @Override

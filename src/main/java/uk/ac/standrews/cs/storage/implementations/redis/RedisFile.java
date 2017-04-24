@@ -11,8 +11,8 @@ import uk.ac.standrews.cs.storage.interfaces.IFile;
 public class RedisFile extends RedisStatefulObject implements IFile {
 
 
-    public RedisFile(Jedis jedis) {
-        super(jedis);
+    public RedisFile(Jedis jedis, String name) {
+        super(jedis, name);
     }
 
     @Override

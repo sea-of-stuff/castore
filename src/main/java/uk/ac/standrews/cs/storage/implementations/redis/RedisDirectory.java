@@ -13,12 +13,21 @@ import java.util.Iterator;
  */
 public class RedisDirectory extends RedisStatefulObject implements IDirectory {
 
-    public RedisDirectory(Jedis jedis) {
-        super(jedis);
+    public RedisDirectory(Jedis jedis, String name) {
+        super(jedis, name);
     }
 
     @Override
     public StatefulObject get(String name) throws BindingAbsentException {
+
+
+        String type = jedis.get(name + ":type");
+        // TODO - check existence
+        if (type.equals("directory")) {
+
+        } else {
+
+        }
         return null;
     }
 
