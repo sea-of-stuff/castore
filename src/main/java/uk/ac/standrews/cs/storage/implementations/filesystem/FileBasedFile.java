@@ -28,7 +28,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
             throw new StorageException("Unable to create file " + name, e);
         }
 
-        this.data = new FileData(realFile); // FIXME - read data on demand?
+        this.data = new FileData(realFile);
     }
 
     public FileBasedFile(IDirectory parent, String name, Data data) throws StorageException {

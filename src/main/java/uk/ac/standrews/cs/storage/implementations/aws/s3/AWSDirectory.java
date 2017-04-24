@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * This class represent an AWS directory.
- * AWS S3 does not have the concept of folders. Everything is a file.
+ * AWS S3 does not have the concept of directories. Everything is a file.
  * To achieve consistent behaviour with the storage interfaces, we allow AWS directories
  * to be persisted by creating files with content-length zero.
  * E.g. on directory.persist(), we actually create the file "<DIR_NAME>/"
@@ -40,7 +40,7 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
                         IDirectory parent, String name) {
         super(s3Client, bucketName, parent, name);
 
-        // TODO - if folder exists, then load it
+        // TODO - if directory exists, then load it
     }
 
     /**
@@ -80,7 +80,6 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
     /**
      * A folder exists if there is at least a file or another folder in it.
      *
-     * TODO - check if possible to do it differently?
      * @return
      */
     @Override

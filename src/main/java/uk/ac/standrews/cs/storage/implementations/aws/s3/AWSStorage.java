@@ -136,10 +136,8 @@ public class AWSStorage extends CommonStorage implements IStorage {
                 Thread.sleep(1000);
             }
 
-        } catch (AmazonClientException ace) {
-            throw new StorageException(ace);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (AmazonClientException | InterruptedException e) {
+            throw new StorageException(e);
         }
 
     }

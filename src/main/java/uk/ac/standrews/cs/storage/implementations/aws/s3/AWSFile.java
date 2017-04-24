@@ -10,18 +10,22 @@ import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IFile;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class AWSFile extends AWSStatefulObject implements IFile {
 
+    private static final Logger log = Logger.getLogger(AWSFile.class.getName());
+
     public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent,
                    String name) {
         super(s3Client, bucketName, parent, name);
 
         if (exists()) {
-            retrieveData();
+            retrieveAndUpdateData();
         }
     }
 
@@ -43,7 +47,7 @@ public class AWSFile extends AWSStatefulObject implements IFile {
                 objectExists = false;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.log(Level.WARNING, "Unable to determine if the AWS object exists", e);
         }
 
         return objectExists;
@@ -59,7 +63,7 @@ public class AWSFile extends AWSStatefulObject implements IFile {
         try (S3Object s3Object = s3Client.getObject(getObjectRequest)) {
             return s3Object.getObjectMetadata().getContentLength();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.log(Level.WARNING, "Unable to get the size of of the AWS File", e);
         }
 
         return 0;
@@ -75,13 +79,13 @@ public class AWSFile extends AWSStatefulObject implements IFile {
         return data;
     }
 
-    private void retrieveData() {
+    private void retrieveAndUpdateData() {
         try (S3Object s3Object = s3Client.getObject(getObjectRequest)) {
             boolean objectExists = s3Object != null;
             updateData(s3Object, objectExists);
 
         } catch (AmazonS3Exception | IOException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Unable to retrieve and/or update the data for the AWS File", e);
         }
     }
 

@@ -54,7 +54,7 @@ public class ByteData implements Data {
 
     /**
      * Tests equality with another instance.
-     * 
+     *
      * @return true if the array's contents are equivalent to those of the given array
      * @see Object#equals(Object)
      */

@@ -57,6 +57,10 @@ export AWS_ACCESS_KEY_ID=<KEY>
 export AWS_SECRET_KEY=<KEY>
 ```
 
+### Redis
+
+You need to run a redis instance.
+
 ### Dropbox
 
 WIP

@@ -15,11 +15,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public abstract class AWSStatefulObject extends CommonStatefulObject implements StatefulObject {
+
+    private static final Logger log = Logger.getLogger(AWSStatefulObject.class.getName());
 
     protected static final int RESOURCE_NOT_FOUND = 404;
     private static final String TMP_FILE_PREFIX = "aws";
@@ -67,7 +71,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
             Date date = metadata.getLastModified();
             return date.getTime();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.log(Level.WARNING, "Unable to get the last modified date for the AWS Object", e);
         }
 
        return 0;
@@ -104,7 +108,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
             s3Client.putObject(putObjectRequest);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Unable to persiste the AWS Object", e);
         }
     }
 

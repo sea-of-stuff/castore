@@ -164,7 +164,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
 
                 return new NameObjectBindingImpl(name, obj);
             } catch (BindingAbsentException e) {
-                e.printStackTrace();
+                log.log(Level.SEVERE, "Unable to create a Binding Object for the next element from the iterator");
             }
 
             return null;
