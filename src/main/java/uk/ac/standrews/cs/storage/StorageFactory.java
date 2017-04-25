@@ -11,6 +11,8 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static uk.ac.standrews.cs.storage.StorageBuilder.NOT_SET;
+
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
@@ -26,21 +28,26 @@ public class StorageFactory {
     public static IStorage createStorage(StorageBuilder builder) throws StorageException {
         IStorage storage;
 
-        switch(builder.type) {
+        switch(builder.getType()) {
             case LOCAL:
-                storage = new FileBasedStorage(new File(builder.root));
+                storage = new FileBasedStorage(new File(builder.getRoot()));
                 break;
             case NETWORK:
-                storage = new NetworkBasedStorage(builder.mountPoint, builder.root);
+                storage = new NetworkBasedStorage(builder.getMountPoint(), builder.getRoot());
                 break;
             case AWS_S3:
-                storage = new AWSStorage(builder.root);
+                storage = new AWSStorage(builder.getRoot());
                 break;
             case REDIS:
-                storage = new RedisStorage(builder.hostname, builder.port);
+                int port = builder.getPort();
+                if (port == NOT_SET) {
+                    storage = new RedisStorage(builder.getHostname());
+                } else {
+                    storage = new RedisStorage(builder.getHostname(), builder.getPort());
+                }
                 break;
             default:
-                log.log(Level.SEVERE, "Storage type: " + builder.type + " is unknown. Impossible to create a storage.");
+                log.log(Level.SEVERE, "Storage type: " + builder.getType() + " is unknown. Impossible to create a storage.");
                 throw new StorageException();
         }
 

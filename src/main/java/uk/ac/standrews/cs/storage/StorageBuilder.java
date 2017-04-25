@@ -5,11 +5,13 @@ package uk.ac.standrews.cs.storage;
  */
 public class StorageBuilder {
 
+    public static final int NOT_SET = -1;
+
     private StorageType type;
     private String root;
     private String mountPoint;
     private String hostname;
-    private int port;
+    private int port = NOT_SET;
 
     public StorageBuilder setType(StorageType type) {
         this.type = type;
@@ -34,5 +36,25 @@ public class StorageBuilder {
     public StorageBuilder setPort(int port) {
         this.port = port;
         return this;
+    }
+
+    public StorageType getType() {
+        return type;
+    }
+
+    public String getRoot() {
+        return root;
+    }
+
+    public String getMountPoint() {
+        return mountPoint;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

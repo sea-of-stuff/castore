@@ -16,7 +16,18 @@ import uk.ac.standrews.cs.storage.interfaces.IStorage;
  */
 public class RedisStorage extends CommonStorage implements IStorage {
 
+    private final static int DEFAULT_PORT = 6379;
+
     private JedisPool pool;
+
+    public RedisStorage(String hostname) {
+        pool = new JedisPool(new JedisPoolConfig(), hostname, DEFAULT_PORT);
+
+        try(Jedis jedis = pool.getResource()) {
+            String response = jedis.ping();
+            // TODO - check if redis instance is on
+        }
+    }
 
     /**
      * You should make sure that a redis instance is available
