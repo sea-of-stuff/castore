@@ -1,4 +1,4 @@
-# castore
+# castore = cast + store
 
 This project provides a set of storage abstractions and implementations.
 
@@ -21,34 +21,22 @@ Alternatively you can produce a `.jar` for the project and add it as a dependenc
 
 File systems all expose very similar, but somewhat different, interfaces to interact with files and directories.
 Here we provide a very simple and basic interface that abstract various storage systems.
-The interface here provided is not complete.
 
+Castore provides a very minimal and simple interface to interact with different storage systems.
 
-### Storage
-
-### File
-
-### Folder
-
-
-## Mutable vs Immutable
-
-
-## Implementations
+## Available implementations
 
 ### File Based
 
 This implementation is based on the local file system.
 
+
 ### Network Based
 
-You need to mount the network drive yourself.
+Current limitation: you need to mount the network drive yourself.
+
 
 ### AWS.s3
-
-- describe behaviour
-- give examples
-
 
 In order to work with an AWS S3 storage, you need to provide an access_key_id and a secret_access_key.
 This can be done explicitly or by setting the environment variables:
@@ -57,15 +45,24 @@ export AWS_ACCESS_KEY_ID=<KEY>
 export AWS_SECRET_KEY=<KEY>
 ```
 
+See the SimplestS3Example to see how to get started.
+
+
 ### Redis
 
-You need to run a redis instance.
+Redis is an in-memory data structure store, which is networked and very fast.
+A Redis-based storage can be used to store small amount of data with good performance.
 
-### Dropbox
+Before using the Redis-based storage, you need [Redis](https://redis.io) installed. Then run a server instance: `redis-server`
 
-WIP
+See the SimplestRedisExample to see how to get started.
 
-## Limitations
+
+## Next (not implemented yet)
+
+- Dropbox
+- In-memory
+- GUID-based
 
 ## Credits
 

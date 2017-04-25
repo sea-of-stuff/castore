@@ -22,6 +22,7 @@ public class RedisStorage extends CommonStorage implements IStorage {
     private static Logger log = Logger.getLogger(RedisStorage.class.getName());
 
     private final static int DEFAULT_PORT = 6379;
+    private final static String PING_RESPONSE = "PONG";
 
     private JedisPool pool;
     private String hostname;
@@ -44,7 +45,7 @@ public class RedisStorage extends CommonStorage implements IStorage {
         try(Jedis jedis = pool.getResource()) {
 
             String response = jedis.ping();
-            if (response.equals("PONG")) {
+            if (response.equals(PING_RESPONSE)) {
                 createRoot(jedis);
             } else {
                 log.log(Level.SEVERE, "Redis Storage could not be created because there is not available or recheable Redis server");
