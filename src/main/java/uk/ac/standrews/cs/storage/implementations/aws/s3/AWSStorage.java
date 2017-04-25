@@ -1,11 +1,13 @@
 package uk.ac.standrews.cs.storage.implementations.aws.s3;
 
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -58,20 +60,25 @@ public class AWSStorage extends CommonStorage implements IStorage {
      */
     public AWSStorage(String bucketName) throws StorageException {
 
-        s3Client = new AmazonS3Client();
-        s3Client.setRegion(region);
-        createAndSetBucket(bucketName);
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withRegion(region.toString())
+                .withCredentials(new EnvironmentVariableCredentialsProvider())
+                .build();
 
+        createAndSetBucket(bucketName);
         createRoot();
     }
 
     public AWSStorage(String accessKeyId, String secretAccessKey, String bucketName) throws StorageException {
 
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, secretAccessKey);
-        s3Client = new AmazonS3Client(awsCreds);
-        s3Client.setRegion(region);
-        createAndSetBucket(bucketName);
 
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withRegion(region.toString())
+                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                .build();
+
+        createAndSetBucket(bucketName);
         createRoot();
     }
 
