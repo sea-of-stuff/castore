@@ -19,30 +19,28 @@ public class StorageFactory {
     private static final Logger log = Logger.getLogger( StorageFactory.class.getName() );
 
     /**
-     *
-     * @param type
-     * @param root (location for LOCAL, NETWORK; bucketname for AWS)
+     * @param builder
      * @return
      * @throws StorageException
      */
-    public static IStorage createStorage(StorageType type, String root) throws StorageException {
+    public static IStorage createStorage(StorageBuilder builder) throws StorageException {
         IStorage storage;
 
-        switch(type) {
+        switch(builder.type) {
             case LOCAL:
-                storage = new FileBasedStorage(new File(root));
+                storage = new FileBasedStorage(new File(builder.root));
                 break;
             case NETWORK:
-                storage = new NetworkBasedStorage(root, root); // FIXME - parameters
+                storage = new NetworkBasedStorage(builder.mountPoint, builder.root);
                 break;
             case AWS_S3:
-                storage = new AWSStorage(root);
+                storage = new AWSStorage(builder.root);
                 break;
             case REDIS:
-                storage = new RedisStorage(root); // root is hostname
+                storage = new RedisStorage(builder.hostname, builder.port);
                 break;
             default:
-                log.log(Level.SEVERE, "Storage type: " + type + " is unknown. Impossible to create a storage.");
+                log.log(Level.SEVERE, "Storage type: " + builder.type + " is unknown. Impossible to create a storage.");
                 throw new StorageException();
         }
 

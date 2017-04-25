@@ -23,8 +23,8 @@ public class RedisStorage extends CommonStorage implements IStorage {
      *
      * @param hostname
      */
-    public RedisStorage(String hostname) {
-        pool = new JedisPool(new JedisPoolConfig(), "localhost");
+    public RedisStorage(String hostname, int port) {
+        pool = new JedisPool(new JedisPoolConfig(), hostname, port);
 
         try(Jedis jedis = pool.getResource()) {
             String response = jedis.ping();

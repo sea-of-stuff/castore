@@ -106,11 +106,12 @@ public class AWSStorage extends CommonStorage implements IStorage {
             ListObjectsV2Result result;
             do {
                 result = s3Client.listObjectsV2(req);
-                for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
+                for (S3ObjectSummary objectSummary:result.getObjectSummaries()) {
                     root.remove(objectSummary.getKey());
                 }
 
-                req.setContinuationToken(result.getNextContinuationToken());
+                String continuationToken = result.getNextContinuationToken();
+                req.setContinuationToken(continuationToken);
             } while (result.isTruncated());
 
             s3Client.deleteBucket(bucketName);
@@ -122,15 +123,13 @@ public class AWSStorage extends CommonStorage implements IStorage {
     private void createAndSetBucket(String bucketName) throws StorageException {
         try {
             boolean bucketExist = s3Client.doesBucketExist(bucketName);
-            if (!bucketExist) {
-                s3Client.createBucket(bucketName);
-            }
+            if (!bucketExist) s3Client.createBucket(bucketName);
+
 
             this.bucketName = bucketName;
 
             while(true) {
-                if (s3Client.doesBucketExist(bucketName))
-                    break;
+                if (s3Client.doesBucketExist(bucketName)) break;
 
                 log.info("Waiting for bucket creation");
                 Thread.sleep(1000);

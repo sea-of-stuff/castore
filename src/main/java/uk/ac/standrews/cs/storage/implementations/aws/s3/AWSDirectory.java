@@ -249,9 +249,7 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
         public NameObjectBinding next() {
             // skipThisFolder();
 
-            if(!hasNext()) {
-                return null;
-            }
+            if(!hasNext()) return null;
 
             try {
                 String objectName;

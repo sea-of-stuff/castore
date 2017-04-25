@@ -1,5 +1,6 @@
 package uk.ac.standrews.cs.storage.examples;
 
+import uk.ac.standrews.cs.storage.StorageBuilder;
 import uk.ac.standrews.cs.storage.StorageFactory;
 import uk.ac.standrews.cs.storage.StorageType;
 import uk.ac.standrews.cs.storage.data.StringData;
@@ -20,7 +21,12 @@ public class SimplestExample {
     public static void main(String[] args) throws IOException, StorageException {
 
         Path path = Files.createTempDirectory(null);
-        IStorage storage = StorageFactory.createStorage(StorageType.LOCAL, path.toString());
+
+        StorageBuilder builder = new StorageBuilder()
+                .setType(StorageType.LOCAL)
+                .setRoot(path.toString());
+
+        IStorage storage = StorageFactory.createStorage(builder);
 
         IDirectory root = storage.getRoot();
         IFile file = storage.createFile(root, "exampleFile");

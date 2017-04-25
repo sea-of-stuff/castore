@@ -24,9 +24,8 @@ public class AWSFile extends AWSStatefulObject implements IFile {
                    String name) {
         super(s3Client, bucketName, parent, name);
 
-        if (exists()) {
-            retrieveAndUpdateData();
-        }
+        if (exists()) retrieveAndUpdateData();
+
     }
 
     public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent,
@@ -41,7 +40,9 @@ public class AWSFile extends AWSStatefulObject implements IFile {
         boolean objectExists = false;
 
         try (S3Object s3Object = s3Client.getObject(getObjectRequest)) {
+
             objectExists = s3Object != null;
+
         } catch (AmazonS3Exception e) {
             if (e.getStatusCode() == RESOURCE_NOT_FOUND) {
                 objectExists = false;
@@ -61,7 +62,9 @@ public class AWSFile extends AWSStatefulObject implements IFile {
     @Override
     public long getSize() {
         try (S3Object s3Object = s3Client.getObject(getObjectRequest)) {
+
             return s3Object.getObjectMetadata().getContentLength();
+
         } catch (IOException e) {
             log.log(Level.WARNING, "Unable to get the size of of the AWS File", e);
         }
@@ -81,6 +84,7 @@ public class AWSFile extends AWSStatefulObject implements IFile {
 
     private void retrieveAndUpdateData() {
         try (S3Object s3Object = s3Client.getObject(getObjectRequest)) {
+
             boolean objectExists = s3Object != null;
             updateData(s3Object, objectExists);
 
