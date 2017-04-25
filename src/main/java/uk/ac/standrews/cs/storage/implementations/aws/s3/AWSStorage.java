@@ -69,7 +69,7 @@ public class AWSStorage extends CommonStorage implements IStorage {
         createRoot();
     }
 
-    public AWSStorage(String accessKeyId, String secretAccessKey, String bucketName) throws StorageException {
+    public AWSStorage(final String accessKeyId, final String secretAccessKey, String bucketName) throws StorageException {
 
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, secretAccessKey);
 
