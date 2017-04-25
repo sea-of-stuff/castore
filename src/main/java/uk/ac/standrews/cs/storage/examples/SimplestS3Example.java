@@ -1,8 +1,8 @@
 package uk.ac.standrews.cs.storage.examples;
 
-import uk.ac.standrews.cs.storage.StorageBuilder;
-import uk.ac.standrews.cs.storage.StorageFactory;
-import uk.ac.standrews.cs.storage.StorageType;
+import uk.ac.standrews.cs.storage.CastoreBuilder;
+import uk.ac.standrews.cs.storage.CastoreFactory;
+import uk.ac.standrews.cs.storage.CastoreType;
 import uk.ac.standrews.cs.storage.data.StringData;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
@@ -18,13 +18,11 @@ public class SimplestS3Example {
 
     public static void main(String[] args) throws IOException, StorageException {
 
-        String bucket = "test";
+        CastoreBuilder builder = new CastoreBuilder()
+                .setType(CastoreType.AWS_S3)
+                .setRoot("test-bucket");
 
-        StorageBuilder builder = new StorageBuilder()
-                .setType(StorageType.AWS_S3)
-                .setRoot(bucket);
-
-        IStorage storage = StorageFactory.createStorage(builder);
+        IStorage storage = CastoreFactory.createStorage(builder);
 
         IDirectory root = storage.getRoot();
         IFile file = storage.createFile(root, "exampleFile");

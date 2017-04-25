@@ -3,42 +3,42 @@ package uk.ac.standrews.cs.storage;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class StorageBuilder {
+public class CastoreBuilder {
 
     public static final int NOT_SET = -1;
 
-    private StorageType type;
+    private CastoreType type;
     private String root;
     private String mountPoint;
     private String hostname;
     private int port = NOT_SET;
 
-    public StorageBuilder setType(StorageType type) {
+    public CastoreBuilder setType(CastoreType type) {
         this.type = type;
         return this;
     }
 
-    public StorageBuilder setRoot(String root) {
+    public CastoreBuilder setRoot(String root) {
         this.root = root;
         return this;
     }
 
-    public StorageBuilder setMountPoint(String mountPoint) {
+    public CastoreBuilder setMountPoint(String mountPoint) {
         this.mountPoint = mountPoint;
         return this;
     }
 
-    public StorageBuilder setHostname(String hostname) {
+    public CastoreBuilder setHostname(String hostname) {
         this.hostname = hostname;
         return this;
     }
 
-    public StorageBuilder setPort(int port) {
+    public CastoreBuilder setPort(int port) {
         this.port = port;
         return this;
     }
 
-    public StorageType getType() {
+    public CastoreType getType() {
         return type;
     }
 

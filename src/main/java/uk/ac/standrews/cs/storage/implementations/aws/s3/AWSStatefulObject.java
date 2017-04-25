@@ -53,7 +53,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
     }
 
     @Override
-    public IDirectory getParent() {
+    public IDirectory getLogicalParent() {
         return logicalParent;
     }
 

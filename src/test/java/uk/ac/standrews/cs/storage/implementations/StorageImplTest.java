@@ -98,7 +98,7 @@ public class StorageImplTest extends StorageBaseTest {
             testCounter++;
         }
 
-        assertEquals(testCounter, 15); // Expecting parent directory too
+        assertEquals(testCounter, 15); // Expecting logicalParent directory too
     }
 
     @Test
@@ -119,7 +119,7 @@ public class StorageImplTest extends StorageBaseTest {
             testCounter++;
         }
 
-        assertEquals(testCounter, 15); // Expecting parent directory too
+        assertEquals(testCounter, 15); // Expecting logicalParent directory too
     }
 
     @Test

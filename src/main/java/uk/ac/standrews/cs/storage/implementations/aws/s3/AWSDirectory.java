@@ -14,6 +14,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static uk.ac.standrews.cs.storage.CastoreConstants.FOLDER_DELIMITER;
+import static uk.ac.standrews.cs.storage.CastoreConstants.NO_DELIMITER;
+
 /**
  * This class represent an AWS directory.
  * AWS S3 does not have the concept of directories. Everything is a file.
@@ -25,8 +28,6 @@ import java.util.List;
  */
 public class AWSDirectory extends AWSStatefulObject implements IDirectory {
 
-    private static final String FOLDER_DELIMITER = "/";
-    private static final String NO_DELIMITER = "";
     private static final int MINIMUM_NUMBER_OBJECT_FOR_FOLDER = 1;
 
     /**

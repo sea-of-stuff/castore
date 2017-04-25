@@ -10,21 +10,17 @@ import uk.ac.standrews.cs.storage.interfaces.IFile;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class SimplestExample {
+public class SimplestRedisExample {
 
     public static void main(String[] args) throws IOException, StorageException {
 
-        Path path = Files.createTempDirectory(null);
-
         CastoreBuilder builder = new CastoreBuilder()
-                .setType(CastoreType.LOCAL)
-                .setRoot(path.toString());
+                .setType(CastoreType.REDIS)
+                .setHostname("localhost");
 
         IStorage storage = CastoreFactory.createStorage(builder);
 
@@ -32,6 +28,9 @@ public class SimplestExample {
         IFile file = storage.createFile(root, "exampleFile");
         file.setData(new StringData("Example Data"));
 
+        file.persist();
+
         System.out.println("Just created a file named " + file.getName() + " at the following path " + file.getPathname());
     }
+
 }

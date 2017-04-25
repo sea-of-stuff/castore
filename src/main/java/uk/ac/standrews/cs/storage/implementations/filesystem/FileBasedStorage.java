@@ -42,7 +42,7 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
 
     @Override
     public IDirectory createDirectory(String name) throws StorageException {
-        return new FileBasedDirectory(root, name);
+        return createDirectory(root, name);
     }
 
     @Override

@@ -26,7 +26,7 @@ public abstract class FileBasedStatefulObject extends CommonStatefulObject imple
     }
 
     @Override
-    public IDirectory getParent() {
+    public IDirectory getLogicalParent() {
         return logicalParent;
     }
 

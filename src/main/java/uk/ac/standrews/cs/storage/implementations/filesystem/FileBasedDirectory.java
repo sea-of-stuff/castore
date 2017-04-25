@@ -22,7 +22,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
 
     private static final Logger log = Logger.getLogger(FileBasedDirectory.class.getName());
 
-    public FileBasedDirectory(IDirectory parent, String name) throws StorageException {
+    public FileBasedDirectory( IDirectory parent,String name) throws StorageException {
         super(parent, name);
 
         try {
@@ -38,7 +38,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
     }
 
     @Override
-    public IDirectory getParent() {
+    public IDirectory getLogicalParent() {
         return logicalParent;
     }
 

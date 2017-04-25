@@ -3,7 +3,7 @@ package uk.ac.standrews.cs.storage;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public enum StorageType {
+public enum CastoreType {
 
     LOCAL("local"),
     NETWORK("network"),
@@ -14,7 +14,7 @@ public enum StorageType {
 
     private final String text;
 
-    StorageType(final String text) {
+    CastoreType(final String text) {
         this.text = text;
     }
 
@@ -23,8 +23,8 @@ public enum StorageType {
         return text;
     }
 
-    public static StorageType getEnum(String value) {
-        for(StorageType v : values())
+    public static CastoreType getEnum(String value) {
+        for(CastoreType v : values())
             if(v.toString().equalsIgnoreCase(value)) return v;
         throw new IllegalArgumentException();
     }

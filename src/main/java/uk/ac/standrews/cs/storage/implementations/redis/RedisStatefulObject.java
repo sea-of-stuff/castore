@@ -9,29 +9,34 @@ import uk.ac.standrews.cs.IGUID;
 import uk.ac.standrews.cs.exceptions.GUIDGenerationException;
 import uk.ac.standrews.cs.storage.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.data.Data;
-import uk.ac.standrews.cs.storage.data.InputStreamData;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
+import uk.ac.standrews.cs.storage.utils.IO;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class RedisStatefulObject extends CommonStatefulObject implements StatefulObject {
+public abstract class RedisStatefulObject extends CommonStatefulObject implements StatefulObject {
 
     private static final String TMP_FILE_PREFIX = "redis";
     private static final String TMP_FILE_SUFFIX = ".tmp";
 
     protected Jedis jedis;
 
+    protected IDirectory logicalParent;
     protected String name;
     protected String objectPath;
     protected Data data;
+
+    public RedisStatefulObject(Jedis jedis, IDirectory parent, String name) {
+        this.jedis = jedis;
+        this.logicalParent = parent;
+        this.name = name;
+        this.objectPath = getPathname();
+    }
 
     public RedisStatefulObject(Jedis jedis, String name) {
         this.jedis = jedis;
@@ -40,23 +45,13 @@ public class RedisStatefulObject extends CommonStatefulObject implements Statefu
     }
 
     @Override
-    public IDirectory getParent() {
+    public IDirectory getLogicalParent() {
         return null;
-    }
-
-    @Override
-    public boolean exists() {
-        return false;
     }
 
     @Override
     public String getName() {
         return name;
-    }
-
-    @Override
-    public String getPathname() {
-        return "TODO";
     }
 
     @Override
@@ -82,15 +77,19 @@ public class RedisStatefulObject extends CommonStatefulObject implements Statefu
     @Override
     public void persist() throws PersistenceException {
 
-        try (InputStream inputStream = getInputStream()) {
+        try (final InputStream inputStream = getInputStream();
+             final ByteArrayOutputStream baos = IO.InputStreamToByteArrayOutputStream(inputStream);
+             InputStream dataFirstClone = new ByteArrayInputStream(baos.toByteArray());
+             InputStream dataSecondClone = new ByteArrayInputStream(baos.toByteArray())) {
 
             String objectPath = getPathname();
-            IGUID guid = GUIDFactory.generateGUID(inputStream);
+            IGUID guid = GUIDFactory.generateGUID(dataFirstClone);
 
             jedis.set(objectPath, guid.toString());
             boolean exists = jedis.exists(guid.toString());
             if (!exists) {
-                jedis.set(guid.toString(), new InputStreamData(inputStream).toString());
+                String dataString = IO.InputStreamToString(dataSecondClone);
+                jedis.set(guid.toString(), dataString);
             }
 
         } catch (IOException | GUIDGenerationException e) {
@@ -102,8 +101,4 @@ public class RedisStatefulObject extends CommonStatefulObject implements Statefu
         return data != null ? data.getInputStream() : new NullInputStream(0);
     }
 
-    @Override
-    public long getSize() {
-        return 0;
-    }
 }

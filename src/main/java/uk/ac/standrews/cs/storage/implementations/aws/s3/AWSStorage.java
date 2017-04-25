@@ -82,7 +82,7 @@ public class AWSStorage extends CommonStorage implements IStorage {
 
     @Override
     public IDirectory createDirectory(String name) {
-        return new AWSDirectory(s3Client, bucketName, root, name);
+        return createDirectory(root, name);
     }
 
     @Override

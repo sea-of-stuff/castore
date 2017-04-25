@@ -11,21 +11,21 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static uk.ac.standrews.cs.storage.StorageBuilder.NOT_SET;
+import static uk.ac.standrews.cs.storage.CastoreBuilder.NOT_SET;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class StorageFactory {
+public class CastoreFactory {
 
-    private static final Logger log = Logger.getLogger( StorageFactory.class.getName() );
+    private static final Logger log = Logger.getLogger( CastoreFactory.class.getName() );
 
     /**
      * @param builder
      * @return
      * @throws StorageException
      */
-    public static IStorage createStorage(StorageBuilder builder) throws StorageException {
+    public static IStorage createStorage(CastoreBuilder builder) throws StorageException {
         IStorage storage;
 
         switch(builder.getType()) {

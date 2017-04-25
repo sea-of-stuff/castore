@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public interface StatefulObject {
 
-    IDirectory getParent();
+    IDirectory getLogicalParent();
 
     boolean exists();
 

@@ -17,7 +17,7 @@ public interface IStorage {
     IDirectory getRoot();
 
     /**
-     * Create a directory within the specified parent and with the given name
+     * Create a directory within the specified logicalParent and with the given name
      * @param parent
      * @param name
      * @return
@@ -32,7 +32,7 @@ public interface IStorage {
     IDirectory createDirectory(String name) throws StorageException;
 
     /**
-     * Create a file at the specified parent directory
+     * Create a file at the specified logicalParent directory
      * @param parent
      * @param filename
      * @return
