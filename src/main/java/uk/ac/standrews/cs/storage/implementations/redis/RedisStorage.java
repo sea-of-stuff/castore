@@ -15,6 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ *
+ * TODO - set the SAVE configuration when creating the redis instance?
+ *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class RedisStorage extends CommonStorage implements IStorage {
@@ -50,7 +53,9 @@ public class RedisStorage extends CommonStorage implements IStorage {
             } else {
                 log.log(Level.SEVERE, "Redis Storage could not be created because there is not available or recheable Redis server");
             }
+
         }
+
     }
 
     @Override
@@ -76,6 +81,13 @@ public class RedisStorage extends CommonStorage implements IStorage {
     public IFile createFile(IDirectory parent, String filename, Data data) throws StorageException {
         try(Jedis jedis = pool.getResource()) {
             return new RedisFile(jedis, parent, filename, data);
+        }
+    }
+
+    @Override
+    public void persist() {
+        try(Jedis jedis = pool.getResource()) {
+            jedis.bgsave();
         }
     }
 

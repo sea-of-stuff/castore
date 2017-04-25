@@ -46,7 +46,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
 
     @Override
     public IDirectory getLogicalParent() {
-        return null;
+        return logicalParent;
     }
 
     @Override

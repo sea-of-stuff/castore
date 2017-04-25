@@ -49,6 +49,8 @@ public interface IStorage {
      */
     IFile createFile(IDirectory parent, String filename, Data data) throws StorageException;
 
+    default void persist() { /* NEEDED ONLY FOR IN-MEMORY BASED STORAGES */ }
+
     /**
      * Destroy this storage
      * @throws DestroyException
