@@ -27,7 +27,7 @@ public class Dropbox {
         CastoreBuilder builder = new CastoreBuilder()
                 .setType(CastoreType.DROPBOX)
                 .setToken(token)
-                .setRoot("test-bucket");
+                .setRoot("/Apps/castore");
 
         IStorage storage = CastoreFactory.createStorage(builder);
 

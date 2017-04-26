@@ -36,7 +36,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     @Override
     public IDirectory getLogicalParent() {
-        return null;
+        return logicalParent;
     }
 
     @Override
@@ -46,12 +46,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     @Override
     public String getName() {
-        return null;
-    }
-
-    @Override
-    public String getPathname() {
-        return null;
+        return name;
     }
 
     @Override

@@ -3,7 +3,6 @@ package uk.ac.standrews.cs.storage.implementations.dropbox;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.files.UploadErrorException;
 import com.dropbox.core.v2.files.WriteMode;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
@@ -30,6 +29,11 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     }
 
     @Override
+    public String getPathname() {
+        return logicalParent.getPathname() + name;
+    }
+
+    @Override
     public void setData(Data data) throws DataException {
         this.data = data;
     }
@@ -42,8 +46,9 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     @Override
     public void persist() throws PersistenceException {
         try (InputStream inputStream = data.getInputStream()){
-            uploadFile(client, inputStream, "/Apps/castore/test"); // FIXME - path is hardcoded
-        } catch (IOException e) {
+            String path = getPathname();
+            uploadFile(client, inputStream, path);
+        } catch (DbxException | IOException e) {
             throw new PersistenceException("Unable to persist data to Dropbox", e);
         }
     }
@@ -56,24 +61,13 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
      * @param inputStream data to upload
      * @param dropboxPath Where to upload the file to within Dropbox
      */
-    private static void uploadFile(DbxClientV2 dbxClient, InputStream inputStream, String dropboxPath) {
-        try {
+    private static void uploadFile(DbxClientV2 dbxClient, InputStream inputStream, String dropboxPath) throws IOException, DbxException {
 
-            FileMetadata metadata = dbxClient.files().uploadBuilder(dropboxPath)
-                    .withMode(WriteMode.ADD)
-                    .uploadAndFinish(inputStream);
+        FileMetadata metadata = dbxClient.files()
+                .uploadBuilder(dropboxPath)
+                .withMode(WriteMode.ADD)
+                .uploadAndFinish(inputStream);
 
-            System.out.println(metadata.toStringMultiline());
-        } catch (UploadErrorException ex) {
-            System.err.println("Error uploading to Dropbox: " + ex.getMessage());
-            System.exit(1);
-        } catch (DbxException ex) {
-            System.err.println("Error uploading to Dropbox: " + ex.getMessage());
-            System.exit(1);
-        } catch (IOException ex) {
-            System.err.println("Error reading from input stream: " + ex.getMessage());
-            System.exit(1);
-        }
     }
 
 }

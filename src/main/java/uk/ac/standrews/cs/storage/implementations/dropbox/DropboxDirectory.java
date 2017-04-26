@@ -10,6 +10,8 @@ import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 
 import java.util.Iterator;
 
+import static uk.ac.standrews.cs.storage.CastoreConstants.FOLDER_DELIMITER;
+
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
@@ -21,6 +23,17 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
 
     public DropboxDirectory(DbxClientV2 client, String name) {
         super(client, name);
+    }
+
+    @Override
+    public String getPathname() {
+        if (logicalParent == null) {
+            return name + FOLDER_DELIMITER;
+        } else if (name == null || name.isEmpty()) {
+            return logicalParent.getPathname() + FOLDER_DELIMITER;
+        } else {
+            return logicalParent.getPathname() + name + FOLDER_DELIMITER;
+        }
     }
 
     @Override
@@ -46,7 +59,9 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     @Override
     public void persist() throws PersistenceException {
         try {
-            client.files().createFolder("/Apps/castore/folder"); // FIXME - do not hardcode
+            String path = getPathname();
+            path = path.substring(0, path.length() - 1); // Removing last slash
+            client.files().createFolder(path);
         } catch (DbxException e) {
             throw new PersistenceException("Unable to persist directory", e);
         }
