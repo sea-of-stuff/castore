@@ -37,12 +37,12 @@ public class DropboxStorage extends CommonStorage implements IStorage {
 
     @Override
     public IDirectory createDirectory(IDirectory parent, String name) throws StorageException {
-        return null;
+        return new DropboxDirectory(client, parent, name);
     }
 
     @Override
     public IDirectory createDirectory(String name) throws StorageException {
-        return null;
+        return createDirectory(root, name);
     }
 
     @Override

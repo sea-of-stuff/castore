@@ -58,6 +58,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
      */
     private static void uploadFile(DbxClientV2 dbxClient, InputStream inputStream, String dropboxPath) {
         try {
+
             FileMetadata metadata = dbxClient.files().uploadBuilder(dropboxPath)
                     .withMode(WriteMode.ADD)
                     .uploadAndFinish(inputStream);

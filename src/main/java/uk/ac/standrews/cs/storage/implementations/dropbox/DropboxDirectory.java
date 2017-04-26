@@ -1,5 +1,6 @@
 package uk.ac.standrews.cs.storage.implementations.dropbox;
 
+import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
@@ -44,6 +45,10 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
 
     @Override
     public void persist() throws PersistenceException {
-
+        try {
+            client.files().createFolder("/Apps/castore/folder"); // FIXME - do not hardcode
+        } catch (DbxException e) {
+            throw new PersistenceException("Unable to persist directory", e);
+        }
     }
 }

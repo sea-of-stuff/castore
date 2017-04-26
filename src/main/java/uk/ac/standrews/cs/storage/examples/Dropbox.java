@@ -36,5 +36,8 @@ public class Dropbox {
         file.persist();
 
         System.out.println("dropbox example finished");
+
+        IDirectory directory = storage.createDirectory("simone");
+        directory.persist();
     }
 }
