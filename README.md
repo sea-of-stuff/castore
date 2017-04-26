@@ -57,10 +57,12 @@ Before using the Redis-based storage, you need [Redis](https://redis.io) install
 
 See the SimplestRedisExample to see how to get started.
 
+### Dropbox
+
+First you need to create a Dropbox app and get an App Token.
 
 ## Next (not implemented yet)
 
-- Dropbox
 - In-memory
 - GUID-based
 

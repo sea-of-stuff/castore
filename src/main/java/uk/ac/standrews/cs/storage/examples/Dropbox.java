@@ -27,15 +27,13 @@ public class Dropbox {
         CastoreBuilder builder = new CastoreBuilder()
                 .setType(CastoreType.DROPBOX)
                 .setToken(token)
-                .setRoot("/Apps/castore");
+                .setRoot("/Apps/castore"); // This is the APP folder created at the time the Dropbox app was created
 
         IStorage storage = CastoreFactory.createStorage(builder);
 
         IDirectory root = storage.getRoot();
         IFile file = storage.createFile(root, "test", new StringData("Example Data"));
         file.persist();
-
-        System.out.println("dropbox example finished");
 
         IDirectory directory = storage.createDirectory("simone");
         directory.persist();
