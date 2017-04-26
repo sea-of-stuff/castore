@@ -16,7 +16,7 @@ import java.nio.file.Path;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class SimplestExample {
+public class FileBased {
 
     public static void main(String[] args) throws IOException, StorageException {
 

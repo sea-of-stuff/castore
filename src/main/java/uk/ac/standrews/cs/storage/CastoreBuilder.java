@@ -12,6 +12,7 @@ public class CastoreBuilder {
     private String mountPoint;
     private String hostname;
     private int port = NOT_SET;
+    private String token;
 
     public CastoreBuilder setType(CastoreType type) {
         this.type = type;
@@ -38,6 +39,11 @@ public class CastoreBuilder {
         return this;
     }
 
+    public CastoreBuilder setToken(String token) {
+        this.token = token;
+        return this;
+    }
+
     public CastoreType getType() {
         return type;
     }
@@ -56,5 +62,9 @@ public class CastoreBuilder {
 
     public int getPort() {
         return port;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

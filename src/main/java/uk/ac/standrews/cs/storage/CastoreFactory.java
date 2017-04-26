@@ -2,6 +2,7 @@ package uk.ac.standrews.cs.storage;
 
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.aws.s3.AWSStorage;
+import uk.ac.standrews.cs.storage.implementations.dropbox.DropboxStorage;
 import uk.ac.standrews.cs.storage.implementations.filesystem.FileBasedStorage;
 import uk.ac.standrews.cs.storage.implementations.network.NetworkBasedStorage;
 import uk.ac.standrews.cs.storage.implementations.redis.RedisStorage;
@@ -37,6 +38,7 @@ public class CastoreFactory {
                 break;
             case AWS_S3:
                 storage = new AWSStorage(builder.getRoot());
+                // TODO - with keys
                 break;
             case REDIS:
                 int port = builder.getPort();
@@ -45,6 +47,9 @@ public class CastoreFactory {
                 } else {
                     storage = new RedisStorage(builder.getHostname(), builder.getPort());
                 }
+                break;
+            case DROPBOX:
+                storage = new DropboxStorage(builder.getToken(), builder.getRoot());
                 break;
             default:
                 log.log(Level.SEVERE, "Storage type: " + builder.getType() + " is unknown. Impossible to create a storage.");

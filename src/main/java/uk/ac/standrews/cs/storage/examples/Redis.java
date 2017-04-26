@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class SimplestRedisExample {
+public class Redis {
 
     public static void main(String[] args) throws IOException, StorageException {
 
