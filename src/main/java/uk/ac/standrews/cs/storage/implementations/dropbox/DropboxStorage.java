@@ -22,6 +22,7 @@ import java.util.Locale;
 public class DropboxStorage extends CommonStorage implements IStorage {
 
     private DbxClientV2 client;
+    private String rootPath;
 
     public DropboxStorage(final String accessToken, String root) {
 
@@ -30,6 +31,7 @@ public class DropboxStorage extends CommonStorage implements IStorage {
                 .build();
         client = new DbxClientV2(config, accessToken);
 
+        this.rootPath = root;
         createRoot();
     }
 
@@ -45,12 +47,12 @@ public class DropboxStorage extends CommonStorage implements IStorage {
 
     @Override
     public IFile createFile(IDirectory parent, String filename) throws StorageException {
-        return null;
+        return new DropboxFile(client, parent, filename);
     }
 
     @Override
     public IFile createFile(IDirectory parent, String filename, Data data) throws StorageException {
-        return null;
+        return new DropboxFile(client, parent, filename, data);
     }
 
     @Override
@@ -59,5 +61,6 @@ public class DropboxStorage extends CommonStorage implements IStorage {
     }
 
     private void createRoot() {
+        root = new DropboxDirectory(client, rootPath);
     }
 }

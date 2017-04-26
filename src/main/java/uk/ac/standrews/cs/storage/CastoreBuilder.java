@@ -13,6 +13,8 @@ public class CastoreBuilder {
     private String hostname;
     private int port = NOT_SET;
     private String token;
+    private String accessKey;
+    private String secretAccessKey;
 
     public CastoreBuilder setType(CastoreType type) {
         this.type = type;
@@ -44,6 +46,16 @@ public class CastoreBuilder {
         return this;
     }
 
+    public CastoreBuilder setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+        return this;
+    }
+
+    public CastoreBuilder setSecretAccessKey(String secretAccessKey) {
+        this.secretAccessKey = secretAccessKey;
+        return this;
+    }
+
     public CastoreType getType() {
         return type;
     }
@@ -66,5 +78,13 @@ public class CastoreBuilder {
 
     public String getToken() {
         return token;
+    }
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public String getSecretAccessKey() {
+        return secretAccessKey;
     }
 }

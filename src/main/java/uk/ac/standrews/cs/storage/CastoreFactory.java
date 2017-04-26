@@ -37,16 +37,26 @@ public class CastoreFactory {
                 storage = new NetworkBasedStorage(builder.getMountPoint(), builder.getRoot());
                 break;
             case AWS_S3:
-                storage = new AWSStorage(builder.getRoot());
-                // TODO - with keys
+
+                String accessKey = builder.getAccessKey();
+                String secretAccessKey = builder.getSecretAccessKey();
+
+                if (accessKey != null && secretAccessKey != null) {
+                    storage = new AWSStorage(accessKey, secretAccessKey, builder.getRoot());
+                } else {
+                    storage = new AWSStorage(builder.getRoot());
+                }
+
                 break;
             case REDIS:
+
                 int port = builder.getPort();
                 if (port == NOT_SET) {
                     storage = new RedisStorage(builder.getHostname());
                 } else {
                     storage = new RedisStorage(builder.getHostname(), builder.getPort());
                 }
+
                 break;
             case DROPBOX:
                 storage = new DropboxStorage(builder.getToken(), builder.getRoot());
