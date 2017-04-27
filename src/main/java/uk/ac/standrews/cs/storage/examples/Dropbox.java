@@ -37,5 +37,9 @@ public class Dropbox {
 
         IDirectory directory = storage.createDirectory("simone");
         directory.persist();
+
+        IDirectory dir = (IDirectory) root.get("simone");
+        System.out.println(dir.getPathname());
+
     }
 }

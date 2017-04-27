@@ -26,7 +26,7 @@ public class DropboxStorage extends CommonStorage implements IStorage {
 
     public DropboxStorage(final String accessToken, String root) {
 
-        DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial")
+        DbxRequestConfig config = DbxRequestConfig.newBuilder("castore/1.0")
                 .withUserLocaleFrom(Locale.UK)
                 .build();
         client = new DbxClientV2(config, accessToken);
@@ -57,7 +57,7 @@ public class DropboxStorage extends CommonStorage implements IStorage {
 
     @Override
     public void destroy() throws DestroyException {
-
+        // TODO - delete root
     }
 
     private void createRoot() {

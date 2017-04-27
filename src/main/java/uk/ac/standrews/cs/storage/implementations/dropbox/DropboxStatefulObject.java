@@ -1,6 +1,8 @@
 package uk.ac.standrews.cs.storage.implementations.dropbox;
 
+import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.Metadata;
 import uk.ac.standrews.cs.storage.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
@@ -41,7 +43,19 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     @Override
     public boolean exists() {
-        return false;
+
+        try {
+            String path = getPathname();
+
+            if (path.charAt(path.length() -1 ) == '/') {
+                path = path.substring(0, path.length() - 1); // Removing last slash
+            }
+
+            Metadata metadata = client.files().getMetadata(path);
+        } catch (DbxException e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -56,6 +70,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     @Override
     public File toFile() throws IOException {
+        // TODO - download and make a file
         return null;
     }
 
