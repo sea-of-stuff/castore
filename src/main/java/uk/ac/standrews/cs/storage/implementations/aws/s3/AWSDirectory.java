@@ -134,18 +134,6 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
         return new DirectoryIterator(false);
     }
 
-    @Override
-    public long getSize() {
-        long size = 0;
-
-        Iterator<NameObjectBinding> it = getIterator();
-        while(it.hasNext()) {
-            StatefulObject obj = it.next().getObject();
-            size += obj.getSize();
-        }
-        return size;
-    }
-
     private void removeFilesInDirectory(String name) throws BindingAbsentException {
 
         Iterator<NameObjectBinding> iterator = new DirectoryIterator(name, true);

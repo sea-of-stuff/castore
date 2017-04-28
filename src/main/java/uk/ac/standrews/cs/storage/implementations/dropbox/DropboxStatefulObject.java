@@ -74,8 +74,4 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
         return null;
     }
 
-    @Override
-    public long getSize() {
-        return 0;
-    }
 }

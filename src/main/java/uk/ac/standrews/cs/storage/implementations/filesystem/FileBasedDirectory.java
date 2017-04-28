@@ -123,18 +123,6 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
         return new DirectoryIterator(realFile);
     }
 
-    @Override
-    public long getSize() {
-        long size = 0;
-
-        Iterator<NameObjectBinding> it = getIterator();
-        while(it.hasNext()) {
-            StatefulObject obj = it.next().getObject();
-            size += obj.getSize();
-        }
-        return size;
-    }
-
     private class DirectoryIterator implements Iterator<NameObjectBinding>  {
 
         private String[] names;

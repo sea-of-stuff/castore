@@ -2,17 +2,22 @@ package uk.ac.standrews.cs.storage.implementations.dropbox;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 import com.fasterxml.jackson.databind.JsonNode;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 import uk.ac.standrews.cs.storage.utils.JSON;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static uk.ac.standrews.cs.storage.CastoreConstants.FOLDER_DELIMITER;
 
@@ -20,6 +25,8 @@ import static uk.ac.standrews.cs.storage.CastoreConstants.FOLDER_DELIMITER;
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class DropboxDirectory extends DropboxStatefulObject implements IDirectory {
+
+    private static final Logger log = Logger.getLogger(DropboxDirectory.class.getName());
 
     public DropboxDirectory(DbxClientV2 client, IDirectory parent, String name) {
         super(client, parent, name);
@@ -88,12 +95,6 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     }
 
     @Override
-    public Iterator<NameObjectBinding> getIterator() {
-        // TODO
-        return null;
-    }
-
-    @Override
     public void persist() throws PersistenceException {
         try {
             if (exists()) return;
@@ -104,6 +105,53 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
             client.files().createFolder(path);
         } catch (DbxException e) {
             throw new PersistenceException("Unable to persist directory", e);
+        }
+    }
+
+    @Override
+    public Iterator<NameObjectBinding> getIterator() {
+
+        try {
+            return new DirectoryIterator(client.files().listFolder(getPathname()));
+        } catch (DbxException e) {
+            log.log(Level.SEVERE, "Unable to create the Directory Iterator properly");
+        }
+        return new DirectoryIterator();
+    }
+
+    private class DirectoryIterator implements Iterator<NameObjectBinding>  {
+
+        private Iterator<Metadata> meta;
+
+        DirectoryIterator(ListFolderResult list) {
+            this.meta = list.getEntries().iterator();
+        }
+
+        DirectoryIterator() {
+            meta = Collections.EMPTY_LIST.iterator();
+        }
+
+        public boolean hasNext() {
+            return meta.hasNext();
+        }
+
+        public NameObjectBinding next() {
+
+            if (!hasNext()) {
+                return null;
+            }
+
+            try {
+                Metadata metadata = meta.next();
+                String name = metadata.getName();
+                StatefulObject obj = get(name);
+
+                return new NameObjectBindingImpl(name, obj);
+            } catch (BindingAbsentException e) {
+                log.log(Level.SEVERE, "Unable to create a Binding Object for the next element from the iterator");
+            }
+
+            return null;
         }
     }
 }

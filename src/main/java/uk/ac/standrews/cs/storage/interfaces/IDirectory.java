@@ -21,4 +21,16 @@ public interface IDirectory extends StatefulObject {
      * @return
      */
     Iterator<NameObjectBinding> getIterator();
+
+    @Override
+    default long getSize() {
+        long size = 0;
+
+        Iterator<NameObjectBinding> it = getIterator();
+        while(it.hasNext()) {
+            StatefulObject obj = it.next().getObject();
+            size += obj.getSize();
+        }
+        return size;
+    }
 }
