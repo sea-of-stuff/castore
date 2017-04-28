@@ -8,24 +8,14 @@ public enum CastoreType {
     LOCAL("local"),
     NETWORK("network"),
     DROPBOX("dropbox"),
-    MEMORY("memory"),
     REDIS("redis"),
     AWS_S3("aws_s3");
+
+    // FUTURE Types: memory, onedrive, google drive, Sea of Stuff, git, mercurial, github
 
     private final String text;
 
     CastoreType(final String text) {
         this.text = text;
-    }
-
-    @Override
-    public String toString() {
-        return text;
-    }
-
-    public static CastoreType getEnum(String value) {
-        for(CastoreType v : values())
-            if(v.toString().equalsIgnoreCase(value)) return v;
-        throw new IllegalArgumentException();
     }
 }
