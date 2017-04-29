@@ -4,25 +4,27 @@ import com.amazonaws.util.StringInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import redis.clients.jedis.Jedis;
-import uk.ac.standrews.cs.GUIDFactory;
-import uk.ac.standrews.cs.IGUID;
-import uk.ac.standrews.cs.exceptions.GUIDGenerationException;
 import uk.ac.standrews.cs.storage.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.data.Data;
-import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
-import uk.ac.standrews.cs.storage.utils.IO;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public abstract class RedisStatefulObject extends CommonStatefulObject implements StatefulObject {
 
-    private static final String TMP_FILE_PREFIX = "redis";
     private static final String TMP_FILE_SUFFIX = ".tmp";
+    private static final String TMP_FILE_PREFIX = "redis";
+
+    protected static final String REDIS_KEY_TYPE_TAG = ":type";
+    protected static final String FILE_TYPE = "file";
+    protected static final String DIRECTORY_TYPE = "directory";
 
     protected Jedis jedis;
 
@@ -56,6 +58,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
 
     @Override
     public long lastModified() {
+        // TODO - path:lmd --> value
         return 0;
     }
 
@@ -74,30 +77,9 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
         return tempFile;
     }
 
-    @Override
-    public void persist() throws PersistenceException {
 
-        try (final InputStream inputStream = getInputStream();
-             final ByteArrayOutputStream baos = IO.InputStreamToByteArrayOutputStream(inputStream);
-             InputStream dataFirstClone = new ByteArrayInputStream(baos.toByteArray());
-             InputStream dataSecondClone = new ByteArrayInputStream(baos.toByteArray())) {
 
-            String objectPath = getPathname();
-            IGUID guid = GUIDFactory.generateGUID(dataFirstClone);
-
-            jedis.set(objectPath, guid.toString());
-            boolean exists = jedis.exists(guid.toString());
-            if (!exists) {
-                String dataString = IO.InputStreamToString(dataSecondClone);
-                jedis.set(guid.toString(), dataString);
-            }
-
-        } catch (IOException | GUIDGenerationException e) {
-            throw new PersistenceException("Unable to persist data to Redis storage");
-        }
-    }
-
-    private InputStream getInputStream() throws IOException {
+    protected InputStream getInputStream() throws IOException {
         return data != null ? data.getInputStream() : new NullInputStream(0);
     }
 
