@@ -59,7 +59,7 @@ First you need to create a Dropbox app and get an App Token.
 
 ## Examples
 
-Examples are available [here](tree/master/src/main/java/uk/ac/standrews/cs/storage/examples).
+Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples).
 
 ## Next (not implemented yet)
 
