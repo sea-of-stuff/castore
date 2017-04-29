@@ -1,9 +1,10 @@
 # castore = cast + store
+*A very minimal and simple interface to interact with different storage systems*
 
-This project provides a set of storage abstractions and implementations.
+File systems and storage systems all expose very similar, but somewhat different, interfaces to interact with files and directories.
+Here we provide a very simple and basic interface that abstract various storage systems.
 
-This project is independent of the SOS project and can be used in any other Java project.
-All you need to do is to add the following to your maven dependencies:
+To use **castore** you can add the following maven dependency:
 
 ```
 <dependency>
@@ -17,12 +18,6 @@ This project is not available via a maven repository yet, so you will have to in
 
 Alternatively you can produce a `.jar` for the project and add it as a dependency for your project.
 
-## The interface
-
-File systems all expose very similar, but somewhat different, interfaces to interact with files and directories.
-Here we provide a very simple and basic interface that abstract various storage systems.
-
-Castore provides a very minimal and simple interface to interact with different storage systems.
 
 ## Available implementations
 
@@ -30,6 +25,7 @@ Castore provides a very minimal and simple interface to interact with different 
 
 This implementation is based on the local file system.
 
+**Settings**: type, root path
 
 ### Network Based
 
@@ -45,6 +41,7 @@ export AWS_ACCESS_KEY_ID=<KEY>
 export AWS_SECRET_KEY=<KEY>
 ```
 
+**Settings**: type, bucket name, credentials (optional)
 
 ### Redis - WIP
 
@@ -53,9 +50,13 @@ A Redis-based storage can be used to store small amount of data with good perfor
 
 Before using the Redis-based storage, you need [Redis](https://redis.io) installed. Then run a server instance: `redis-server`
 
+**Settings**: type, host, port (optional)
+
 ### Dropbox
 
 First you need to create a Dropbox app and get an App Token.
+
+**Settings**: type, path to dropbox folder, token
 
 ## Examples
 
@@ -68,6 +69,6 @@ Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples)
 
 ## Credits
 
-This project initially originates from the `asa/filesystem` project developed by *Alan Dearle*, *Graham Kirby*, and *Stuart Norcross* at the University of St Andrews.
+This project originates from the `asa/filesystem` project developed by *Alan Dearle*, *Graham Kirby*, and *Stuart Norcross* at the University of St Andrews.
 
-This project is currently maintained by *Simone I. Conte* at the University of St Andrews.
+This project is now currently maintained by *Simone I. Conte* at the University of St Andrews.
