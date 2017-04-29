@@ -7,6 +7,7 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.files.WriteMode;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.io.IOUtils;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.InputStreamData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
@@ -14,9 +15,13 @@ import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IFile;
 import uk.ac.standrews.cs.storage.utils.JSON;
+import uk.ac.standrews.cs.storage.utils.Time;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +31,9 @@ import java.util.logging.Logger;
 public class DropboxFile extends DropboxStatefulObject implements IFile {
 
     private static final Logger log = Logger.getLogger(DropboxFile.class.getName());
+
+    private static final String TMP_FILE_PREFIX = "dropbox";
+    private static final String TMP_FILE_SUFFIX = ".tmp";
 
     public DropboxFile(DbxClientV2 client, IDirectory parent, String name) {
         super(client, parent, name);
@@ -80,6 +88,44 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
         return 0;
     }
 
+    @Override
+    public long lastModified() {
+
+        long retval = 0;
+
+        try {
+            Metadata metadata = client.files().getMetadata(getPathname());
+            JsonNode node = JSON.Mapper().readTree(metadata.toStringMultiline());
+
+            String lmd = node.get("client_modified").textValue();
+            retval = Time.DateToLong(lmd);
+
+        } catch (DbxException | ParseException | IOException e) {
+            log.log(Level.WARNING, "Unable to retrieve the last modified time about the file with path " + getPathname());
+        }
+
+        return retval;
+    }
+
+    @Override
+    public File toFile() throws IOException {
+
+
+        final File tempFile = File.createTempFile(TMP_FILE_PREFIX, TMP_FILE_SUFFIX);
+        tempFile.deleteOnExit();
+
+        try (FileOutputStream output = new FileOutputStream(tempFile);
+             InputStream input = downloadStream()) {
+
+            IOUtils.copy(input, output);
+        } catch (DbxException e) {
+            throw new IOException("Unable to fetch data");
+        }
+
+        return tempFile;
+
+    }
+
     /**
      * Uploads a file in a single request. This approach is preferred for small files since it
      * eliminates unnecessary round-trips to the servers.
@@ -97,12 +143,19 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
 
     }
 
+    private InputStream downloadStream() throws DbxException {
+
+        DbxDownloader<FileMetadata> downloadedContent = client.files().download(getPathname());
+        return downloadedContent.getInputStream();
+    }
+
     private void retrieveAndUpdateData() {
-        try {
-            DbxDownloader<FileMetadata> downloadedContent = client.files().download(getPathname());
-            data = new InputStreamData(downloadedContent.getInputStream());
-        } catch (DbxException e) {
-            e.printStackTrace();
+
+        try (InputStream inputStream = downloadStream()) {
+            data = new InputStreamData(inputStream);
+
+        } catch (DbxException | IOException e) {
+            log.log(Level.SEVERE, "Unable to retrieve and update data");
         }
     }
 

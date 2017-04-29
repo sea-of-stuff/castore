@@ -70,8 +70,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     @Override
     public File toFile() throws IOException {
-        // TODO - download and make a file
-        return null;
+        throw new IOException("Unable to make file");
     }
 
 }
