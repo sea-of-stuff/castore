@@ -45,21 +45,21 @@ export AWS_ACCESS_KEY_ID=<KEY>
 export AWS_SECRET_KEY=<KEY>
 ```
 
-See the SimplestS3Example to see how to get started.
 
-
-### Redis
+### Redis - WIP
 
 Redis is an in-memory data structure store, which is networked and very fast.
 A Redis-based storage can be used to store small amount of data with good performance.
 
 Before using the Redis-based storage, you need [Redis](https://redis.io) installed. Then run a server instance: `redis-server`
 
-See the SimplestRedisExample to see how to get started.
-
 ### Dropbox
 
 First you need to create a Dropbox app and get an App Token.
+
+## Examples
+
+Examples are available [here](tree/master/src/main/java/uk/ac/standrews/cs/storage/examples).
 
 ## Next (not implemented yet)
 
