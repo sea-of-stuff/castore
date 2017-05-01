@@ -6,15 +6,17 @@ import org.testng.annotations.DataProvider;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.aws.s3.AWSStorage;
+import uk.ac.standrews.cs.storage.implementations.dropbox.DropboxStorage;
 import uk.ac.standrews.cs.storage.implementations.filesystem.FileBasedStorage;
+import uk.ac.standrews.cs.storage.implementations.redis.RedisStorage;
 import uk.ac.standrews.cs.storage.interfaces.IStorage;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.AWS;
 import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.LOCAL;
+import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.REDIS;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -46,12 +48,12 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-                {LOCAL} /*, {AWS} */
+                {LOCAL}, {REDIS} /*, {AWS} */
         };
     }
 
     public enum STORAGE_TYPE {
-        LOCAL, AWS
+        LOCAL, AWS, REDIS, DROPBOX
     }
 
     public class StorageFactory {
@@ -62,6 +64,10 @@ public abstract class StorageBaseTest {
                     return new FileBasedStorage(ROOT_TEST_DIRECTORY);
                 case AWS:
                     return new AWSStorage(AWS_S3_TEST_BUCKET);
+                case REDIS:
+                    return new RedisStorage("localhost");
+                case DROPBOX:
+                    return new DropboxStorage("RR98BxfODrwAAAAAAAARS1rcAuSjYCxTphYWPVFm84lcCmkcYFqfjZ8PHneU6CxF", "/Apps/castore");
             }
             return null;
         }

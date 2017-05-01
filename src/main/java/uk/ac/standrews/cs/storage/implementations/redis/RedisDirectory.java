@@ -32,10 +32,10 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
     @Override
     public StatefulObject get(String name) throws BindingAbsentException {
 
-        boolean hasObject = jedis.exists(name + REDIS_KEY_TYPE_TAG);
+        boolean hasObject = jedis.exists(objectPath + name + REDIS_KEY_TYPE_TAG);
         if (hasObject) {
 
-            String type = jedis.get(name + REDIS_KEY_TYPE_TAG);
+            String type = jedis.get(objectPath + name + REDIS_KEY_TYPE_TAG);
             switch (type) {
                 case DIRECTORY_TYPE:
                     return new RedisDirectory(jedis, this, name);
@@ -65,6 +65,16 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
     @Override
     public void persist() throws PersistenceException {
         jedis.set(objectPath + REDIS_KEY_TYPE_TAG, DIRECTORY_TYPE);
+
+        if (logicalParent != null) {
+            jedis.sadd(logicalParent.getPathname(), name + "/");
+        }
+
+        if (logicalParent != null) {
+            logicalParent.persist();
+        } else {
+            jedis.set("" + REDIS_KEY_TYPE_TAG, DIRECTORY_TYPE);
+        }
     }
 
     @Override
@@ -80,7 +90,6 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
 
     @Override
     public boolean contains(String name) {
-
         return jedis.sismember(getPathname(), name);
     }
 
@@ -99,7 +108,6 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
         return new DirectoryIterator();
     }
 
-    // TODO
     private class DirectoryIterator implements Iterator<NameObjectBinding>  {
 
         Iterator<String> elements;

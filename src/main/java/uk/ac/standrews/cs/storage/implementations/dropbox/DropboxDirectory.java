@@ -116,6 +116,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         } catch (DbxException e) {
             log.log(Level.SEVERE, "Unable to create the Directory Iterator properly");
         }
+
         return new DirectoryIterator();
     }
 

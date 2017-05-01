@@ -5,6 +5,7 @@ import uk.ac.standrews.cs.GUIDFactory;
 import uk.ac.standrews.cs.IGUID;
 import uk.ac.standrews.cs.exceptions.GUIDGenerationException;
 import uk.ac.standrews.cs.storage.data.Data;
+import uk.ac.standrews.cs.storage.data.StringData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
@@ -23,6 +24,14 @@ public class RedisFile extends RedisStatefulObject implements IFile {
 
     public RedisFile(Jedis jedis, IDirectory parent, String name) {
         super(jedis, parent, name);
+
+        if (exists()) retrieveAndUpdateData();
+    }
+
+    private void retrieveAndUpdateData() {
+
+        String guid = jedis.get(objectPath);
+        data = new StringData(jedis.get(guid));
     }
 
     public RedisFile(Jedis jedis, IDirectory parent, String name, Data data) {
@@ -72,7 +81,6 @@ public class RedisFile extends RedisStatefulObject implements IFile {
              InputStream dataFirstClone = new ByteArrayInputStream(baos.toByteArray());
              InputStream dataSecondClone = new ByteArrayInputStream(baos.toByteArray())) {
 
-            String objectPath = getPathname();
             IGUID guid = GUIDFactory.generateGUID(dataFirstClone);
 
             jedis.set(objectPath, guid.toString());
@@ -90,5 +98,10 @@ public class RedisFile extends RedisStatefulObject implements IFile {
         } catch (IOException | GUIDGenerationException e) {
             throw new PersistenceException("Unable to persist data to Redis storage");
         }
+
+        if (logicalParent != null) {
+            logicalParent.persist();
+        }
+
     }
 }
