@@ -66,7 +66,7 @@ public abstract class StorageBaseTest {
                 case REDIS:
                     return new RedisStorage("localhost");
                 case DROPBOX:
-                    return new DropboxStorage("RR98BxfODrwAAAAAAAARS1rcAuSjYCxTphYWPVFm84lcCmkcYFqfjZ8PHneU6CxF", "/Apps/castore");
+                    return new DropboxStorage("/Apps/castore");
             }
             return null;
         }

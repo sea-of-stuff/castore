@@ -36,6 +36,10 @@ public class DropboxStorage extends CommonStorage implements IStorage {
         createRoot();
     }
 
+    public DropboxStorage(String root) {
+        this(System.getenv().get("DROPBOX_TOKEN"), root);
+    }
+
     @Override
     public IDirectory createDirectory(IDirectory parent, String name) throws StorageException {
         return new DropboxDirectory(client, parent, name);
