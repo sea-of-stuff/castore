@@ -212,4 +212,5 @@ public class StorageImplTest extends StorageBaseTest {
         storage.getRoot().remove("15-test.txt");
         assertFalse(storage.getRoot().contains("15-test.txt"));
     }
+
 }

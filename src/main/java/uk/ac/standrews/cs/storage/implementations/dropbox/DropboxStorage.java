@@ -36,6 +36,13 @@ public class DropboxStorage extends CommonStorage implements IStorage {
         createRoot();
     }
 
+    /**
+     * Create a DropboxStorage handle at the given root.
+     *
+     * This constructor assumes that the token app has been set at the environment variable DROPBOX_TOKEN
+     *
+     * @param root
+     */
     public DropboxStorage(String root) {
         this(System.getenv().get("DROPBOX_TOKEN"), root);
     }
