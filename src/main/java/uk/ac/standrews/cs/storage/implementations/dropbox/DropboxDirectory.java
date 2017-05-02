@@ -50,6 +50,8 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     @Override
     public StatefulObject get(String name) throws BindingAbsentException {
 
+        name = normalise(name);
+
         try {
 
             Metadata metadata = client.files().getMetadata(getPathname() + name);
@@ -75,6 +77,8 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     @Override
     public boolean contains(String name) {
 
+        name = normalise(name);
+
         try {
             Metadata metadata = client.files().getMetadata(getPathname() + name);
         } catch (DbxException e) {
@@ -86,6 +90,8 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
 
     @Override
     public void remove(String name) throws BindingAbsentException {
+
+        name = normalise(name);
 
         try {
             client.files().delete(getPathname() + name);
@@ -99,8 +105,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         try {
             if (exists()) return;
 
-            String path = getPathname();
-            path = path.substring(0, path.length() - 1); // Removing last slash
+            String path = normalise(getPathname());
 
             client.files().createFolder(path);
         } catch (DbxException e) {
@@ -154,5 +159,13 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
 
             return null;
         }
+    }
+
+    private String normalise(String path) {
+        if (path.charAt(path.length() - 1) == '/') {
+            path = path.substring(0, path.length() - 1); // Removing last slash
+        }
+
+        return path;
     }
 }

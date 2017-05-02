@@ -1,5 +1,7 @@
 package uk.ac.standrews.cs.storage.data;
 
+import org.apache.commons.io.input.NullInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -30,7 +32,9 @@ public interface Data {
      * @return an input stream reading from the object's state
      * @throws IOException if the object's state could not be read
      */
-    InputStream getInputStream() throws IOException;
+    default InputStream getInputStream() throws IOException {
+       return new NullInputStream(0);
+    }
 
     /**
      * Tests equality with another instance.

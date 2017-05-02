@@ -8,6 +8,7 @@ import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.files.WriteMode;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.NullInputStream;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.InputStreamData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
@@ -38,7 +39,11 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     public DropboxFile(DbxClientV2 client, IDirectory parent, String name) {
         super(client, parent, name);
 
-        if (exists()) retrieveAndUpdateData();
+        if (exists()) {
+            retrieveAndUpdateData();
+        } else {
+            data = new InputStreamData(new NullInputStream(0));
+        }
     }
 
     public DropboxFile(DbxClientV2 client, IDirectory parent, String name, Data data) {
@@ -64,6 +69,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
 
     @Override
     public void persist() throws PersistenceException {
+
         try (InputStream inputStream = data.getInputStream()){
             String path = getPathname();
             uploadFile(client, inputStream, path);

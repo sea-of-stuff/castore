@@ -15,8 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.LOCAL;
-import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.REDIS;
+import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.*;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -26,7 +25,7 @@ public abstract class StorageBaseTest {
     private static final String AWS_S3_TEST_BUCKET = "sos-simone-test";
     private static final File ROOT_TEST_DIRECTORY = new File("/tmp/storage/");
 
-    private static final int TEST_DELAY = 1000; // Needed to allow any background ops
+    private static final int TEST_DELAY = 800; // Needed to allow any background ops
 
     protected abstract STORAGE_TYPE getStorageType();
     protected IStorage storage;
@@ -48,7 +47,7 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-                {LOCAL}, {REDIS} /*, {AWS} */
+                {LOCAL}, {REDIS}, {DROPBOX} /*, {AWS} */
         };
     }
 

@@ -78,4 +78,4 @@ Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples)
 
 This project is inspired by the `asa/filesystem` project developed by *Alan Dearle*, *Graham Kirby*, and *Stuart Norcross* at the University of St Andrews.
 
-This **castore** project has been developed, and is currently maintained, by *Simone I. Conte* at the University of St Andrews.
+The **castore** project has been developed, and is currently maintained, by *Simone I. Conte* at the University of St Andrews.

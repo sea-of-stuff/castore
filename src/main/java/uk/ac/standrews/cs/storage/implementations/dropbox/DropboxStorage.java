@@ -1,5 +1,6 @@
 package uk.ac.standrews.cs.storage.implementations.dropbox;
 
+import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import uk.ac.standrews.cs.storage.data.Data;
@@ -57,7 +58,16 @@ public class DropboxStorage extends CommonStorage implements IStorage {
 
     @Override
     public void destroy() throws DestroyException {
-        // TODO - delete root
+
+        try {
+            // Dropbox accepts deletion of folders with content only
+            if (root.getIterator().hasNext()) {
+                client.files().delete(rootPath);
+            }
+        } catch (DbxException e) {
+            throw new DestroyException("Unable to destroy storage with root path " + rootPath);
+        }
+
     }
 
     private void createRoot() {
