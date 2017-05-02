@@ -62,15 +62,19 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
         }
     }
 
+    /**
+     * path:type --> DIRECTORY_TYPE
+     *
+     *
+     * @throws PersistenceException
+     */
     @Override
     public void persist() throws PersistenceException {
         jedis.set(objectPath + REDIS_KEY_TYPE_TAG, DIRECTORY_TYPE);
 
+        // Update parent path
         if (logicalParent != null) {
             jedis.sadd(logicalParent.getPathname(), name + "/");
-        }
-
-        if (logicalParent != null) {
             logicalParent.persist();
         } else {
             jedis.set("" + REDIS_KEY_TYPE_TAG, DIRECTORY_TYPE);
@@ -98,6 +102,37 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
 
         if (contains(name)) {
             jedis.srem(objectPath, name);
+
+            String type = jedis.get(objectPath + name + REDIS_KEY_TYPE_TAG);
+            switch(type) {
+                case FILE_TYPE:
+
+                    String key = jedis.get(objectPath + name);
+                    if (key != null) {
+                        long ref = jedis.decr(key + REDIS_REF_TAG);
+                        if (ref == 0) { // No more references to the data exist
+                            jedis.del(key);
+                            jedis.del(key + REDIS_REF_TAG);
+                        }
+                    }
+
+                    break;
+                case DIRECTORY_TYPE:
+
+                    // Delete all the content in the directory. The deletion is to be propagated to the leaf contents.
+                    IDirectory subDir = (IDirectory) get(name);
+                    Iterator<NameObjectBinding> iterator = subDir.getIterator();
+                    while(iterator.hasNext()) {
+                        NameObjectBinding obj = iterator.next();
+                        subDir.remove(obj.getName());
+                    }
+
+                    break;
+            }
+
+            jedis.del(objectPath + name + REDIS_KEY_TYPE_TAG);
+            jedis.del(objectPath + name);
+
         } else {
             throw new BindingAbsentException("Element with name " + name + " does not exist and thus it cannot be removed");
         }

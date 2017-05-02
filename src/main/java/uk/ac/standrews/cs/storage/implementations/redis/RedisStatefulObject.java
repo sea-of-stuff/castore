@@ -25,6 +25,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
     protected static final String REDIS_KEY_TYPE_TAG = ":type";
     protected static final String FILE_TYPE = "file";
     protected static final String DIRECTORY_TYPE = "directory";
+    protected static final String REDIS_REF_TAG = ":ref";
 
     protected Jedis jedis;
 

@@ -67,7 +67,9 @@ public class RedisFile extends RedisStatefulObject implements IFile {
 
     /**
      * path --> guid
+     * path:type --> FILE_TYPE
      * guid --> data
+     * parent_path --> [name]
      *
      * This will give us de-duplication over data
      *
@@ -83,22 +85,31 @@ public class RedisFile extends RedisStatefulObject implements IFile {
 
             IGUID guid = GUIDFactory.generateGUID(dataFirstClone);
 
-            jedis.set(objectPath, guid.toString());
-            jedis.set(objectPath + REDIS_KEY_TYPE_TAG, FILE_TYPE);
+            String retrievedGUID = jedis.get(objectPath);
+            if (!guid.toString().equals(retrievedGUID)) {
 
-            boolean exists = jedis.exists(guid.toString());
-            if (!exists) {
-                String dataString = IO.InputStreamToString(dataSecondClone);
-                jedis.set(guid.toString(), dataString);
+                jedis.set(objectPath, guid.toString());
+                jedis.set(objectPath + REDIS_KEY_TYPE_TAG, FILE_TYPE);
+
+                boolean exists = jedis.exists(guid.toString());
+                if (!exists) {
+                    String dataString = IO.InputStreamToString(dataSecondClone);
+
+                    jedis.set(guid.toString(), dataString);
+                    jedis.set(guid.toString() + REDIS_REF_TAG, "1");
+                } else {
+                    jedis.incr(guid.toString() + REDIS_REF_TAG);
+                }
+
+                // Add element to parent
+                jedis.sadd(logicalParent.getPathname(), name);
             }
-
-            // Add element to parent
-            jedis.sadd(logicalParent.getPathname(), name);
 
         } catch (IOException | GUIDGenerationException e) {
             throw new PersistenceException("Unable to persist data to Redis storage");
         }
 
+        // Make sure that the parent path is persisted
         if (logicalParent != null) {
             logicalParent.persist();
         }

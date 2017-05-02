@@ -203,4 +203,13 @@ public class StorageImplTest extends StorageBaseTest {
         Iterator iterator = storage.getRoot().getIterator();
         assertFalse(iterator.hasNext());
     }
+
+    @Test
+    public void deleteFileInDirectory() throws StorageException {
+        IFile file = storage.createFile(storage.getRoot(), "15-test.txt", TEST_DATA);
+        file.persist();
+
+        storage.getRoot().remove("15-test.txt");
+        assertFalse(storage.getRoot().contains("15-test.txt"));
+    }
 }
