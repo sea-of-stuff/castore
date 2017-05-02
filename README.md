@@ -1,5 +1,5 @@
 # castore = cast + store
-*A very minimal and simple interface to interact with different storage systems*
+*A very minimal and simple library to interact with different storage systems*
 
 File systems and storage systems all expose very similar, but somewhat different, interfaces to interact with files and directories.
 Here we provide a very simple and basic interface that abstract various storage systems.
@@ -18,6 +18,7 @@ This project is not available via a maven repository yet, so you will have to in
 
 Alternatively you can produce a `.jar` for the project and add it as a dependency for your project.
 
+---
 
 ## Available implementations
 
@@ -43,7 +44,7 @@ export AWS_SECRET_KEY=<KEY>
 
 **Settings**: type, bucket name, credentials (optional)
 
-### Redis - WIP
+### Redis
 
 Redis is an in-memory data structure store, which is networked and very fast.
 A Redis-based storage can be used to store small amount of data with good performance.
@@ -62,13 +63,19 @@ First you need to create a Dropbox app and get an App Token.
 
 Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples).
 
-## Next (not implemented yet)
+---
+
+## Not implemented yet
 
 - In-memory
 - GUID-based
+- Google Drive
+- OneDrive
+
+---
 
 ## Credits
 
-This project originates from the `asa/filesystem` project developed by *Alan Dearle*, *Graham Kirby*, and *Stuart Norcross* at the University of St Andrews.
+This project is inspired by the `asa/filesystem` project developed by *Alan Dearle*, *Graham Kirby*, and *Stuart Norcross* at the University of St Andrews.
 
-This project is now currently maintained by *Simone I. Conte* at the University of St Andrews.
+This **castore** project has been developed, and is currently maintained, by *Simone I. Conte* at the University of St Andrews.
