@@ -3,6 +3,7 @@ package uk.ac.standrews.cs.storage.implementations;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
+import uk.ac.standrews.cs.storage.CastoreType;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.aws.s3.AWSStorage;
@@ -15,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static uk.ac.standrews.cs.storage.implementations.StorageBaseTest.STORAGE_TYPE.*;
+import static uk.ac.standrews.cs.storage.CastoreType.*;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -27,12 +28,12 @@ public abstract class StorageBaseTest {
 
     private static final int TEST_DELAY = 800; // Needed to allow any background ops
 
-    protected abstract STORAGE_TYPE getStorageType();
+    protected abstract CastoreType getStorageType();
     protected IStorage storage;
 
     @BeforeMethod
     public void setUp(Method method) throws StorageException, InterruptedException {
-        STORAGE_TYPE type = getStorageType();
+        CastoreType type = getStorageType();
         System.out.println(type.toString() + " :: " + method.getName());
         storage = new StorageFactory().getStorage(type);
     }
@@ -51,17 +52,13 @@ public abstract class StorageBaseTest {
         };
     }
 
-    public enum STORAGE_TYPE {
-        LOCAL, AWS, REDIS, DROPBOX
-    }
-
     public class StorageFactory {
 
-        public IStorage getStorage(STORAGE_TYPE type) throws StorageException {
+        public IStorage getStorage(CastoreType type) throws StorageException {
             switch(type) {
                 case LOCAL:
                     return new FileBasedStorage(ROOT_TEST_DIRECTORY);
-                case AWS:
+                case AWS_S3:
                     return new AWSStorage(AWS_S3_TEST_BUCKET);
                 case REDIS:
                     return new RedisStorage("localhost");

@@ -1,7 +1,7 @@
 package uk.ac.standrews.cs.storage.implementations.filesystem;
 
-import uk.ac.standrews.cs.storage.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.implementations.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
 

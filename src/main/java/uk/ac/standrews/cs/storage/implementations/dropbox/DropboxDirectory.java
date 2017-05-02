@@ -80,7 +80,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         name = normalise(name);
 
         try {
-            Metadata metadata = client.files().getMetadata(getPathname() + name);
+            client.files().getMetadata(getPathname() + name);
         } catch (DbxException e) {
             return false;
         }

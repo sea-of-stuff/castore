@@ -2,6 +2,7 @@ package uk.ac.standrews.cs.storage.implementations;
 
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
+import uk.ac.standrews.cs.storage.CastoreType;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.StringData;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
@@ -23,15 +24,15 @@ import static org.testng.AssertJUnit.assertNotNull;
 public class StorageImplTest extends StorageBaseTest {
 
     private static final Data TEST_DATA = new StringData("hello world");
-    private final STORAGE_TYPE storageType;
+    private final CastoreType storageType;
 
     @Factory(dataProvider = "storage-manager-provider")
-    public StorageImplTest(STORAGE_TYPE storageType) {
+    public StorageImplTest(CastoreType storageType) {
         this.storageType = storageType;
     }
 
     @Override
-    protected STORAGE_TYPE getStorageType() {
+    protected CastoreType getStorageType() {
         return storageType;
     }
 

@@ -1,20 +1,38 @@
 package uk.ac.standrews.cs.storage;
 
 /**
+ * This class is used to define the settings needed to create the Storage object
+ *
+ * Fluent pattern used for this class
+ *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class CastoreBuilder {
 
-    public static final int NOT_SET = -1;
+    static final int NOT_SET = -1;
 
+    // All
     private CastoreType type;
     private String root;
+
+    // Network
     private String mountPoint;
+
+    // Redis
     private String hostname;
     private int port = NOT_SET;
+
+    // Dropbox
     private String token;
+
+    // AWS
     private String accessKey;
     private String secretAccessKey;
+
+    // NOTE: Still unused params
+    private boolean useChunkUpload;
+    private int chunkThreshold;
+    private int chunkSize;
 
     public CastoreBuilder setType(CastoreType type) {
         this.type = type;

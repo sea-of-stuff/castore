@@ -5,17 +5,11 @@ package uk.ac.standrews.cs.storage;
  */
 public enum CastoreType {
 
-    LOCAL("local"),
-    NETWORK("network"),
-    DROPBOX("dropbox"),
-    REDIS("redis"),
-    AWS_S3("aws_s3");
+    LOCAL,
+    NETWORK,
+    DROPBOX,
+    REDIS,
+    AWS_S3;
 
     // FUTURE Types: memory, onedrive, google drive, Sea of Stuff, git, mercurial, github
-
-    private final String text;
-
-    CastoreType(final String text) {
-        this.text = text;
-    }
 }

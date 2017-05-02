@@ -51,7 +51,7 @@ public class RedisStorage extends CommonStorage implements IStorage {
             if (response.equals(PING_RESPONSE)) {
                 createRoot(jedis);
             } else {
-                log.log(Level.SEVERE, "Redis Storage could not be created because there is not available or recheable Redis server");
+                log.log(Level.SEVERE, "Redis Storage could not be created because there is not an available or reachable Redis server");
             }
 
         }

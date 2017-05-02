@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.storage;
+package uk.ac.standrews.cs.storage.implementations;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
