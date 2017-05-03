@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static uk.ac.standrews.cs.storage.CastoreType.*;
+import static uk.ac.standrews.cs.storage.CastoreType.DROPBOX;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -48,7 +48,9 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-                {LOCAL}, {REDIS}, {DROPBOX} /*, {AWS} */
+//                {LOCAL},
+//                {REDIS},
+                {DROPBOX} /*, {AWS} */
         };
     }
 

@@ -30,12 +30,17 @@ public class CastoreFactory {
         IStorage storage;
 
         switch(builder.getType()) {
+
             case LOCAL:
+
                 storage = new FileBasedStorage(new File(builder.getRoot()));
                 break;
+
             case NETWORK:
+
                 storage = new NetworkBasedStorage(builder.getMountPoint(), builder.getRoot());
                 break;
+
             case AWS_S3:
 
                 String accessKey = builder.getAccessKey();
@@ -48,6 +53,7 @@ public class CastoreFactory {
                 }
 
                 break;
+
             case REDIS:
 
                 int port = builder.getPort();
@@ -58,9 +64,16 @@ public class CastoreFactory {
                 }
 
                 break;
+
             case DROPBOX:
+
                 storage = new DropboxStorage(builder.getToken(), builder.getRoot());
                 break;
+
+            case GOOGLE_DRIVE:
+
+                throw new StorageException("Google Drive Storage Not Implemented Yet");
+
             default:
                 log.log(Level.SEVERE, "Storage type: " + builder.getType() + " is unknown. Impossible to create a storage.");
                 throw new StorageException();

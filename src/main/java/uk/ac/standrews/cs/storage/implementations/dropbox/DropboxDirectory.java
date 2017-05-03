@@ -119,7 +119,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         try {
             return new DirectoryIterator(client.files().listFolder(getPathname()));
         } catch (DbxException e) {
-            log.log(Level.SEVERE, "Unable to create the Directory Iterator properly");
+            log.log(Level.WARNING, "Unable to create the Directory Iterator properly");
         }
 
         return new DirectoryIterator();
@@ -127,9 +127,11 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
 
     private class DirectoryIterator implements Iterator<NameObjectBinding>  {
 
+        private ListFolderResult list;
         private Iterator<Metadata> meta;
 
         DirectoryIterator(ListFolderResult list) {
+            this.list = list;
             this.meta = list.getEntries().iterator();
         }
 
@@ -138,7 +140,25 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         }
 
         public boolean hasNext() {
-            return meta.hasNext();
+            boolean hasNext = meta.hasNext();
+
+            // Check if there are more results from the original list of results.
+            if (!hasNext) {
+
+                hasNext = list.getHasMore();
+
+                if (hasNext) {
+                    String continueCursor = list.getCursor();
+                    try {
+                        list = client.files().listFolderContinue(continueCursor);
+                        meta = list.getEntries().iterator();
+                    } catch (DbxException e) {
+                        return false;
+                    }
+                }
+            }
+
+            return hasNext;
         }
 
         public NameObjectBinding next() {
@@ -150,6 +170,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
             try {
                 Metadata metadata = meta.next();
                 String name = metadata.getName();
+                System.out.println("name " + name);
                 StatefulObject obj = get(name);
 
                 return new NameObjectBindingImpl(name, obj);

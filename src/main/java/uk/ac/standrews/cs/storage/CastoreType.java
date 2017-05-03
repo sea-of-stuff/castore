@@ -9,7 +9,8 @@ public enum CastoreType {
     NETWORK,
     DROPBOX,
     REDIS,
-    AWS_S3;
+    AWS_S3,
+    GOOGLE_DRIVE;
 
     // FUTURE Types: memory, onedrive, google drive, Sea of Stuff, git, mercurial, github
 }
