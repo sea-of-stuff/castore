@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/stacs-srg/castore.svg?style=svg)](https://circleci.com/gh/stacs-srg/castore)
+
 # castore = cast + store
 *A very minimal and simple library to interact with different storage systems*
 
