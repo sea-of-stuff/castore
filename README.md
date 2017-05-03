@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/stacs-srg/castore.svg?style=svg)](https://circleci.com/gh/stacs-srg/castore)
+[![CircleCI](https://circleci.com/gh/stacs-srg/castore.svg?style=svg&circle-token=:619302303a40d36f6e718006d26a804711dcbc91)](https://circleci.com/gh/stacs-srg/castore)
 
 # castore = cast + store
 *A very minimal and simple library to interact with different storage systems*
