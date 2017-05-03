@@ -143,7 +143,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
             boolean hasNext = meta.hasNext();
 
             // Check if there are more results from the original list of results.
-            if (!hasNext) {
+            if (!hasNext && list != null) {
 
                 hasNext = list.getHasMore();
 
