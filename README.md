@@ -77,6 +77,14 @@ Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples)
 
 ---
 
+## Maven
+
+`$ mvn clean compile` - will clean and compile the project
+
+`$ mvn cobertura:cobertura` - will run the coverage tests
+
+---
+
 ## Credits
 
 This project is inspired by the `asa/filesystem` project developed by *Alan Dearle*, *Graham Kirby*, and *Stuart Norcross* at the University of St Andrews.

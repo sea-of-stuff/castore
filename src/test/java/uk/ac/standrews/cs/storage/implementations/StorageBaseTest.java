@@ -26,7 +26,7 @@ public abstract class StorageBaseTest {
     private static final String AWS_S3_TEST_BUCKET = "sos-simone-test";
     private static final File ROOT_TEST_DIRECTORY = new File("/tmp/storage/");
 
-    private static final int TEST_DELAY = 800; // Needed to allow any background ops
+    private static final int TEST_DELAY = 800; // Needed to allow any background ops (e.g. s3 needs some time to create buckets and so on)
 
     protected abstract CastoreType getStorageType();
     protected IStorage storage;
