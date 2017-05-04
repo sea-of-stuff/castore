@@ -8,6 +8,7 @@ import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
@@ -27,11 +28,11 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
 
     private static final Logger log = Logger.getLogger(DropboxDirectory.class.getName());
 
-    public DropboxDirectory(DbxClientV2 client, IDirectory parent, String name) {
+    public DropboxDirectory(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(client, parent, name);
     }
 
-    public DropboxDirectory(DbxClientV2 client, String name) {
+    public DropboxDirectory(DbxClientV2 client, String name) throws StorageException {
         super(client, name);
     }
 
@@ -60,7 +61,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
                 throw new BindingAbsentException("Object type is unknown");
             }
 
-        } catch (DbxException e) {
+        } catch (DbxException | StorageException e) {
             throw new BindingAbsentException("Unable to get object with name " + name);
         }
 

@@ -1,6 +1,7 @@
 package uk.ac.standrews.cs.storage.implementations.filesystem;
 
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
@@ -13,12 +14,12 @@ import java.io.File;
 public abstract class FileBasedStatefulObject extends CommonStatefulObject implements StatefulObject {
 
     protected IDirectory logicalParent;
-    protected String name;
     protected File realFile;
 
-    public FileBasedStatefulObject(IDirectory parent, String name) {
+    public FileBasedStatefulObject(IDirectory parent, String name) throws StorageException {
+        super(name);
+
         this.logicalParent = parent;
-        this.name = name;
     }
 
     public FileBasedStatefulObject() {

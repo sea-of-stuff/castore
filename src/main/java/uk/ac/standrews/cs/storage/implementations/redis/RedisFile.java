@@ -8,6 +8,7 @@ import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.StringData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IFile;
 import uk.ac.standrews.cs.storage.utils.IO;
@@ -22,7 +23,7 @@ import java.io.InputStream;
  */
 public class RedisFile extends RedisStatefulObject implements IFile {
 
-    public RedisFile(Jedis jedis, IDirectory parent, String name) {
+    public RedisFile(Jedis jedis, IDirectory parent, String name) throws StorageException {
         super(jedis, parent, name);
 
         if (exists()) retrieveAndUpdateData();
@@ -34,7 +35,7 @@ public class RedisFile extends RedisStatefulObject implements IFile {
         data = new StringData(jedis.get(guid));
     }
 
-    public RedisFile(Jedis jedis, IDirectory parent, String name, Data data) {
+    public RedisFile(Jedis jedis, IDirectory parent, String name, Data data) throws StorageException {
         super(jedis, parent, name);
 
         this.data = data;

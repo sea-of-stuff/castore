@@ -214,4 +214,9 @@ public class StorageImplTest extends StorageBaseTest {
         assertFalse(storage.getRoot().contains("15-test.txt"));
     }
 
+    @Test (expectedExceptions = StorageException.class)
+    public void createDirectoryException() throws StorageException {
+        storage.createDirectory("").persist();
+    }
+
 }

@@ -11,6 +11,7 @@ import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.InputStreamData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IFile;
 
@@ -31,7 +32,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     private static final String TMP_FILE_PREFIX = "dropbox";
     private static final String TMP_FILE_SUFFIX = ".tmp";
 
-    public DropboxFile(DbxClientV2 client, IDirectory parent, String name) {
+    public DropboxFile(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(client, parent, name);
 
         if (exists()) {
@@ -41,7 +42,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
         }
     }
 
-    public DropboxFile(DbxClientV2 client, IDirectory parent, String name, Data data) {
+    public DropboxFile(DbxClientV2 client, IDirectory parent, String name, Data data) throws StorageException {
         super(client, parent, name);
 
         this.data = data;

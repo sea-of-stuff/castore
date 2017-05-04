@@ -14,6 +14,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
+import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStorage;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
@@ -83,22 +84,22 @@ public class AWSStorage extends CommonStorage implements IStorage {
     }
 
     @Override
-    public IDirectory createDirectory(IDirectory parent, String name) {
+    public IDirectory createDirectory(IDirectory parent, String name) throws StorageException {
         return new AWSDirectory(s3Client, bucketName, parent, name);
     }
 
     @Override
-    public IDirectory createDirectory(String name) {
+    public IDirectory createDirectory(String name) throws StorageException {
         return createDirectory(root, name);
     }
 
     @Override
-    public IFile createFile(IDirectory parent, String filename) {
+    public IFile createFile(IDirectory parent, String filename) throws StorageException {
         return new AWSFile(s3Client, bucketName, parent, filename);
     }
 
     @Override
-    public IFile createFile(IDirectory parent, String filename, Data data) {
+    public IFile createFile(IDirectory parent, String filename, Data data) throws StorageException {
         return new AWSFile(s3Client, bucketName, parent, filename, data);
     }
 
@@ -148,8 +149,13 @@ public class AWSStorage extends CommonStorage implements IStorage {
 
     }
 
-    private void createRoot() {
-        root = new AWSDirectory(s3Client, bucketName);
+    private void createRoot() throws StorageException {
+        try {
+            root = new AWSDirectory(s3Client, bucketName);
+            root.persist();
+        } catch (PersistenceException e) {
+            throw new StorageException(e);
+        }
     }
 
 }

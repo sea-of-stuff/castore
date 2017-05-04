@@ -5,6 +5,7 @@ import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.DestroyException;
+import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStorage;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
@@ -25,14 +26,14 @@ public class DropboxStorage extends CommonStorage implements IStorage {
     private DbxClientV2 client;
     private String rootPath;
 
-    public DropboxStorage(final String accessToken, String root) {
+    public DropboxStorage(final String accessToken, String rootPath) throws StorageException {
 
         DbxRequestConfig config = DbxRequestConfig.newBuilder("castore/1.0")
                 .withUserLocaleFrom(Locale.UK)
                 .build();
         client = new DbxClientV2(config, accessToken);
 
-        this.rootPath = root;
+        this.rootPath = rootPath;
         createRoot();
     }
 
@@ -43,7 +44,7 @@ public class DropboxStorage extends CommonStorage implements IStorage {
      *
      * @param root
      */
-    public DropboxStorage(String root) {
+    public DropboxStorage(String root) throws StorageException {
         this(System.getenv().get("DROPBOX_TOKEN"), root);
     }
 
@@ -81,7 +82,12 @@ public class DropboxStorage extends CommonStorage implements IStorage {
 
     }
 
-    private void createRoot() {
-        root = new DropboxDirectory(client, rootPath);
+    private void createRoot() throws StorageException {
+        try {
+            root = new DropboxDirectory(client, rootPath);
+            root.persist();
+        } catch (PersistenceException e) {
+            throw new StorageException(e);
+        }
     }
 }

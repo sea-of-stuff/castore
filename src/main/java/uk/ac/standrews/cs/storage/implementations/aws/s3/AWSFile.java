@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.InputStreamData;
 import uk.ac.standrews.cs.storage.exceptions.DataException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IFile;
 
@@ -20,16 +21,14 @@ public class AWSFile extends AWSStatefulObject implements IFile {
 
     private static final Logger log = Logger.getLogger(AWSFile.class.getName());
 
-    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent,
-                   String name) {
+    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
         super(s3Client, bucketName, parent, name);
 
         if (exists()) retrieveAndUpdateData();
 
     }
 
-    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent,
-                   String name, Data data) {
+    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent, String name, Data data) throws StorageException {
         super(s3Client, bucketName, parent, name);
 
         this.data = data;

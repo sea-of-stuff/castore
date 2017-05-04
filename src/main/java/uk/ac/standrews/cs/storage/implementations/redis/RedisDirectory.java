@@ -3,6 +3,7 @@ package uk.ac.standrews.cs.storage.implementations.redis;
 import redis.clients.jedis.Jedis;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
@@ -21,34 +22,38 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
 
     private static final Logger log = Logger.getLogger(RedisDirectory.class.getName());
 
-    public RedisDirectory(Jedis jedis, String name) {
+    public RedisDirectory(Jedis jedis, String name) throws StorageException {
         super(jedis, name);
     }
 
-    public RedisDirectory(Jedis jedis, IDirectory parent, String name) {
+    public RedisDirectory(Jedis jedis, IDirectory parent, String name) throws StorageException {
         super(jedis, parent, name);
     }
 
     @Override
     public StatefulObject get(String name) throws BindingAbsentException {
 
-        boolean hasObject = jedis.exists(objectPath + name + REDIS_KEY_TYPE_TAG);
-        if (hasObject) {
+        try {
 
-            String type = jedis.get(objectPath + name + REDIS_KEY_TYPE_TAG);
-            switch (type) {
-                case DIRECTORY_TYPE:
-                    return new RedisDirectory(jedis, this, name);
-                case FILE_TYPE:
-                    return new RedisFile(jedis, this, name);
-                default:
-                    throw new BindingAbsentException("Type for stateful object unknown. Cannot create a proper object");
+            boolean hasObject = jedis.exists(objectPath + name + REDIS_KEY_TYPE_TAG);
+            if (hasObject) {
+
+                String type = jedis.get(objectPath + name + REDIS_KEY_TYPE_TAG);
+                switch (type) {
+                    case DIRECTORY_TYPE:
+                        return new RedisDirectory(jedis, this, name);
+                    case FILE_TYPE:
+                        return new RedisFile(jedis, this, name);
+                    default:
+                        throw new BindingAbsentException("Type for stateful object unknown. Cannot create a proper object");
+                }
             }
 
-        } else {
+        } catch (StorageException e) {
             throw new BindingAbsentException("Object with name " + name + " was not found");
         }
 
+        throw new BindingAbsentException("Object with name " + name + " was not found");
     }
 
     @Override

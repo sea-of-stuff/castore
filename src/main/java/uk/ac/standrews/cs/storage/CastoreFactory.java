@@ -67,7 +67,13 @@ public class CastoreFactory {
 
             case DROPBOX:
 
-                storage = new DropboxStorage(builder.getToken(), builder.getRoot());
+                String token = builder.getToken();
+                if (token == null || token.isEmpty()) {
+                    storage = new DropboxStorage(builder.getRoot());
+                } else {
+                    storage = new DropboxStorage(builder.getToken(), builder.getRoot());
+                }
+
                 break;
 
             case GOOGLE_DRIVE:

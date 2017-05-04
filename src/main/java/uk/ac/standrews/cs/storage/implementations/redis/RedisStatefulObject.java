@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import redis.clients.jedis.Jedis;
 import uk.ac.standrews.cs.storage.data.Data;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
@@ -30,20 +31,21 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
     protected Jedis jedis;
 
     protected IDirectory logicalParent;
-    protected String name;
     protected String objectPath;
     protected Data data;
 
-    public RedisStatefulObject(Jedis jedis, IDirectory parent, String name) {
+    public RedisStatefulObject(Jedis jedis, IDirectory parent, String name) throws StorageException {
+        super(name);
+
         this.jedis = jedis;
         this.logicalParent = parent;
-        this.name = name;
         this.objectPath = getPathname();
     }
 
-    public RedisStatefulObject(Jedis jedis, String name) {
+    public RedisStatefulObject(Jedis jedis, String name) throws StorageException {
+        super(name);
+
         this.jedis = jedis;
-        this.name = name;
         this.objectPath = getPathname();
     }
 

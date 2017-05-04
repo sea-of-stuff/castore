@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
@@ -32,22 +33,22 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
     protected AmazonS3 s3Client;
     protected String bucketName;
     protected IDirectory logicalParent;
-    protected String name;
     protected Data data;
     protected GetObjectRequest getObjectRequest;
 
-    public AWSStatefulObject(AmazonS3 s3Client, String bucketName,
-                             IDirectory parent, String name) {
+    public AWSStatefulObject(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
+        super(name);
+
         this.s3Client = s3Client;
         this.bucketName = bucketName;
         this.logicalParent = parent;
-        this.name = name;
 
         String objectPath = getPathname();
         getObjectRequest = new GetObjectRequest(bucketName, objectPath);
     }
 
     public AWSStatefulObject(AmazonS3 s3Client, String bucketName) {
+
         this.s3Client = s3Client;
         this.bucketName = bucketName;
     }

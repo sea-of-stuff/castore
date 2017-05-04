@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
+import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
@@ -37,8 +38,7 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
      * @param parent
      * @param name
      */
-    public AWSDirectory(AmazonS3 s3Client, String bucketName,
-                        IDirectory parent, String name) {
+    public AWSDirectory(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
         super(s3Client, bucketName, parent, name);
 
         // TODO - if directory exists, then load it
@@ -67,15 +67,19 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
     @Override
     public StatefulObject get(String name) throws BindingAbsentException {
 
-        StatefulObject obj;
-        if (isDirectory(name)) {
-            name = name.substring(0, name.length() - 1);
-            obj = new AWSDirectory(s3Client, bucketName, this, name);
-        } else {
-            obj = new AWSFile(s3Client, bucketName, this, name);
-        }
+        try {
+            StatefulObject obj;
+            if (isDirectory(name)) {
+                name = name.substring(0, name.length() - 1);
+                obj = new AWSDirectory(s3Client, bucketName, this, name);
+            } else {
+                obj = new AWSFile(s3Client, bucketName, this, name);
+            }
 
-        return obj;
+            return obj;
+        } catch (StorageException e) {
+            throw new BindingAbsentException("Unable to find object for name " + name);
+        }
     }
 
     /**
