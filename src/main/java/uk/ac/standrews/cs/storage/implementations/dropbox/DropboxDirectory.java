@@ -2,18 +2,17 @@ package uk.ac.standrews.cs.storage.implementations.dropbox;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
-import com.fasterxml.jackson.databind.JsonNode;
 import uk.ac.standrews.cs.storage.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.implementations.NameObjectBindingImpl;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
 import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
-import uk.ac.standrews.cs.storage.utils.JSON;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -50,25 +49,18 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     @Override
     public StatefulObject get(String name) throws BindingAbsentException {
 
-        name = normalise(name);
-
         try {
+            Metadata metadata = getMetadata(getPathname() + name);
 
-            Metadata metadata = client.files().getMetadata(getPathname() + name);
-
-            JsonNode node = JSON.Mapper().readTree(metadata.toString());
-            String type = node.get(".tag").textValue();
-
-            switch (type) {
-                case "folder":
-                    return new DropboxDirectory(client, this, name);
-                case "file":
-                    return new DropboxFile(client, this, name);
-                default:
-                    throw new BindingAbsentException("Object type is unknown");
+            if (metadata instanceof FolderMetadata) {
+                return new DropboxDirectory(client, this, name);
+            } else if (metadata instanceof FileMetadata) {
+                return new DropboxFile(client, this, name);
+            } else {
+                throw new BindingAbsentException("Object type is unknown");
             }
 
-        } catch (DbxException | IOException e) {
+        } catch (DbxException e) {
             throw new BindingAbsentException("Unable to get object with name " + name);
         }
 
@@ -77,10 +69,8 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     @Override
     public boolean contains(String name) {
 
-        name = normalise(name);
-
         try {
-            client.files().getMetadata(getPathname() + name);
+            getMetadata(getPathname() + name);
         } catch (DbxException e) {
             return false;
         }
@@ -182,11 +172,4 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         }
     }
 
-    private String normalise(String path) {
-        if (path.charAt(path.length() - 1) == '/') {
-            path = path.substring(0, path.length() - 1); // Removing last slash
-        }
-
-        return path;
-    }
 }

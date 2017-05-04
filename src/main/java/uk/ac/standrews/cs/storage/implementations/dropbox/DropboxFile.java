@@ -4,9 +4,7 @@ import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.files.WriteMode;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import uk.ac.standrews.cs.storage.data.Data;
@@ -15,14 +13,11 @@ import uk.ac.standrews.cs.storage.exceptions.DataException;
 import uk.ac.standrews.cs.storage.exceptions.PersistenceException;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
 import uk.ac.standrews.cs.storage.interfaces.IFile;
-import uk.ac.standrews.cs.storage.utils.JSON;
-import uk.ac.standrews.cs.storage.utils.Time;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,9 +65,11 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     @Override
     public void persist() throws PersistenceException {
 
-        try (InputStream inputStream = data.getInputStream()){
+        try (InputStream inputStream = data.getInputStream()) {
+
             String path = getPathname();
             uploadFile(client, inputStream, path);
+
         } catch (DbxException | IOException e) {
             throw new PersistenceException("Unable to persist data to Dropbox", e);
         }
@@ -82,12 +79,10 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     public long getSize() {
 
         try {
-            Metadata metadata = client.files().getMetadata(getPathname());
-            JsonNode node = JSON.Mapper().readTree(metadata.toStringMultiline());
+            FileMetadata metadata = (FileMetadata) getMetadata();
+            return metadata.getSize();
 
-            return node.get("size").asLong();
-
-        } catch (DbxException | IOException e) {
+        } catch (DbxException e) {
             log.log(Level.WARNING, "Unable to retrieve the size info about the file with path " + getPathname());
         }
 
@@ -100,13 +95,10 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
         long retval = 0;
 
         try {
-            Metadata metadata = client.files().getMetadata(getPathname());
-            JsonNode node = JSON.Mapper().readTree(metadata.toStringMultiline());
+            FileMetadata metadata = (FileMetadata) getMetadata();
+            retval = metadata.getClientModified().getTime();
 
-            String lmd = node.get("client_modified").textValue();
-            retval = Time.DateToLong(lmd);
-
-        } catch (DbxException | ParseException | IOException e) {
+        } catch (DbxException e) {
             log.log(Level.WARNING, "Unable to retrieve the last modified time about the file with path " + getPathname());
         }
 
@@ -142,11 +134,10 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
      */
     private static void uploadFile(DbxClientV2 dbxClient, InputStream inputStream, String dropboxPath) throws IOException, DbxException {
 
-        FileMetadata metadata = dbxClient.files()
+        dbxClient.files()
                 .uploadBuilder(dropboxPath)
                 .withMode(WriteMode.ADD)
                 .uploadAndFinish(inputStream);
-
     }
 
     private InputStream downloadStream() throws DbxException {

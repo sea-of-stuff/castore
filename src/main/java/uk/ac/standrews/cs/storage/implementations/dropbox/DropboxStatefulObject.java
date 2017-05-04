@@ -45,16 +45,11 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
     public boolean exists() {
 
         try {
-            String path = getPathname();
-
-            if (path.charAt(path.length() -1 ) == '/') {
-                path = path.substring(0, path.length() - 1); // Removing last slash
-            }
-
-            Metadata metadata = client.files().getMetadata(path);
+            getMetadata();
         } catch (DbxException e) {
             return false;
         }
+
         return true;
     }
 
@@ -65,6 +60,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     @Override
     public long lastModified() {
+
         return 0;
     }
 
@@ -73,4 +69,23 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
         throw new IOException("Unable to make file");
     }
 
+    protected Metadata getMetadata() throws DbxException {
+
+        String path = getPathname();
+        return getMetadata(path);
+    }
+
+    protected Metadata getMetadata(String path) throws DbxException {
+
+        path = normalise(path);
+        return client.files().getMetadata(path);
+    }
+
+    protected String normalise(String path) {
+        if (path.charAt(path.length() - 1) == '/') {
+            path = path.substring(0, path.length() - 1); // Removing last slash
+        }
+
+        return path;
+    }
 }

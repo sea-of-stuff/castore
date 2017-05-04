@@ -41,11 +41,6 @@ public class RedisFile extends RedisStatefulObject implements IFile {
     }
 
     @Override
-    public boolean exists() {
-        return jedis.exists(getPathname());
-    }
-
-    @Override
     public String getPathname() {
         return logicalParent.getPathname() + name;
     }

@@ -28,6 +28,8 @@ public class AWSS3 {
         IFile file = storage.createFile(root, "exampleFile");
         file.setData(new StringData("Example Data"));
 
+        file.persist();
+
         System.out.println("Just created a file named " + file.getName() + " at the following path " + file.getPathname());
     }
 

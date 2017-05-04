@@ -82,12 +82,6 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
     }
 
     @Override
-    public boolean exists() {
-        // TODO - check it has files/folders
-        return false;
-    }
-
-    @Override
     public long getSize() {
         return 0;
     }

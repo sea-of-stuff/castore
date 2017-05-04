@@ -35,6 +35,14 @@ public class Dropbox {
         IFile file = storage.createFile(root, "exampleFile");
         file.setData(new StringData("Example Data"));
 
+        file.persist();
+
         System.out.println("Just created a file named " + file.getName() + " at the following path " + file.getPathname());
+
+        IDirectory directory = storage.createDirectory("exampleDir");
+        directory.persist();
+
+        directory.lastModified();
+        System.out.println("Just created a dir");
     }
 }
