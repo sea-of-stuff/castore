@@ -17,9 +17,9 @@ To use **castore** you can add the following maven dependency:
 </dependency>
 ```
 
-This project is not available via a maven repository yet, so you will have to install this yourself `mvn install`.
+This project is not available via a maven repository yet, so you will have to install this yourself by running `mvn install`.
 
-Alternatively you can produce a `.jar` for the project and add it as a dependency for your project.
+Alternatively you can produce a `.jar` for the project, `mvn package -am -DskipTests`.
 
 ---
 
@@ -30,6 +30,7 @@ Alternatively you can produce a `.jar` for the project and add it as a dependenc
 This implementation is based on the local file system.
 
 **Settings**: type, root path
+
 
 ### Network Based
 
@@ -47,6 +48,7 @@ export AWS_SECRET_KEY=<KEY>
 
 **Settings**: type, bucket name, credentials (optional)
 
+
 ### Redis
 
 Redis is an in-memory data structure store, which is networked and very fast.
@@ -56,11 +58,13 @@ Before using the Redis-based storage, you need [Redis](https://redis.io) install
 
 **Settings**: type, host, port (optional)
 
+
 ### Dropbox
 
 First you need to create a Dropbox app and get an App Token.
 
 **Settings**: type, path to dropbox folder, token
+
 
 ## Examples
 
@@ -68,12 +72,25 @@ Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples)
 
 ---
 
-## Not implemented yet
+## Future Plans
 
-- In-memory
-- GUID-based
-- Google Drive
-- OneDrive
+- More implementations:
+    - In-memory
+    - GUID-based
+    - Google Drive
+    - OneDrive
+    - WebDAV
+    - FTP
+- Make a storage instance available via a REST API
+- CLI
+
+---
+
+## Continous Integration
+
+CircleCI automatically builds and runs the tests for the project.
+
+Codecov, with JaCoCo, is used to measure the test coverage for the project. Info on how to read the Codecov reports: https://docs.codecov.io/v4.3.6/docs/viewing-source-code
 
 ---
 
@@ -82,3 +99,6 @@ Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples)
 This project is inspired by the `asa/filesystem` project developed by *Alan Dearle*, *Graham Kirby*, and *Stuart Norcross* at the University of St Andrews.
 
 The **castore** project has been developed, and is currently maintained, by *Simone I. Conte* at the University of St Andrews.
+
+Suggestions and Pull Requests are more than welcome.
+
