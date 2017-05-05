@@ -219,4 +219,18 @@ public class StorageImplTest extends StorageBaseTest {
         storage.createDirectory("").persist();
     }
 
+    @Test (expectedExceptions = StorageException.class)
+    public void createFileException() throws StorageException {
+        IDirectory root = storage.getRoot();
+        storage.createFile(root, "").persist();
+    }
+
+    @Test
+    public void rootExists() throws StorageException {
+        IDirectory root = storage.getRoot();
+
+        assertNotNull(root);
+        assertTrue(root.exists());
+    }
+
 }

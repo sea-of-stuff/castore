@@ -51,7 +51,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     public StatefulObject get(String name) throws BindingAbsentException {
 
         try {
-            Metadata metadata = getMetadata(getPathname() + name);
+            Metadata metadata = getMetadata(objectPath + name);
 
             if (metadata instanceof FolderMetadata) {
                 return new DropboxDirectory(client, this, name);
@@ -71,7 +71,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     public boolean contains(String name) {
 
         try {
-            getMetadata(getPathname() + name);
+            getMetadata(objectPath + name);
         } catch (DbxException e) {
             return false;
         }
@@ -85,7 +85,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         name = normalise(name);
 
         try {
-            client.files().delete(getPathname() + name);
+            client.files().delete(objectPath + name);
         } catch (DbxException e) {
             throw new BindingAbsentException("Unable to delete object with name " + name);
         }
@@ -96,8 +96,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         try {
             if (exists()) return;
 
-            String path = normalise(getPathname());
-
+            String path = normalise(objectPath);
             client.files().createFolder(path);
         } catch (DbxException e) {
             throw new PersistenceException("Unable to persist directory", e);
@@ -108,7 +107,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     public Iterator<NameObjectBinding> getIterator() {
 
         try {
-            return new DirectoryIterator(client.files().listFolder(getPathname()));
+            return new DirectoryIterator(client.files().listFolder(objectPath));
         } catch (DbxException e) {
             log.log(Level.WARNING, "Unable to create the Directory Iterator properly");
         }
@@ -161,7 +160,6 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
             try {
                 Metadata metadata = meta.next();
                 String name = metadata.getName();
-                System.out.println("name " + name);
                 StatefulObject obj = get(name);
 
                 return new NameObjectBindingImpl(name, obj);

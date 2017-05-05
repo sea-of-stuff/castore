@@ -61,7 +61,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
 
     @Override
     public boolean exists() {
-        return jedis.exists(getPathname());
+        return jedis.exists(getPathname() + REDIS_KEY_TYPE_TAG);
     }
 
     @Override

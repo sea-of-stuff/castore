@@ -28,8 +28,9 @@ public class DriveStorage extends CommonStorage implements IStorage {
         try {
             GoogleCredential credential = new GoogleCredential().setAccessToken(token);
             HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+            JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
-            drive = new Drive.Builder(httpTransport, JacksonFactory.getDefaultInstance(), credential)
+            drive = new Drive.Builder(httpTransport, jsonFactory, credential)
                     .setApplicationName("castore/1.0")
                     .build();
         } catch (GeneralSecurityException | IOException e) {

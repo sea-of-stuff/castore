@@ -17,8 +17,6 @@ import java.util.logging.Logger;
 
 /**
  *
- * TODO - set the SAVE configuration when creating the redis instance?
- *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class RedisStorage extends CommonStorage implements IStorage {
@@ -36,7 +34,7 @@ public class RedisStorage extends CommonStorage implements IStorage {
     }
 
     /**
-     * Note: You should make sure that a redis instance is available
+     * Note: A Redis server instance should be available
      *
      * @param hostname
      */
@@ -54,7 +52,6 @@ public class RedisStorage extends CommonStorage implements IStorage {
             }
 
         }
-
     }
 
     @Override

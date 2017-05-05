@@ -73,8 +73,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     protected Metadata getMetadata() throws DbxException {
 
-        String path = getPathname();
-        return getMetadata(path);
+        return getMetadata(objectPath);
     }
 
     protected Metadata getMetadata(String path) throws DbxException {

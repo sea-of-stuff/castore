@@ -68,8 +68,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
 
         try (InputStream inputStream = data.getInputStream()) {
 
-            String path = getPathname();
-            uploadFile(client, inputStream, path);
+            uploadFile(client, inputStream, objectPath);
 
         } catch (DbxException | IOException e) {
             throw new PersistenceException("Unable to persist data to Dropbox", e);
@@ -143,7 +142,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
 
     private InputStream downloadStream() throws DbxException {
 
-        DbxDownloader<FileMetadata> downloadedContent = client.files().download(getPathname());
+        DbxDownloader<FileMetadata> downloadedContent = client.files().download(objectPath);
         return downloadedContent.getInputStream();
     }
 
