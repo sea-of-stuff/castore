@@ -33,11 +33,8 @@ public abstract class StorageBaseTest {
     @BeforeMethod
     public void setUp(Method method) throws StorageException, InterruptedException {
 
-        CastoreType type = getStorageType();
-        CastoreBuilder builder = makeBuilder(type);
-        storage = CastoreFactory.createStorage(builder);
-
-        System.out.println(type.toString() + " :: " + method.getName());
+        storage = makeStorage();
+        System.out.println(getStorageType().toString() + " :: " + method.getName());
     }
 
     @AfterMethod
@@ -54,6 +51,12 @@ public abstract class StorageBaseTest {
                 {REDIS},
                 {DROPBOX} /*, {AWS} */
         };
+    }
+
+    protected IStorage makeStorage() throws StorageException {
+        CastoreType type = getStorageType();
+        CastoreBuilder builder = makeBuilder(type);
+        return CastoreFactory.createStorage(builder);
     }
 
     private CastoreBuilder makeBuilder(CastoreType type) {

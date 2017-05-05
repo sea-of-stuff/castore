@@ -82,11 +82,4 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
         return client.files().getMetadata(path);
     }
 
-    protected String normalise(String path) {
-        if (path.charAt(path.length() - 1) == '/') {
-            path = path.substring(0, path.length() - 1); // Removing last slash
-        }
-
-        return path;
-    }
 }

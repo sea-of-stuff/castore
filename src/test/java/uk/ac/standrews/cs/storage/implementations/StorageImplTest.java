@@ -6,10 +6,7 @@ import uk.ac.standrews.cs.storage.CastoreType;
 import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.data.StringData;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
-import uk.ac.standrews.cs.storage.interfaces.IDirectory;
-import uk.ac.standrews.cs.storage.interfaces.IFile;
-import uk.ac.standrews.cs.storage.interfaces.NameObjectBinding;
-import uk.ac.standrews.cs.storage.interfaces.StatefulObject;
+import uk.ac.standrews.cs.storage.interfaces.*;
 
 import java.util.Iterator;
 
@@ -233,4 +230,59 @@ public class StorageImplTest extends StorageBaseTest {
         assertTrue(root.exists());
     }
 
+    @Test
+    public void reUseStorageFile() throws StorageException {
+        IFile file = storage.createFile(storage.getRoot(), "16-test.txt", TEST_DATA);
+        file.persist();
+        assertTrue(file.exists());
+
+        IStorage newStorage = makeStorage();
+        IFile retrievedFile = newStorage.createFile(newStorage.getRoot(), "16-test.txt");
+        assertTrue(retrievedFile.getSize() > 0);
+        assertTrue(retrievedFile.exists());
+        assertEquals(retrievedFile.getData(), TEST_DATA);
+    }
+
+    @Test
+    public void reUseStorageDirectory() throws StorageException {
+        IDirectory folder = storage.createDirectory("17-folder");
+        folder.persist();
+        assertTrue(folder.exists());
+
+        IStorage newStorage = makeStorage();
+        IDirectory retrievedFolder = newStorage.createDirectory("17-folder");
+        assertTrue(retrievedFolder.exists());
+    }
+
+    @Test
+    public void getFileFromRoot() throws StorageException {
+        IFile file = storage.createFile(storage.getRoot(), "18-test.txt", TEST_DATA);
+        file.persist();
+        assertTrue(file.exists());
+
+        IStorage newStorage = makeStorage();
+
+        boolean hasFile = newStorage.getRoot().contains("18-test.txt");
+        assertTrue(hasFile);
+
+        IFile retrievedFile = (IFile) newStorage.getRoot().get("18-test.txt");
+        assertTrue(retrievedFile.getSize() > 0);
+        assertTrue(retrievedFile.exists());
+        assertEquals(retrievedFile.getData(), TEST_DATA);
+    }
+
+    @Test
+    public void getDirectoryFromRoot() throws StorageException {
+        IDirectory folder = storage.createDirectory("19-folder");
+        folder.persist();
+        assertTrue(folder.exists());
+
+        IStorage newStorage = makeStorage();
+
+        boolean hasFolder = newStorage.getRoot().contains("19-folder/");
+        assertTrue(hasFolder);
+
+        IDirectory retrievedFolder = (IDirectory) newStorage.getRoot().get("19-folder/");
+        assertTrue(retrievedFolder.exists());
+    }
 }

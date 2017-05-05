@@ -17,9 +17,10 @@ public abstract class CommonStatefulObject {
     protected String name;
 
     public CommonStatefulObject(String name) throws StorageException {
-        this.name = name;
 
         if (!NameIsLegal(name)) throw new StorageException();
+
+        this.name = normalise(name);
     }
 
     protected CommonStatefulObject() {}
@@ -29,6 +30,20 @@ public abstract class CommonStatefulObject {
     @Override
     public String toString() {
         return getPathname();
+    }
+
+    /**
+     * Remove trailing slash
+     *
+     * @param path
+     * @return
+     */
+    protected String normalise(String path) {
+        if (path.charAt(path.length() - 1) == '/') {
+            path = path.substring(0, path.length() - 1);
+        }
+
+        return path;
     }
 
     /**
@@ -42,7 +57,7 @@ public abstract class CommonStatefulObject {
      * @param name to be checked
      * @return true if the name is legal
      */
-    public static boolean NameIsLegal(String name) {
+    protected static boolean NameIsLegal(String name) {
 
         return name != null && !name.isEmpty() && name.matches(LEGAL_CHARS_PATTERN);
     }
