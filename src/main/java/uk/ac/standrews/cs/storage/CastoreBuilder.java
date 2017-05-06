@@ -29,6 +29,9 @@ public class CastoreBuilder {
     private String accessKey;
     private String secretAccessKey;
 
+    // Drive
+    private String credentialsPath;
+
     // NOTE: Still unused params
     private boolean useChunkUpload;
     private int chunkThreshold;
@@ -74,6 +77,11 @@ public class CastoreBuilder {
         return this;
     }
 
+    public CastoreBuilder setCredentialsPath(String credentialsPath) {
+        this.credentialsPath = credentialsPath;
+        return this;
+    }
+
     public CastoreType getType() {
         return type;
     }
@@ -104,5 +112,9 @@ public class CastoreBuilder {
 
     public String getSecretAccessKey() {
         return secretAccessKey;
+    }
+
+    public String getCredentialsPath() {
+        return credentialsPath;
     }
 }

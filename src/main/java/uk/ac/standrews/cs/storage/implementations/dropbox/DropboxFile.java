@@ -32,6 +32,8 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     private static final String TMP_FILE_PREFIX = "dropbox";
     private static final String TMP_FILE_SUFFIX = ".tmp";
 
+    protected Data data;
+
     public DropboxFile(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(client, parent, name);
 

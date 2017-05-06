@@ -3,7 +3,6 @@ package uk.ac.standrews.cs.storage.implementations.dropbox;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.Metadata;
-import uk.ac.standrews.cs.storage.data.Data;
 import uk.ac.standrews.cs.storage.exceptions.StorageException;
 import uk.ac.standrews.cs.storage.implementations.CommonStatefulObject;
 import uk.ac.standrews.cs.storage.interfaces.IDirectory;
@@ -21,7 +20,6 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     protected IDirectory logicalParent;
     protected String objectPath;
-    protected Data data;
 
     public DropboxStatefulObject(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(name);
