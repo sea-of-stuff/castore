@@ -50,10 +50,6 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     public boolean exists() {
 
         try {
-//            String fileId = getId();
-//            if (fileId == null) return false;
-//
-//            drive.files().get(fileId).execute(); // Need to check drive to avoid any inconsistencies with the index
             return getFile() != null;
         } catch (IOException e) {
             return false;

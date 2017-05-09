@@ -81,12 +81,14 @@ public class RedisFile extends RedisStatefulObject implements IFile {
 
             IGUID guid = GUIDFactory.generateGUID(dataFirstClone);
 
+            // Check if first time adding the data or if data has changed, thus it is an update
             String retrievedGUID = jedis.get(objectPath);
-            if (!guid.toString().equals(retrievedGUID)) {
+            if (retrievedGUID == null || !guid.toString().equals(retrievedGUID)) {
 
                 jedis.set(objectPath, guid.toString());
                 jedis.set(objectPath + REDIS_KEY_TYPE_TAG, FILE_TYPE);
 
+                // Check if the data is already stored or not
                 boolean exists = jedis.exists(guid.toString());
                 if (!exists) {
                     String dataString = IO.InputStreamToString(dataSecondClone);
@@ -95,6 +97,14 @@ public class RedisFile extends RedisStatefulObject implements IFile {
                     jedis.set(guid.toString() + REDIS_REF_TAG, "1");
                 } else {
                     jedis.incr(guid.toString() + REDIS_REF_TAG);
+                }
+
+                if (retrievedGUID != null) {
+                    long ref = jedis.decr(retrievedGUID + REDIS_REF_TAG);
+                    if (ref == 0) { // No more references to the data exist
+                        jedis.del(retrievedGUID);
+                        jedis.del(retrievedGUID + REDIS_REF_TAG);
+                    }
                 }
 
                 // Add element to parent

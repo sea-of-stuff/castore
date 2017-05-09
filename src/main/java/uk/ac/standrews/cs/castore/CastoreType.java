@@ -5,12 +5,29 @@ package uk.ac.standrews.cs.castore;
  */
 public enum CastoreType {
 
-    LOCAL,
-    NETWORK,
-    DROPBOX,
-    REDIS,
-    AWS_S3,
-    GOOGLE_DRIVE;
+    LOCAL("local"),
+    NETWORK("network"),
+    DROPBOX("dropbox"),
+    REDIS("redis"),
+    AWS_S3("aws_s3"),
+    GOOGLE_DRIVE("google_drive");
 
     // FUTURE Types: memory, onedrive, google drive, Sea of Stuff, git, mercurial, github
+
+    private final String text;
+
+    CastoreType(final String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return text;
+    }
+
+    public static CastoreType getEnum(String value) {
+        for(CastoreType v : values())
+            if(v.toString().equalsIgnoreCase(value)) return v;
+        throw new IllegalArgumentException();
+    }
 }
