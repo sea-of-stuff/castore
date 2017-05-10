@@ -15,9 +15,6 @@ public class CastoreBuilder {
     private CastoreType type;
     private String root;
 
-    // Network
-    private String mountPoint;
-
     // Redis
     private String hostname;
     private int port = NOT_SET;
@@ -44,11 +41,6 @@ public class CastoreBuilder {
 
     public CastoreBuilder setRoot(String root) {
         this.root = root;
-        return this;
-    }
-
-    public CastoreBuilder setMountPoint(String mountPoint) {
-        this.mountPoint = mountPoint;
         return this;
     }
 
@@ -88,10 +80,6 @@ public class CastoreBuilder {
 
     public String getRoot() {
         return root;
-    }
-
-    public String getMountPoint() {
-        return mountPoint;
     }
 
     public String getHostname() {

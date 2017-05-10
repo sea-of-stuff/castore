@@ -6,7 +6,6 @@ package uk.ac.standrews.cs.castore;
 public enum CastoreType {
 
     LOCAL("local"),
-    NETWORK("network"),
     DROPBOX("dropbox"),
     REDIS("redis"),
     AWS_S3("aws_s3"),

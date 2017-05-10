@@ -5,7 +5,6 @@ import uk.ac.standrews.cs.castore.implementations.aws.s3.AWSStorage;
 import uk.ac.standrews.cs.castore.implementations.dropbox.DropboxStorage;
 import uk.ac.standrews.cs.castore.implementations.filesystem.FileBasedStorage;
 import uk.ac.standrews.cs.castore.implementations.google.drive.DriveStorage;
-import uk.ac.standrews.cs.castore.implementations.network.NetworkBasedStorage;
 import uk.ac.standrews.cs.castore.implementations.redis.RedisStorage;
 import uk.ac.standrews.cs.castore.interfaces.IStorage;
 
@@ -35,11 +34,6 @@ public class CastoreFactory {
             case LOCAL:
 
                 storage = new FileBasedStorage(new File(builder.getRoot()));
-                break;
-
-            case NETWORK:
-
-                storage = new NetworkBasedStorage(builder.getMountPoint(), builder.getRoot());
                 break;
 
             case AWS_S3:

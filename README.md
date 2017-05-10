@@ -31,12 +31,6 @@ This implementation is based on the local file system.
 
 **Settings**: type, root path
 
-
-### Network Based
-
-Current limitation: you need to mount the network drive yourself.
-
-
 ### AWS.s3
 
 In order to work with an AWS S3 storage, you need to provide an access_key_id and a secret_access_key.
