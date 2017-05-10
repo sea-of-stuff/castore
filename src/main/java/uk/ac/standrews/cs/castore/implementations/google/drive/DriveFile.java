@@ -15,7 +15,7 @@ import uk.ac.standrews.cs.castore.interfaces.IFile;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.Collections;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -24,7 +24,7 @@ public class DriveFile extends DriveStatefulObject implements IFile {
 
     protected Data data;
 
-    public DriveFile(Drive drive, HashMap<String, String> index, IDirectory parent, String name) throws StorageException {
+    public DriveFile(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
         super(drive, index, parent, name);
 
         if (exists()) {
@@ -34,7 +34,7 @@ public class DriveFile extends DriveStatefulObject implements IFile {
         }
     }
 
-    public DriveFile(Drive drive, HashMap<String, String> index, IDirectory parent, String name, Data data) throws StorageException {
+    public DriveFile(Drive drive, Index index, IDirectory parent, String name, Data data) throws StorageException {
         super(drive, index, parent, name);
 
         this.data = data;
@@ -64,14 +64,34 @@ public class DriveFile extends DriveStatefulObject implements IFile {
     public void persist() throws PersistenceException {
 
         try {
-            File file = new File().setName(name);
-            InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
-
-            File storedFile = drive.files().create(file, mediaContent).execute();
-            index.put(objectPath, storedFile.getId());
+            if (!exists()) {
+                createFile();
+            } else {
+                updateFile();
+            }
         } catch (IOException | DataException e) {
-            throw new PersistenceException("Unable to persist file with name " + name);
+            throw new PersistenceException("Unable to persist file with name " + name + " Cause: " + e.getMessage());
         }
+    }
+
+    private void createFile() throws IOException, DataException {
+        String parentId = index.getObjectId(getLogicalParent().getPathname());
+        File file = new File()
+                .setParents(Collections.singletonList(parentId))
+                .setName(name);
+        InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
+
+        File storedFile = drive.files().create(file, mediaContent).execute();
+        index.setPathId(objectPath, storedFile.getId());
+    }
+
+    private void updateFile() throws IOException, DataException {
+        File file = getFile();
+
+        InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
+
+        drive.files().update(file.getId(), file, mediaContent).execute();
+        index.setPathId(objectPath, file.getId());
     }
 
     private void retrieveAndUpdateData() throws StorageException {

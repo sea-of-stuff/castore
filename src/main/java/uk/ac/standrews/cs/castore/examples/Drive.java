@@ -5,6 +5,7 @@ import uk.ac.standrews.cs.castore.CastoreFactory;
 import uk.ac.standrews.cs.castore.CastoreType;
 import uk.ac.standrews.cs.castore.data.StringData;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
+import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
 import uk.ac.standrews.cs.castore.interfaces.IStorage;
 
@@ -36,6 +37,11 @@ public class Drive {
 
         System.out.println("lmd " + retrieved.lastModified());
         System.out.println("size " + retrieved.getSize());
+
+        IDirectory directory = storage.createDirectory("folder");
+        directory.persist();
+
+        storage.persist();
 
         storage.destroy();
     }

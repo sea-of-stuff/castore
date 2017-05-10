@@ -126,6 +126,8 @@ public class AWSStorage extends CommonStorage implements IStorage {
         } catch (BindingAbsentException e) {
             throw new DestroyException(e);
         }
+
+        root = null;
     }
 
     private void createAndSetBucket(String bucketName) throws StorageException {

@@ -9,7 +9,6 @@ import uk.ac.standrews.cs.castore.interfaces.StatefulObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -22,9 +21,9 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     protected String objectPath;
     protected Data data;
 
-    protected HashMap<String, String> index;
+    protected Index index;
 
-    public DriveStatefulObject(Drive drive, HashMap<String, String> index, IDirectory parent, String name) throws StorageException  {
+    public DriveStatefulObject(Drive drive, Index index, IDirectory parent, String name) throws StorageException  {
         super(name);
 
         this.drive = drive;
@@ -33,7 +32,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
         this.objectPath = getPathname();
     }
 
-    public DriveStatefulObject(Drive drive, HashMap<String, String> index, String name) throws StorageException {
+    public DriveStatefulObject(Drive drive, Index index, String name) throws StorageException {
         super(name);
 
         this.drive = drive;
@@ -93,13 +92,20 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     }
 
     protected String getId() {
-        return index.get(objectPath);
+        return index.getObjectId(objectPath);
     }
 
+    /**
+     *
+     * @return the id of the file. Null if the file is unknown
+     * @throws IOException
+     */
     // See fields - https://developers.google.com/drive/v3/reference/files#resource
     protected com.google.api.services.drive.model.File getFile() throws IOException {
 
         String fileId = getId();
+        if (fileId == null) return null;
+
         return drive.files()
                 .get(fileId)
                 .setFields("id, kind, name, modifiedTime, size")

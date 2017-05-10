@@ -1,6 +1,7 @@
 package uk.ac.standrews.cs.castore.implementations.google.drive;
 
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
 import uk.ac.standrews.cs.castore.exceptions.BindingAbsentException;
 import uk.ac.standrews.cs.castore.exceptions.PersistenceException;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
@@ -8,7 +9,7 @@ import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.NameObjectBinding;
 import uk.ac.standrews.cs.castore.interfaces.StatefulObject;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Iterator;
 
 import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER;
@@ -18,11 +19,13 @@ import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER;
  */
 public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
-    public DriveDirectory(Drive drive, HashMap<String, String> index, IDirectory parent, String name) throws StorageException {
+    private static final String DRIVE_MIME_TYPE = "application/vnd.google-apps.folder";
+
+    public DriveDirectory(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
         super(drive, index, parent, name);
     }
 
-    public DriveDirectory(Drive drive, HashMap<String, String> index, String name) throws StorageException {
+    public DriveDirectory(Drive drive, Index index, String name) throws StorageException {
         super(drive, index, name);
     }
 
@@ -60,5 +63,19 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     @Override
     public void persist() throws PersistenceException {
 
+        try {
+            File fileMetadata = new File()
+                    .setName(name)
+                    .setMimeType(DRIVE_MIME_TYPE);
+
+            File file = drive.files().create(fileMetadata)
+                    .setFields("id")
+                    .execute();
+            System.out.println("Folder ID: " + file.getId() + " name " + name);
+
+            index.setPathId(objectPath, file.getId());
+        } catch (IOException e) {
+            throw new PersistenceException("Unable to create folder with name " + name);
+        }
     }
 }

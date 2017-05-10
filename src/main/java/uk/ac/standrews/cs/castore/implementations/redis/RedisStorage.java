@@ -89,6 +89,9 @@ public class RedisStorage extends CommonStorage implements IStorage {
 
     @Override
     public void destroy() throws DestroyException {
+
+        root = null;
+
         try(Jedis jedis = pool.getResource()) {
             jedis.flushDB();
         }

@@ -80,6 +80,7 @@ public class DropboxStorage extends CommonStorage implements IStorage {
             throw new DestroyException("Unable to destroy storage with root path " + rootPath);
         }
 
+        root = null;
     }
 
     private void createRoot() throws StorageException {

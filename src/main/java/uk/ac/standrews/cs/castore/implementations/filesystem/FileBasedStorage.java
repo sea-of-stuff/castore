@@ -57,11 +57,14 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
 
     @Override
     public void destroy() throws DestroyException {
+
         try {
             FileUtils.deleteDirectory(root.toFile());
         } catch (IOException e) {
             throw new DestroyException("Unable to destroy root directory");
         }
+
+        root = null;
     }
 
 }

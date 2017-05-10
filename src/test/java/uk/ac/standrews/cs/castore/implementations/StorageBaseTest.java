@@ -49,7 +49,8 @@ public abstract class StorageBaseTest {
         return new Object[][] {
                 {LOCAL},
                 {REDIS},
-                {DROPBOX} /*, {AWS} */
+                {DROPBOX},
+                {GOOGLE_DRIVE} /*, {AWS} */
         };
     }
 
@@ -75,6 +76,11 @@ public abstract class StorageBaseTest {
                 break;
             case DROPBOX:
                 builder.setRoot(DROPBOX_PATH);
+                break;
+            case GOOGLE_DRIVE:
+                // TODO - improve
+                builder.setCredentialsPath("src/main/resources/drive.json")
+                    .setRoot("test_folder");
                 break;
         }
 

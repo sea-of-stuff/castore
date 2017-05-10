@@ -60,6 +60,14 @@ First you need to create a Dropbox app and get an App Token.
 **Settings**: type, path to dropbox folder, token
 
 
+### Google Drive
+
+Need to create a Google Drive App.
+
+TODO - more info on the app creation and types of keys
+
+**Settings**: type, credentials json file
+
 ## Examples
 
 Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples).
