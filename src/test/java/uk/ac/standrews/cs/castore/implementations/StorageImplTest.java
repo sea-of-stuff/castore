@@ -21,6 +21,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 public class StorageImplTest extends StorageBaseTest {
 
     private static final Data TEST_DATA = new StringData("hello world");
+
     private final CastoreType storageType;
 
     @Factory(dataProvider = "storage-manager-provider")
