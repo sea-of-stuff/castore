@@ -107,13 +107,7 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
                 case FILE_TYPE:
 
                     String key = jedis.get(objectPath + name);
-                    if (key != null) {
-                        long ref = jedis.decr(key + REDIS_REF_TAG);
-                        if (ref == 0) { // No more references to the data exist
-                            jedis.del(key);
-                            jedis.del(key + REDIS_REF_TAG);
-                        }
-                    }
+                    decreaseDataRef(key);
 
                     break;
                 case DIRECTORY_TYPE:

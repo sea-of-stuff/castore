@@ -85,10 +85,23 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
         return tempFile;
     }
 
-
-
     protected InputStream getInputStream() throws IOException {
         return data != null ? data.getInputStream() : new NullInputStream(0);
     }
 
+    /**
+     * Decrease the ref count to the data with the given key
+     * If the ref becomes zero, then delete the data altogether
+     *
+     * @param key
+     */
+    protected void decreaseDataRef(String key) {
+        if (key != null) {
+            long ref = jedis.decr(key + REDIS_REF_TAG);
+            if (ref == 0) { // No more references to the data exist
+                jedis.del(key);
+                jedis.del(key + REDIS_REF_TAG);
+            }
+        }
+    }
 }

@@ -99,13 +99,7 @@ public class RedisFile extends RedisStatefulObject implements IFile {
                     jedis.incr(guid.toString() + REDIS_REF_TAG);
                 }
 
-                if (retrievedGUID != null) {
-                    long ref = jedis.decr(retrievedGUID + REDIS_REF_TAG);
-                    if (ref == 0) { // No more references to the data exist
-                        jedis.del(retrievedGUID);
-                        jedis.del(retrievedGUID + REDIS_REF_TAG);
-                    }
-                }
+                decreaseDataRef(retrievedGUID);
 
                 // Add element to parent
                 jedis.sadd(logicalParent.getPathname(), name);
