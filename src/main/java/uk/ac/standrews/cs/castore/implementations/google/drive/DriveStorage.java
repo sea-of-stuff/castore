@@ -47,7 +47,6 @@ public class DriveStorage extends CommonStorage implements IStorage {
                     .setApplicationName("castore/1.0")
                     .build();
 
-            createRoot();
         } catch (GeneralSecurityException | IOException e) {
             throw new StorageException("Unable to create Google Drive storage object", e);
         }

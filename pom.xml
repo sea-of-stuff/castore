@@ -169,6 +169,14 @@
             <version>v3-rev71-1.22.0</version>
         </dependency>
 
+        <!-- Used for FTP -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.6</version>
+        </dependency>
+
+
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
