@@ -21,22 +21,18 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     protected String objectPath;
     protected Data data;
 
-    protected Index index;
-
-    public DriveStatefulObject(Drive drive, Index index, IDirectory parent, String name) throws StorageException  {
+    DriveStatefulObject(Drive drive, IDirectory parent, String name) throws StorageException  {
         super(name);
 
         this.drive = drive;
-        this.index = index;
         this.logicalParent = parent;
         this.objectPath = getPathname();
     }
 
-    public DriveStatefulObject(Drive drive, Index index, String name) throws StorageException {
+    DriveStatefulObject(Drive drive, String name) throws StorageException {
         super(name);
 
         this.drive = drive;
-        this.index = index;
         this.objectPath = getPathname();
     }
 
@@ -92,7 +88,14 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     }
 
     protected String getId() {
-        return index.getObjectId(objectPath);
+        return "TODO";
+    }
+
+    protected String getId(String path) {
+
+        String[] pathComponents = path.split("/");
+
+        return null;
     }
 
     /**

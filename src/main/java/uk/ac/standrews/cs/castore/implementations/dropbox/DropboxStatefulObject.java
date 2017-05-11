@@ -21,7 +21,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
     protected IDirectory logicalParent;
     protected String objectPath;
 
-    public DropboxStatefulObject(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
+    DropboxStatefulObject(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(name);
 
         this.client = client;
@@ -29,7 +29,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
         this.objectPath = getPathname();
     }
 
-    public DropboxStatefulObject(DbxClientV2 client, String name) throws StorageException {
+    DropboxStatefulObject(DbxClientV2 client, String name) throws StorageException {
         super(name);
 
         this.client = client;

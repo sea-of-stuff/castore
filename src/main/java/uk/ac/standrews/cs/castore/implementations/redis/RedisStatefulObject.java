@@ -34,7 +34,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
     protected String objectPath;
     protected Data data;
 
-    public RedisStatefulObject(Jedis jedis, IDirectory parent, String name) throws StorageException {
+    RedisStatefulObject(Jedis jedis, IDirectory parent, String name) throws StorageException {
         super(name);
 
         this.jedis = jedis;
@@ -42,7 +42,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
         this.objectPath = getPathname();
     }
 
-    public RedisStatefulObject(Jedis jedis, String name) throws StorageException {
+    RedisStatefulObject(Jedis jedis, String name) throws StorageException {
         super(name);
 
         this.jedis = jedis;

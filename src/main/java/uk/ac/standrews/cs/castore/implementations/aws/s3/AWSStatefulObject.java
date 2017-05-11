@@ -36,7 +36,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
     protected Data data;
     protected GetObjectRequest getObjectRequest;
 
-    public AWSStatefulObject(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
+    AWSStatefulObject(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
         super(name);
 
         this.s3Client = s3Client;
@@ -47,7 +47,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
         getObjectRequest = new GetObjectRequest(bucketName, objectPath);
     }
 
-    public AWSStatefulObject(AmazonS3 s3Client, String bucketName) {
+    AWSStatefulObject(AmazonS3 s3Client, String bucketName) {
 
         this.s3Client = s3Client;
         this.bucketName = bucketName;

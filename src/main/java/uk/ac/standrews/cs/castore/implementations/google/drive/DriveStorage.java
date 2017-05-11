@@ -21,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,15 +31,11 @@ public class DriveStorage extends CommonStorage implements IStorage {
 
     private static final Logger log = Logger.getLogger(DriveStorage.class.getName());
 
-    private static final String DEFAULT_INDEX_PATH = "./drive.index";
-
     private Drive drive;
     private String rootPath;
-    private Index index; // REMOVEME
 
     public DriveStorage(java.io.File credentialFile, String path) throws StorageException {
         this.rootPath = path;
-        loadOrCreateIndex(DEFAULT_INDEX_PATH);
 
         try {
             HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -60,57 +55,22 @@ public class DriveStorage extends CommonStorage implements IStorage {
 
     @Override
     public IDirectory createDirectory(IDirectory parent, String name) throws StorageException {
-        return new DriveDirectory(drive, index, parent, name);
+        return new DriveDirectory(drive, parent, name);
     }
 
     @Override
     public IDirectory createDirectory(String name) throws StorageException {
-        return new DriveDirectory(drive, index, root, name);
+        return new DriveDirectory(drive, root, name);
     }
 
     @Override
     public IFile createFile(IDirectory parent, String filename) throws StorageException {
-        return new DriveFile(drive, index, parent, filename);
+        return new DriveFile(drive, parent, filename);
     }
 
     @Override
     public IFile createFile(IDirectory parent, String filename, Data data) throws StorageException {
-        return new DriveFile(drive, index, parent, filename, data);
-    }
-
-    @Override
-    public void persist() {
-        try {
-            index.persist(DEFAULT_INDEX_PATH);
-        } catch (IOException e) {
-            log.log(Level.SEVERE, "Unable to persist index for Drive Storage");
-        }
-    }
-
-    /**
-     * Destroys all the content of the storage that has been indexed.
-     *
-     * @throws DestroyException
-     */
-    @Override
-    public void destroy() throws DestroyException {
-
-        root = null;
-
-        try {
-            Iterator<String> objectIds = index.getAllIds();
-            while (objectIds.hasNext()) {
-                String objectId = objectIds.next();
-                drive.files().delete(objectId).execute();
-
-                System.out.println("Deleting file/folder with id " + objectId);
-            }
-        } catch (IOException e) {
-            throw new DestroyException("Unable to destroy the Google Drive storage");
-        }
-
-        index.empty();
-        index.delete(DEFAULT_INDEX_PATH);
+        return new DriveFile(drive, parent, filename, data);
     }
 
     /**
@@ -118,9 +78,7 @@ public class DriveStorage extends CommonStorage implements IStorage {
      *
      * @throws DestroyException
      */
-    public void totalDestroy() throws DestroyException {
-
-        destroy();
+    public void destroy() throws DestroyException {
 
         try {
             String token;
@@ -129,13 +87,18 @@ public class DriveStorage extends CommonStorage implements IStorage {
 
                 for (File file : contents.getFiles()) {
                     log.log(Level.INFO, "Deleting file/folder with name " + file.getName() + " with id " + file.getId());
-                    drive.files().delete(file.getId()).execute();
+                    drive.files()
+                            .delete(file.getId())
+                            .execute();
                 }
 
                 token = contents.getNextPageToken();
                 if (token == null) break;
 
-                contents = drive.files().list().setPageToken(token).execute();
+                contents = drive.files()
+                        .list()
+                        .setPageToken(token)
+                        .execute();
             }
 
         } catch (IOException e) {
@@ -146,23 +109,10 @@ public class DriveStorage extends CommonStorage implements IStorage {
     private void createRoot() throws StorageException {
 
         try {
-            root = new DriveDirectory(drive, index, rootPath);
+            root = new DriveDirectory(drive, rootPath);
             root.persist();
         } catch (PersistenceException e) {
             throw new StorageException(e);
-        }
-    }
-
-    private void loadOrCreateIndex(String path) {
-        try {
-            index = Index.load(path);
-
-        } catch (ClassNotFoundException | IOException e) {
-            log.log(Level.WARNING, "Unable to load index");
-        }
-
-        if (index == null) {
-            index = new Index();
         }
     }
 

@@ -24,8 +24,8 @@ public class DriveFile extends DriveStatefulObject implements IFile {
 
     protected Data data;
 
-    DriveFile(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
-        super(drive, index, parent, name);
+    DriveFile(Drive drive, IDirectory parent, String name) throws StorageException {
+        super(drive, parent, name);
 
         if (exists()) {
             retrieveAndUpdateData();
@@ -34,8 +34,8 @@ public class DriveFile extends DriveStatefulObject implements IFile {
         }
     }
 
-    DriveFile(Drive drive, Index index, IDirectory parent, String name, Data data) throws StorageException {
-        super(drive, index, parent, name);
+    DriveFile(Drive drive, IDirectory parent, String name, Data data) throws StorageException {
+        super(drive, parent, name);
 
         this.data = data;
     }
@@ -70,14 +70,15 @@ public class DriveFile extends DriveStatefulObject implements IFile {
     }
 
     private void createFile() throws IOException, DataException {
-        String parentId = index.getObjectId(getParent().getPathname());
+
+
+        String parentId = getId(getParent().getPathname());
         File file = new File()
                 .setParents(Collections.singletonList(parentId))
                 .setName(name);
         InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
 
         File storedFile = drive.files().create(file, mediaContent).execute();
-        index.setPathId(objectPath, storedFile.getId(), Index.FILE_TYPE);
     }
 
     private void updateFile() throws IOException, DataException {
@@ -86,7 +87,6 @@ public class DriveFile extends DriveStatefulObject implements IFile {
         InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
 
         drive.files().update(file.getId(), file, mediaContent).execute();
-        index.setPathId(objectPath, file.getId(), Index.FILE_TYPE);
     }
 
     private void retrieveAndUpdateData() throws StorageException {

@@ -31,15 +31,15 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
     private String id;
 
-    DriveDirectory(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
-        super(drive, index, parent, name);
+    DriveDirectory(Drive drive, IDirectory parent, String name) throws StorageException {
+        super(drive, parent, name);
 
         // Re-add trailing slash
         this.name = name + "/";
     }
 
-    DriveDirectory(Drive drive, Index index, String name) throws StorageException {
-        super(drive, index, name);
+    DriveDirectory(Drive drive, String name) throws StorageException {
+        super(drive, name);
 
         // Re-add trailing slash
         this.name = name + "/";
@@ -67,7 +67,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     public StatefulObject get(String name) throws BindingAbsentException {
 
         try {
-            String id = index.getObjectId(objectPath); // TODO - Store this id here?
+            String id = getId(objectPath); // TODO - Store this id here?
             List<File> list = drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
@@ -80,10 +80,10 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
                 switch(found.getMimeType()) {
                     case DRIVE_FOLDER_MIME_TYPE:
-                        // TODO - pass id around
-                        return new DriveDirectory(drive, index, this, name);
+                        // TODO - pass id around?
+                        return new DriveDirectory(drive, this, name);
                     default:
-                        return new DriveFile(drive, index, this, name);
+                        return new DriveFile(drive, this, name);
 
                 }
             }
@@ -100,7 +100,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     public boolean contains(String name) {
 
         try {
-            String id = index.getObjectId(objectPath); // TODO - Store this id here?
+            String id = getId(objectPath); // TODO - Store this id here?
             List<File> list = drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
@@ -120,7 +120,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     public void remove(String name) throws BindingAbsentException {
 
         try {
-            String id = index.getObjectId(objectPath); // TODO - Store this id here?
+            String id = getId(objectPath); // TODO - Store this id here?
             List<File> list = drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
@@ -144,7 +144,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
         try {
             String parentId = null;
             if (logicalParent != null) {
-                parentId = index.getObjectId(getParent().getPathname());
+                parentId = getId(getParent().getPathname());
             }
 
             File fileMetadata = new File()
@@ -161,7 +161,6 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
                     .setFields("id")
                     .execute();
 
-            index.setPathId(objectPath, file.getId(), Index.DIRECTORY_TYPE);
         } catch (IOException e) {
             throw new PersistenceException("Unable to create folder with name " + name);
         }
@@ -171,7 +170,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     public Iterator<NameObjectBinding> getIterator() {
 
         try {
-            String folderId = index.getObjectId(objectPath);
+            String folderId = getId(objectPath);
             FileList list = drive.files()
                     .list()
                     .setQ("'" + folderId + "' in parents")
@@ -192,12 +191,12 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
         private FileList list;
         private Iterator<File> files;
 
-        public DirectoryIterator(FileList list) {
+        DirectoryIterator(FileList list) {
             this.list = list;
             files = list.getFiles().iterator();
         }
 
-        public DirectoryIterator() {
+        DirectoryIterator() {
             files = Collections.EMPTY_LIST.iterator();
         }
 

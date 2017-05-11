@@ -16,13 +16,13 @@ public abstract class FileBasedStatefulObject extends CommonStatefulObject imple
     protected IDirectory logicalParent;
     protected File realFile;
 
-    public FileBasedStatefulObject(IDirectory parent, String name) throws StorageException {
+    FileBasedStatefulObject(IDirectory parent, String name) throws StorageException {
         super(name);
 
         this.logicalParent = parent;
     }
 
-    public FileBasedStatefulObject() {
+    FileBasedStatefulObject() {
         this.name = "";
     }
 
