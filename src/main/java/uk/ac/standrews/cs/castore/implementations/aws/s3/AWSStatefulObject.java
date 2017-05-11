@@ -32,7 +32,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
 
     protected AmazonS3 s3Client;
     protected String bucketName;
-    protected IDirectory logicalParent;
+    protected IDirectory parent;
     protected Data data;
     protected GetObjectRequest getObjectRequest;
 
@@ -41,7 +41,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
 
         this.s3Client = s3Client;
         this.bucketName = bucketName;
-        this.logicalParent = parent;
+        this.parent = parent;
 
         String objectPath = getPathname();
         getObjectRequest = new GetObjectRequest(bucketName, objectPath);
@@ -55,7 +55,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
 
     @Override
     public IDirectory getParent() {
-        return logicalParent;
+        return parent;
     }
 
     @Override

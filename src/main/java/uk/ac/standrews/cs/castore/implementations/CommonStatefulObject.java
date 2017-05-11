@@ -2,6 +2,8 @@ package uk.ac.standrews.cs.castore.implementations;
 
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 
+import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER_CHAR;
+
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
@@ -39,8 +41,16 @@ public abstract class CommonStatefulObject {
      * @return
      */
     protected String normalise(String path) {
-        if (path.charAt(path.length() - 1) == '/') {
+        if (path.charAt(path.length() - 1) == FOLDER_DELIMITER_CHAR) {
             path = path.substring(0, path.length() - 1);
+        }
+
+        return path;
+    }
+
+    protected String addTrailingSlash(String path) {
+        if (path.charAt(path.length() - 1) != FOLDER_DELIMITER_CHAR) {
+            path += FOLDER_DELIMITER_CHAR;
         }
 
         return path;

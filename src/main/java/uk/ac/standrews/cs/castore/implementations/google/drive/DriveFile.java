@@ -42,7 +42,7 @@ public class DriveFile extends DriveStatefulObject implements IFile {
 
     @Override
     public String getPathname() {
-        return logicalParent.getPathname() + name;
+        return parent.getPathname() + name;
     }
 
     @Override
@@ -58,6 +58,11 @@ public class DriveFile extends DriveStatefulObject implements IFile {
     @Override
     public void persist() throws PersistenceException {
 
+        if (parent != null) {
+            // Make sure that the parent folder is persisted
+            parent.persist();
+        }
+
         try {
             if (!exists()) {
                 createFile();
@@ -71,14 +76,15 @@ public class DriveFile extends DriveStatefulObject implements IFile {
 
     private void createFile() throws IOException, DataException {
 
-
         String parentId = getId(getParent().getPathname());
         File file = new File()
                 .setParents(Collections.singletonList(parentId))
                 .setName(name);
         InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
 
-        File storedFile = drive.files().create(file, mediaContent).execute();
+        drive.files()
+                .create(file, mediaContent)
+                .execute();
     }
 
     private void updateFile() throws IOException, DataException {
@@ -86,7 +92,9 @@ public class DriveFile extends DriveStatefulObject implements IFile {
 
         InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
 
-        drive.files().update(file.getId(), file, mediaContent).execute();
+        drive.files()
+                .update(file.getId(), file, mediaContent)
+                .execute();
     }
 
     private void retrieveAndUpdateData() throws StorageException {

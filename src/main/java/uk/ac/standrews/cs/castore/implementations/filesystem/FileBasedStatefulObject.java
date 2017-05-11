@@ -13,13 +13,13 @@ import java.io.File;
  */
 public abstract class FileBasedStatefulObject extends CommonStatefulObject implements StatefulObject {
 
-    protected IDirectory logicalParent;
+    protected IDirectory parent;
     protected File realFile;
 
     FileBasedStatefulObject(IDirectory parent, String name) throws StorageException {
         super(name);
 
-        this.logicalParent = parent;
+        this.parent = parent;
     }
 
     FileBasedStatefulObject() {
@@ -28,7 +28,7 @@ public abstract class FileBasedStatefulObject extends CommonStatefulObject imple
 
     @Override
     public IDirectory getParent() {
-        return logicalParent;
+        return parent;
     }
 
     @Override

@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER;
+
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
@@ -39,7 +41,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
 
     @Override
     public IDirectory getParent() {
-        return logicalParent;
+        return parent;
     }
 
     @Override
@@ -49,12 +51,12 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
 
     @Override
     public String getPathname() {
-        if (logicalParent == null) {
-            return realFile.getAbsolutePath() + "/";
+        if (parent == null) {
+            return realFile.getAbsolutePath() + FOLDER_DELIMITER;
         } else if (name == null || name.isEmpty()) {
-            return logicalParent.getPathname() + "/";
+            return parent.getPathname() + FOLDER_DELIMITER;
         } else {
-            return logicalParent.getPathname() + name + "/";
+            return parent.getPathname() + name + FOLDER_DELIMITER;
         }
     }
 

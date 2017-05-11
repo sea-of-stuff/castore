@@ -18,14 +18,14 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     protected DbxClientV2 client;
 
-    protected IDirectory logicalParent;
+    protected IDirectory parent;
     protected String objectPath;
 
     DropboxStatefulObject(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(name);
 
         this.client = client;
-        this.logicalParent = parent;
+        this.parent = parent;
         this.objectPath = getPathname();
     }
 
@@ -38,7 +38,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
 
     @Override
     public IDirectory getParent() {
-        return logicalParent;
+        return parent;
     }
 
     @Override

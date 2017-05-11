@@ -12,6 +12,7 @@ public interface IDirectory extends StatefulObject {
 
     /**
      * Get the object contained in the directory that matches the given name
+     * The directory should exist in the storage, @see #persist()
      *
      * Directories should have a trailing slash, e.g. get("folder/")
      *
@@ -44,6 +45,12 @@ public interface IDirectory extends StatefulObject {
      */
     Iterator<NameObjectBinding> getIterator();
 
+    /**
+     * Default method to calculate the size of a directory
+     * The size is the sum of the size of its children
+     *
+     * @return size of the directory
+     */
     @Override
     default long getSize() {
         long size = 0;
@@ -55,4 +62,5 @@ public interface IDirectory extends StatefulObject {
         }
         return size;
     }
+
 }

@@ -45,7 +45,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
 
     @Override
     public String getPathname() {
-        return logicalParent.getPathname() + name;
+        return parent.getPathname() + name;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
     }
 
     private void createParentFolderIfNone() throws PersistenceException {
-        if (!logicalParent.exists()) {
-            logicalParent.persist();
+        if (!parent.exists()) {
+            parent.persist();
         }
     }
 

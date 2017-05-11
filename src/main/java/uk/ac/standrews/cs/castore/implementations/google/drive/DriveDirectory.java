@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER;
-
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
@@ -29,35 +27,35 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
     private static final String DRIVE_FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 
-    private String id;
-
     DriveDirectory(Drive drive, IDirectory parent, String name) throws StorageException {
         super(drive, parent, name);
 
         // Re-add trailing slash
-        this.name = name + "/";
+
+        this.name = addTrailingSlash(name);
+        this.objectPath = getPathname();
     }
 
     DriveDirectory(Drive drive, String name) throws StorageException {
         super(drive, name);
 
         // Re-add trailing slash
-        this.name = name + "/";
+        this.name = addTrailingSlash(name);
+        this.objectPath = getPathname();
     }
 
     @Override
     public String getPathname() {
-        if (logicalParent == null) {
-            return name + FOLDER_DELIMITER;
+        if (parent == null) {
+            return name;
         } else if (name == null || name.isEmpty()) {
-            return logicalParent.getPathname() + FOLDER_DELIMITER;
+            return parent.getPathname();
         } else {
-            return logicalParent.getPathname() + name + FOLDER_DELIMITER;
+            return parent.getPathname() + name;
         }
     }
 
     /**
-     * FIXME - Will not work if the directory is not persisted
      *
      * @param name
      * @return
@@ -67,11 +65,11 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     public StatefulObject get(String name) throws BindingAbsentException {
 
         try {
-            String id = getId(objectPath); // TODO - Store this id here?
+            String id = getId(objectPath);
             List<File> list = drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
-                    .setFields("files(id, name, kind, mimeType)")
+                    .setFields("files(id, name, mimeType)")
                     .execute()
                     .getFiles();
 
@@ -80,7 +78,6 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
                 switch(found.getMimeType()) {
                     case DRIVE_FOLDER_MIME_TYPE:
-                        // TODO - pass id around?
                         return new DriveDirectory(drive, this, name);
                     default:
                         return new DriveFile(drive, this, name);
@@ -100,7 +97,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     public boolean contains(String name) {
 
         try {
-            String id = getId(objectPath); // TODO - Store this id here?
+            String id = getId(objectPath);
             List<File> list = drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
@@ -120,7 +117,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     public void remove(String name) throws BindingAbsentException {
 
         try {
-            String id = getId(objectPath); // TODO - Store this id here?
+            String id = getId(objectPath);
             List<File> list = drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
@@ -141,9 +138,16 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     @Override
     public void persist() throws PersistenceException {
 
+        if (exists()) return;
+
         try {
             String parentId = null;
-            if (logicalParent != null) {
+            if (parent != null) {
+
+                // Make sure that the parent folder is persisted
+                if (!parent.exists()) {
+                    parent.persist();
+                }
                 parentId = getId(getParent().getPathname());
             }
 
@@ -153,10 +157,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
             if (parentId != null) fileMetadata.setParents(Collections.singletonList(parentId));
 
-            System.out.println("Persist - Path " + getPathname() + " Name " + name);
-            System.out.println("Persist - Parent " + parentId);
-
-            File file = drive.files()
+            drive.files()
                     .create(fileMetadata)
                     .setFields("id")
                     .execute();
@@ -178,7 +179,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
                     .execute();
 
 
-            return new DirectoryIterator(list);
+            return new DirectoryIterator(list, folderId);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -188,12 +189,15 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
     private class DirectoryIterator implements Iterator<NameObjectBinding>  {
 
+        private String folderId;
         private FileList list;
         private Iterator<File> files;
 
-        DirectoryIterator(FileList list) {
+        DirectoryIterator(FileList list, String folderId) {
             this.list = list;
             files = list.getFiles().iterator();
+
+            this.folderId = folderId;
         }
 
         DirectoryIterator() {
@@ -213,7 +217,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
                     try {
                         list = drive.files()
                                 .list()
-                                .setQ("'" + id + "' in parents")
+                                .setQ("'" + folderId + "' in parents")
                                 .setFields("nextPageToken, files(id, name)")
                                 .setPageToken(nextToken)
                                 .execute();

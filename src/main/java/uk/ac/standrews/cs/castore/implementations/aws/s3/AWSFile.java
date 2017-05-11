@@ -55,7 +55,7 @@ public class AWSFile extends AWSStatefulObject implements IFile {
 
     @Override
     public String getPathname() {
-        return logicalParent.getPathname() + name;
+        return parent.getPathname() + name;
     }
 
     @Override

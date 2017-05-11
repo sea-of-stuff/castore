@@ -52,7 +52,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
 
     @Override
     public String getPathname() {
-        return logicalParent.getPathname() + name;
+        return parent.getPathname() + name;
     }
 
     @Override

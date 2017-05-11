@@ -58,12 +58,12 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
 
     @Override
     public String getPathname() {
-        if (logicalParent == null) {
+        if (parent == null) {
             return  "";
         } else if (name == null || name.isEmpty()) {
-            return logicalParent.getPathname() + FOLDER_DELIMITER;
+            return parent.getPathname() + FOLDER_DELIMITER;
         } else {
-            return logicalParent.getPathname() + name + FOLDER_DELIMITER;
+            return parent.getPathname() + name + FOLDER_DELIMITER;
         }
     }
 
@@ -78,9 +78,9 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
         jedis.set(objectPath + REDIS_KEY_TYPE_TAG, DIRECTORY_TYPE);
 
         // Update parent path
-        if (logicalParent != null) {
-            jedis.sadd(logicalParent.getPathname(), name + "/");
-            logicalParent.persist();
+        if (parent != null) {
+            jedis.sadd(parent.getPathname(), name + "/");
+            parent.persist();
         } else {
             jedis.set("" + REDIS_KEY_TYPE_TAG, DIRECTORY_TYPE);
         }

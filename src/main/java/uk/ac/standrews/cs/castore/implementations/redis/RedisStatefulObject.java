@@ -30,7 +30,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
 
     protected Jedis jedis;
 
-    protected IDirectory logicalParent;
+    protected IDirectory parent;
     protected String objectPath;
     protected Data data;
 
@@ -38,7 +38,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
         super(name);
 
         this.jedis = jedis;
-        this.logicalParent = parent;
+        this.parent = parent;
         this.objectPath = getPathname();
     }
 
@@ -51,7 +51,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
 
     @Override
     public IDirectory getParent() {
-        return logicalParent;
+        return parent;
     }
 
     @Override

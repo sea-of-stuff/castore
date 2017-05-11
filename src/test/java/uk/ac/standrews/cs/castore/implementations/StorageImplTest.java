@@ -97,7 +97,7 @@ public class StorageImplTest extends StorageBaseTest {
             testCounter++;
         }
 
-        assertEquals(testCounter, 15); // Expecting logicalParent directory too
+        assertEquals(testCounter, 15); // Expecting parent directory too
     }
 
     @Test
@@ -118,7 +118,7 @@ public class StorageImplTest extends StorageBaseTest {
             testCounter++;
         }
 
-        assertEquals(testCounter, 15); // Expecting logicalParent directory too
+        assertEquals(testCounter, 15); // Expecting parent directory too
     }
 
     @Test
@@ -274,6 +274,7 @@ public class StorageImplTest extends StorageBaseTest {
 
     @Test
     public void getDirectoryFromRoot() throws StorageException {
+
         IDirectory folder = storage.createDirectory("19-folder");
         folder.persist();
         assertTrue(folder.exists());

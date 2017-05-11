@@ -13,7 +13,7 @@ import uk.ac.standrews.cs.castore.interfaces.IStorage;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static uk.ac.standrews.cs.castore.CastoreType.*;
+import static uk.ac.standrews.cs.castore.CastoreType.GOOGLE_DRIVE;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -33,7 +33,10 @@ public abstract class StorageBaseTest {
     @BeforeMethod
     public void setUp(Method method) throws StorageException, InterruptedException {
 
-        storage = makeStorage();
+        storage = makeStorage(); // Make it, but could have previous status from other tests
+        storage.destroy();
+        storage = makeStorage(); // Remake it clean
+
         System.out.println(getStorageType().toString() + " :: " + method.getName());
     }
 
@@ -47,9 +50,9 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-                {LOCAL},
-                {REDIS},
-                {DROPBOX},
+//                {LOCAL},
+//                {REDIS},
+//                {DROPBOX},
                 {GOOGLE_DRIVE} /*, {AWS} */
         };
     }

@@ -37,7 +37,7 @@ public class RedisFile extends RedisStatefulObject implements IFile {
 
     @Override
     public String getPathname() {
-        return logicalParent.getPathname() + name;
+        return parent.getPathname() + name;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class RedisFile extends RedisStatefulObject implements IFile {
                 decreaseDataRef(retrievedGUID);
 
                 // Add element to parent
-                jedis.sadd(logicalParent.getPathname(), name);
+                jedis.sadd(parent.getPathname(), name);
             }
 
         } catch (IOException | GUIDGenerationException e) {
@@ -104,8 +104,8 @@ public class RedisFile extends RedisStatefulObject implements IFile {
         }
 
         // Make sure that the parent path is persisted
-        if (logicalParent != null) {
-            logicalParent.persist();
+        if (parent != null) {
+            parent.persist();
         }
 
     }

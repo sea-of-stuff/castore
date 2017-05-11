@@ -55,12 +55,12 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
 
     @Override
     public String getPathname() {
-        if (logicalParent == null) {
+        if (parent == null) {
             return  "";
         } else if (name == null || name.isEmpty()) {
-            return logicalParent.getPathname() + FOLDER_DELIMITER;
+            return parent.getPathname() + FOLDER_DELIMITER;
         } else {
-            return logicalParent.getPathname() + name + FOLDER_DELIMITER;
+            return parent.getPathname() + name + FOLDER_DELIMITER;
         }
     }
 

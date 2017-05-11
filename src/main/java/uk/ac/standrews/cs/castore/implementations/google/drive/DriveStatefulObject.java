@@ -9,6 +9,10 @@ import uk.ac.standrews.cs.castore.interfaces.StatefulObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER;
+import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER_CHAR;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -17,7 +21,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
 
     protected Drive drive;
 
-    protected IDirectory logicalParent;
+    protected IDirectory parent;
     protected String objectPath;
     protected Data data;
 
@@ -25,7 +29,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
         super(name);
 
         this.drive = drive;
-        this.logicalParent = parent;
+        this.parent = parent;
         this.objectPath = getPathname();
     }
 
@@ -38,7 +42,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
 
     @Override
     public IDirectory getParent() {
-        return logicalParent;
+        return parent;
     }
 
     @Override
@@ -88,14 +92,42 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     }
 
     protected String getId() {
-        return "TODO";
+        return getId(objectPath);
     }
 
     protected String getId(String path) {
 
-        String[] pathComponents = path.split("/");
+        String[] pathComponents = path.split(FOLDER_DELIMITER);
+        if (path.charAt(path.length() - 1) == FOLDER_DELIMITER_CHAR) {
+            pathComponents[pathComponents.length - 1] += FOLDER_DELIMITER_CHAR;
+        }
 
-        return null;
+        String parentId = null;
+        for(String component:pathComponents) {
+
+            try {
+                String query = "name = '" + component + "'";
+                if (parentId != null) {
+                    query += " and '" + parentId + "' in parents";
+                }
+
+                List<com.google.api.services.drive.model.File> list = drive.files()
+                        .list()
+                        .setQ(query)
+                        .setFields("files(id, name)")
+                        .execute()
+                        .getFiles();
+
+                if (!list.isEmpty()) {
+                    parentId = list.get(0).getId();
+                }
+
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        return parentId;
     }
 
     /**
