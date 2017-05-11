@@ -13,7 +13,7 @@ import uk.ac.standrews.cs.castore.interfaces.IStorage;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static uk.ac.standrews.cs.castore.CastoreType.GOOGLE_DRIVE;
+import static uk.ac.standrews.cs.castore.CastoreType.*;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -50,9 +50,9 @@ public abstract class StorageBaseTest {
     @DataProvider(name = "storage-manager-provider")
     public static Object[][] indexProvider() throws IOException {
         return new Object[][] {
-//                {LOCAL},
-//                {REDIS},
-//                {DROPBOX},
+                {LOCAL},
+                {REDIS},
+                {DROPBOX},
                 {GOOGLE_DRIVE} /*, {AWS} */
         };
     }
@@ -82,8 +82,7 @@ public abstract class StorageBaseTest {
                 break;
             case GOOGLE_DRIVE:
                 // TODO - improve
-                builder.setCredentialsPath("src/main/resources/drive.json")
-                    .setRoot("test_folder");
+                builder.setRoot("test_folder");
                 break;
         }
 

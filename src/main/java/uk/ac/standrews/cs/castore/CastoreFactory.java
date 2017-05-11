@@ -78,9 +78,9 @@ public class CastoreFactory {
             {
                 String credentialsPath = builder.getCredentialsPath();
                 if (credentialsPath == null || credentialsPath.isEmpty()) {
-                    throw new StorageException("Google Drive Storage Not Implemented Yet for this config. Use credentials file.");
+                    storage = new DriveStorage(builder.getRoot());
                 } else {
-                    storage = new DriveStorage(new File(builder.getCredentialsPath()), builder.getRoot());
+                    storage = new DriveStorage(builder.getCredentialsPath(), builder.getRoot());
                 }
             }
 

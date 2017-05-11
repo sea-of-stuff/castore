@@ -34,13 +34,13 @@ public class DriveStorage extends CommonStorage implements IStorage {
     private Drive drive;
     private String rootPath;
 
-    public DriveStorage(java.io.File credentialFile, String path) throws StorageException {
+    public DriveStorage(String credentialFile, String path) throws StorageException {
         this.rootPath = path;
 
         try {
             HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(credentialFile))
+            GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(new java.io.File(credentialFile)))
                     .createScoped(Collections.singleton(DriveScopes.DRIVE_FILE));
 
             drive = new Drive.Builder(httpTransport, jsonFactory, credential)
@@ -51,6 +51,10 @@ public class DriveStorage extends CommonStorage implements IStorage {
         } catch (GeneralSecurityException | IOException e) {
             throw new StorageException("Unable to create Google Drive storage object", e);
         }
+    }
+
+    public DriveStorage(String path) throws StorageException {
+        this(System.getenv().get("HOME") + "/.drive/credentials.json", path);
     }
 
     @Override
