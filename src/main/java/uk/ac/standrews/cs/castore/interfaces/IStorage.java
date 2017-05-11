@@ -12,12 +12,14 @@ public interface IStorage {
 
     /**
      * Get the root directory of this storage
+     *
      * @return
      */
     IDirectory getRoot();
 
     /**
-     * Create a directory within the specified logicalParent and with the given name
+     * Create a directory within the specified parent and with the given name
+     *
      * @param parent
      * @param name
      * @return
@@ -26,13 +28,15 @@ public interface IStorage {
 
     /**
      * Create a directory at the root of this storage with the given name
+     *
      * @param name
      * @return
      */
     IDirectory createDirectory(String name) throws StorageException;
 
     /**
-     * Create a file at the specified logicalParent directory
+     * Create a file at the specified parent directory
+     *
      * @param parent
      * @param filename
      * @return
@@ -41,6 +45,7 @@ public interface IStorage {
 
     /**
      * Create a file with some given data at the specified directory
+     *
      * @param parent
      * @param filename
      * @param data
@@ -56,6 +61,7 @@ public interface IStorage {
 
     /**
      * Destroy this storage
+     *
      * @throws DestroyException
      */
     void destroy() throws DestroyException;

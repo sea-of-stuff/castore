@@ -13,9 +13,9 @@ public interface NameObjectBinding {
     String getName();
 
     /**
-     * Gets the NameObjectBinding.
+     * Gets the StatefulObject.
      *
-     * @return the NameObjectBinding
+     * @return the StatefulObject
      */
     StatefulObject getObject();
 }

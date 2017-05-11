@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,7 +36,7 @@ public class DriveStorage extends CommonStorage implements IStorage {
 
     private Drive drive;
     private String rootPath;
-    private Index index;
+    private Index index; // REMOVEME
 
     public DriveStorage(java.io.File credentialFile, String path) throws StorageException {
         this.rootPath = path;
@@ -86,10 +87,40 @@ public class DriveStorage extends CommonStorage implements IStorage {
         }
     }
 
+    /**
+     * Destroys all the content of the storage that has been indexed.
+     *
+     * @throws DestroyException
+     */
     @Override
     public void destroy() throws DestroyException {
 
         root = null;
+
+        try {
+            Iterator<String> objectIds = index.getAllIds();
+            while (objectIds.hasNext()) {
+                String objectId = objectIds.next();
+                drive.files().delete(objectId).execute();
+
+                System.out.println("Deleting file/folder with id " + objectId);
+            }
+        } catch (IOException e) {
+            throw new DestroyException("Unable to destroy the Google Drive storage");
+        }
+
+        index.empty();
+        index.delete(DEFAULT_INDEX_PATH);
+    }
+
+    /**
+     * Destroy all the content for the drive app
+     *
+     * @throws DestroyException
+     */
+    public void totalDestroy() throws DestroyException {
+
+        destroy();
 
         try {
             String token;
@@ -110,9 +141,6 @@ public class DriveStorage extends CommonStorage implements IStorage {
         } catch (IOException e) {
             throw new DestroyException("Unable to destroy the Google Drive storage");
         }
-
-        index.empty();
-        index.delete(DEFAULT_INDEX_PATH);
     }
 
     private void createRoot() throws StorageException {
@@ -127,10 +155,8 @@ public class DriveStorage extends CommonStorage implements IStorage {
 
     private void loadOrCreateIndex(String path) {
         try {
-            java.io.File file = new java.io.File(path);
-            if (file.exists()) {
-                index = Index.load(file);
-            }
+            index = Index.load(path);
+
         } catch (ClassNotFoundException | IOException e) {
             log.log(Level.WARNING, "Unable to load index");
         }

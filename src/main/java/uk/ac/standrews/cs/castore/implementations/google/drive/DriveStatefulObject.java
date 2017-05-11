@@ -41,7 +41,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     }
 
     @Override
-    public IDirectory getLogicalParent() {
+    public IDirectory getParent() {
         return logicalParent;
     }
 
@@ -100,14 +100,19 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
      * @return the id of the file. Null if the file is unknown
      * @throws IOException
      */
-    // See fields - https://developers.google.com/drive/v3/reference/files#resource
     protected com.google.api.services.drive.model.File getFile() throws IOException {
 
-        String fileId = getId();
-        if (fileId == null) return null;
+        String id = getId();
+        if (id == null) return null;
+
+        return getFile(id);
+    }
+
+    // See fields - https://developers.google.com/drive/v3/reference/files#resource
+    protected com.google.api.services.drive.model.File getFile(String id) throws IOException {
 
         return drive.files()
-                .get(fileId)
+                .get(id)
                 .setFields("id, kind, name, modifiedTime, size")
                 .execute();
     }

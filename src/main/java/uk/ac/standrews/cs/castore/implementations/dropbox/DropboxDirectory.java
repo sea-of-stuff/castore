@@ -136,7 +136,6 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
             if (!hasNext && list != null) {
 
                 hasNext = list.getHasMore();
-
                 if (hasNext) {
                     String continueCursor = list.getCursor();
                     try {

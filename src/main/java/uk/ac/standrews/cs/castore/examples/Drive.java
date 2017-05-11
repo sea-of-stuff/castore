@@ -33,6 +33,14 @@ public class Drive {
         file.persist();
         System.out.println("Exists : " + file.exists());
 
+
+        IDirectory dd = storage.createDirectory(storage.getRoot(), "inner");
+        dd.persist();
+
+        storage.getRoot().get("inner/");
+
+        storage.getRoot().getIterator();
+
         IFile retrieved = storage.createFile(storage.getRoot(), "test_file");
 
         System.out.println("lmd " + retrieved.lastModified());
@@ -41,6 +49,7 @@ public class Drive {
         IDirectory directory = storage.createDirectory("folder");
         directory.persist();
 
+        // Persist the index
         storage.persist();
 
         storage.destroy();

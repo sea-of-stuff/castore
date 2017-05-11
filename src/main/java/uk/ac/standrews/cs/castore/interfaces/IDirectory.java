@@ -10,15 +10,37 @@ import java.util.Iterator;
  */
 public interface IDirectory extends StatefulObject {
 
+    /**
+     * Get the object contained in the directory that matches the given name
+     *
+     * Directories should have a trailing slash, e.g. get("folder/")
+     *
+     * @param name
+     * @return
+     * @throws BindingAbsentException if the object is not present or it could not be created
+     */
     StatefulObject get(String name) throws BindingAbsentException;
 
+    /**
+     * Check if the object matching the name exists inside this directory
+     *
+     * @param name
+     * @return
+     */
     boolean contains(String name);
 
+    /**
+     * Removes the object matching the specified name
+     *
+     * @param name
+     * @throws BindingAbsentException
+     */
     void remove(String name) throws BindingAbsentException;
 
     /**
      * An iterator of the Stateful objects contained in this directory.
-     * @return
+     *
+     * @return an iterator of NameObjectBinding
      */
     Iterator<NameObjectBinding> getIterator();
 

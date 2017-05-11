@@ -37,7 +37,7 @@ public abstract class DropboxStatefulObject extends CommonStatefulObject impleme
     }
 
     @Override
-    public IDirectory getLogicalParent() {
+    public IDirectory getParent() {
         return logicalParent;
     }
 

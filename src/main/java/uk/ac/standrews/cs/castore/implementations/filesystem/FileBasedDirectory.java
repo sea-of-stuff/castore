@@ -38,7 +38,7 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
     }
 
     @Override
-    public IDirectory getLogicalParent() {
+    public IDirectory getParent() {
         return logicalParent;
     }
 
