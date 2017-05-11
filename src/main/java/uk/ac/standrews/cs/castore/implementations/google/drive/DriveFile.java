@@ -24,7 +24,7 @@ public class DriveFile extends DriveStatefulObject implements IFile {
 
     protected Data data;
 
-    public DriveFile(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
+    DriveFile(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
         super(drive, index, parent, name);
 
         if (exists()) {
@@ -34,7 +34,7 @@ public class DriveFile extends DriveStatefulObject implements IFile {
         }
     }
 
-    public DriveFile(Drive drive, Index index, IDirectory parent, String name, Data data) throws StorageException {
+    DriveFile(Drive drive, Index index, IDirectory parent, String name, Data data) throws StorageException {
         super(drive, index, parent, name);
 
         this.data = data;

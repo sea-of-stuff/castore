@@ -34,7 +34,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
 
     protected Data data;
 
-    public DropboxFile(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
+    DropboxFile(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(client, parent, name);
 
         if (exists()) {
@@ -44,7 +44,7 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
         }
     }
 
-    public DropboxFile(DbxClientV2 client, IDirectory parent, String name, Data data) throws StorageException {
+    DropboxFile(DbxClientV2 client, IDirectory parent, String name, Data data) throws StorageException {
         super(client, parent, name);
 
         this.data = data;

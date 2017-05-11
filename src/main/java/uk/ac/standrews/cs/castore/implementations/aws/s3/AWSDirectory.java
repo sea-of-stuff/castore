@@ -38,7 +38,7 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
      * @param parent
      * @param name
      */
-    public AWSDirectory(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
+    AWSDirectory(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
         super(s3Client, bucketName, parent, name);
 
         // TODO - if directory exists, then load it
@@ -49,7 +49,7 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
      * @param s3Client
      * @param bucketName
      */
-    public AWSDirectory(AmazonS3 s3Client, String bucketName) {
+    AWSDirectory(AmazonS3 s3Client, String bucketName) {
         super(s3Client, bucketName);
     }
 

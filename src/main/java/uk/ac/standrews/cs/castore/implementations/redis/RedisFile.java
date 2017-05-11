@@ -23,19 +23,13 @@ import java.io.InputStream;
  */
 public class RedisFile extends RedisStatefulObject implements IFile {
 
-    public RedisFile(Jedis jedis, IDirectory parent, String name) throws StorageException {
+    RedisFile(Jedis jedis, IDirectory parent, String name) throws StorageException {
         super(jedis, parent, name);
 
         if (exists()) retrieveAndUpdateData();
     }
 
-    private void retrieveAndUpdateData() {
-
-        String guid = jedis.get(objectPath);
-        data = new StringData(jedis.get(guid));
-    }
-
-    public RedisFile(Jedis jedis, IDirectory parent, String name, Data data) throws StorageException {
+    RedisFile(Jedis jedis, IDirectory parent, String name, Data data) throws StorageException {
         super(jedis, parent, name);
 
         this.data = data;
@@ -114,5 +108,11 @@ public class RedisFile extends RedisStatefulObject implements IFile {
             logicalParent.persist();
         }
 
+    }
+
+    private void retrieveAndUpdateData() {
+
+        String guid = jedis.get(objectPath);
+        data = new StringData(jedis.get(guid));
     }
 }

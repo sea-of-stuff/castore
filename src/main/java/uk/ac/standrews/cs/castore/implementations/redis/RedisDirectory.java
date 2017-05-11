@@ -22,11 +22,11 @@ public class RedisDirectory extends RedisStatefulObject implements IDirectory {
 
     private static final Logger log = Logger.getLogger(RedisDirectory.class.getName());
 
-    public RedisDirectory(Jedis jedis, String name) throws StorageException {
+    RedisDirectory(Jedis jedis, String name) throws StorageException {
         super(jedis, name);
     }
 
-    public RedisDirectory(Jedis jedis, IDirectory parent, String name) throws StorageException {
+    RedisDirectory(Jedis jedis, IDirectory parent, String name) throws StorageException {
         super(jedis, parent, name);
     }
 

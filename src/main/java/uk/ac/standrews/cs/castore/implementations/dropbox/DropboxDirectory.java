@@ -28,11 +28,11 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
 
     private static final Logger log = Logger.getLogger(DropboxDirectory.class.getName());
 
-    public DropboxDirectory(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
+    DropboxDirectory(DbxClientV2 client, IDirectory parent, String name) throws StorageException {
         super(client, parent, name);
     }
 
-    public DropboxDirectory(DbxClientV2 client, String name) throws StorageException {
+    DropboxDirectory(DbxClientV2 client, String name) throws StorageException {
         super(client, name);
     }
 

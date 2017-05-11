@@ -31,14 +31,14 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
     private String id;
 
-    public DriveDirectory(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
+    DriveDirectory(Drive drive, Index index, IDirectory parent, String name) throws StorageException {
         super(drive, index, parent, name);
 
         // Re-add trailing slash
         this.name = name + "/";
     }
 
-    public DriveDirectory(Drive drive, Index index, String name) throws StorageException {
+    DriveDirectory(Drive drive, Index index, String name) throws StorageException {
         super(drive, index, name);
 
         // Re-add trailing slash
