@@ -29,29 +29,18 @@ public class Drive {
 
         IStorage storage = CastoreFactory.createStorage(builder);
 
-        IFile file = storage.createFile(storage.getRoot(), "test_file", new StringData("Hello World"));
+        IDirectory root = storage.getRoot();
+        IFile file = storage.createFile(root, "exampleFile");
+        file.setData(new StringData("Example Data"));
+
         file.persist();
-        System.out.println("Exists : " + file.exists());
 
+        System.out.println("Just created a file named " + file.getName() + " at the following path " + file.getPathname());
 
-        IDirectory dd = storage.createDirectory(storage.getRoot(), "inner");
-        dd.persist();
-
-        storage.getRoot().get("inner/");
-
-        storage.getRoot().getIterator();
-
-        IFile retrieved = storage.createFile(storage.getRoot(), "test_file");
-
-        System.out.println("lmd " + retrieved.lastModified());
-        System.out.println("size " + retrieved.getSize());
-
-        IDirectory directory = storage.createDirectory("folder");
+        IDirectory directory = storage.createDirectory("exampleDir");
         directory.persist();
 
-        // Persist the index
-        storage.persist();
-
-        storage.destroy();
+        directory.lastModified();
+        System.out.println("Just created a dir");
     }
 }

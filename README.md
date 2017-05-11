@@ -71,7 +71,7 @@ No need to set the path for the credentials file explicitly, if at the path "~/.
 
 ## Examples
 
-Examples are available [here](src/main/java/uk/ac/standrews/cs/storage/examples).
+Examples are available [here](src/main/java/uk/ac/standrews/cs/castore/examples).
 
 ---
 
