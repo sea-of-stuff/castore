@@ -24,7 +24,6 @@ public class Drive {
 
         CastoreBuilder builder = new CastoreBuilder()
                 .setType(CastoreType.GOOGLE_DRIVE)
-                .setCredentialsPath("src/main/resources/drive.json")
                 .setRoot("test_folder"); // This is the APP folder created at the time the Dropbox app was created
 
         IStorage storage = CastoreFactory.createStorage(builder);

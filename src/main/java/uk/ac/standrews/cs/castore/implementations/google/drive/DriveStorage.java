@@ -21,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -30,6 +29,7 @@ import java.util.logging.Logger;
 public class DriveStorage extends CommonStorage implements IStorage {
 
     private static final Logger log = Logger.getLogger(DriveStorage.class.getName());
+    private static final String CREDENTIALS_DEFAULT_PATH = System.getenv().get("HOME") + "/.drive/credentials.json";
 
     private Drive drive;
     private String rootPath;
@@ -47,13 +47,14 @@ public class DriveStorage extends CommonStorage implements IStorage {
                     .setApplicationName("castore/1.0")
                     .build();
 
+            createRoot();
         } catch (GeneralSecurityException | IOException e) {
             throw new StorageException("Unable to create Google Drive storage object", e);
         }
     }
 
     public DriveStorage(String path) throws StorageException {
-        this(System.getenv().get("HOME") + "/.drive/credentials.json", path);
+        this(CREDENTIALS_DEFAULT_PATH, path);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class DriveStorage extends CommonStorage implements IStorage {
             while(true) {
 
                 for (File file : contents.getFiles()) {
-                    log.log(Level.INFO, "Deleting file/folder with name " + file.getName() + " with id " + file.getId());
+                    // log.log(Level.INFO, "Deleting file/folder with name " + file.getName() + " with id " + file.getId());
                     drive.files()
                             .delete(file.getId())
                             .execute();

@@ -24,6 +24,7 @@ public abstract class StorageBaseTest {
     private static final String AWS_S3_TEST_BUCKET = "sos-simone-test";
     private static final String REDIS_HOST = "localhost";
     private static final String DROPBOX_PATH = "/Apps/castore";
+    private static final String DRIVE_PATH = "test_folder";
 
     private static final int TEST_DELAY = 500; // Needed to allow any background ops (e.g. s3 needs some time to create buckets and so on)
 
@@ -81,8 +82,7 @@ public abstract class StorageBaseTest {
                 builder.setRoot(DROPBOX_PATH);
                 break;
             case GOOGLE_DRIVE:
-                // TODO - improve
-                builder.setRoot("test_folder");
+                builder.setRoot(DRIVE_PATH);
                 break;
         }
 
