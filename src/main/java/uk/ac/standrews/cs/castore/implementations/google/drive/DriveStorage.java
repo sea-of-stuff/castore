@@ -106,7 +106,7 @@ public class DriveStorage extends CommonStorage implements IStorage {
             }
 
         } catch (IOException e) {
-            throw new DestroyException("Unable to destroy the Google Drive storage");
+            throw new DestroyException("Unable to destroy the Google Drive storage " + e.getMessage());
         }
     }
 
