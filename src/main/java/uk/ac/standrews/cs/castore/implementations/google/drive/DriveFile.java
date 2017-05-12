@@ -88,12 +88,15 @@ public class DriveFile extends DriveStatefulObject implements IFile {
     }
 
     private void updateFile() throws IOException, DataException {
-        File file = getFile();
-
+        File existingFile = getFile();
         InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
 
+        // @see http://stackoverflow.com/a/35143284/2467938
+        File newFile = new File();
+        newFile.setTrashed(true);
+
         drive.files()
-                .update(file.getId(), file, mediaContent)
+                .update(existingFile.getId(), newFile, mediaContent)
                 .execute();
     }
 
