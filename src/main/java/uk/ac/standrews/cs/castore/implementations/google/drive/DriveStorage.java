@@ -87,26 +87,43 @@ public class DriveStorage extends CommonStorage implements IStorage {
         try {
             String token;
             FileList contents = drive.files().list().execute();
+
+            int retry = 3;
             while(true) {
 
-                for (File file : contents.getFiles()) {
-                    // log.log(Level.INFO, "Deleting file/folder with name " + file.getName() + " with id " + file.getId());
-                    drive.files()
-                            .delete(file.getId())
+                try {
+                    for (File file : contents.getFiles()) {
+                        drive.files()
+                                .delete(file.getId())
+                                .execute();
+                    }
+
+                    token = contents.getNextPageToken();
+                    if (token == null) break;
+
+                    contents = drive.files()
+                            .list()
+                            .setPageToken(token)
                             .execute();
+                } catch (IOException e) {
+                    // This exception might have been thrown due to "User Rate Limit Exceeded"
+                    // So we shall retry the above request
+
+                    retry--;
+                    if (retry == 0) {
+                        throw new DestroyException("Unable to destroy the Google Drive storage");
+                    }
+
+                    try {
+                        Thread.sleep(2000); // Cool down for 2 seconds
+                    } catch (InterruptedException e1) {
+                        throw new DestroyException(e1);
+                    }
                 }
-
-                token = contents.getNextPageToken();
-                if (token == null) break;
-
-                contents = drive.files()
-                        .list()
-                        .setPageToken(token)
-                        .execute();
             }
 
         } catch (IOException e) {
-            throw new DestroyException("Unable to destroy the Google Drive storage " + e.getMessage());
+            throw new DestroyException("Unable to destroy the Google Drive storage");
         }
     }
 
