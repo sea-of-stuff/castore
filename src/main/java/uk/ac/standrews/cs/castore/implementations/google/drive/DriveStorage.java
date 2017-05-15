@@ -86,43 +86,23 @@ public class DriveStorage extends CommonStorage implements IStorage {
 
         try {
             String token;
-            FileList contents = drive.files().list().execute();
+            FileList contents = DriveWrapper.Execute(drive.files().list());
 
-            int retry = 3;
             while(true) {
+                for (File file : contents.getFiles()) {
 
-                try {
-                    for (File file : contents.getFiles()) {
-                        drive.files()
-                                .delete(file.getId())
-                                .execute();
-                    }
-
-                    token = contents.getNextPageToken();
-                    if (token == null) break;
-
-                    contents = drive.files()
-                            .list()
-                            .setPageToken(token)
-                            .execute();
-                } catch (IOException e) {
-                    // This exception might have been thrown due to "User Rate Limit Exceeded"
-                    // So we shall retry the above request
-
-                    retry--;
-                    if (retry == 0) {
-                        throw new DestroyException("Unable to destroy the Google Drive storage");
-                    }
-
-                    try {
-                        Thread.sleep(2000); // Cool down for 2 seconds
-                    } catch (InterruptedException e1) {
-                        throw new DestroyException(e1);
-                    }
+                    DriveWrapper.Execute(drive.files().delete(file.getId()));
                 }
+
+                token = contents.getNextPageToken();
+                if (token == null) break;
+
+                contents = DriveWrapper.Execute(drive.files()
+                        .list()
+                        .setPageToken(token));
             }
 
-        } catch (IOException e) {
+        } catch (IOException | DriveException e) {
             throw new DestroyException("Unable to destroy the Google Drive storage");
         }
     }
