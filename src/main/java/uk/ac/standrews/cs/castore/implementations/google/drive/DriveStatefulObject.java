@@ -50,7 +50,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
 
         try {
             return getFile() != null;
-        } catch (IOException e) {
+        } catch (IOException |DriveException e) {
             return false;
         }
 
@@ -66,7 +66,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
 
         try {
             return getFile().getModifiedTime().getValue();
-        } catch (IOException e) {
+        } catch (IOException |DriveException e) {
             return 0;
         }
     }
@@ -84,7 +84,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
             if (file != null) {
                 return file.getSize();
             }
-        } catch (IOException e) {
+        } catch (IOException | DriveException e) {
             return 0;
         }
 
@@ -111,18 +111,17 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
                     query += " and '" + parentId + "' in parents";
                 }
 
-                List<com.google.api.services.drive.model.File> list = drive.files()
+                List<com.google.api.services.drive.model.File> list = DriveWrapper.Execute(drive.files()
                         .list()
                         .setQ(query)
-                        .setFields("files(id, name)")
-                        .execute()
+                        .setFields("files(id, name)"))
                         .getFiles();
 
                 if (!list.isEmpty()) {
                     parentId = list.get(0).getId();
                 }
 
-            } catch (IOException e) {
+            } catch (IOException |DriveException e) {
                 return null;
             }
         }
@@ -135,7 +134,7 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
      * @return the id of the file. Null if the file is unknown
      * @throws IOException
      */
-    protected com.google.api.services.drive.model.File getFile() throws IOException {
+    protected com.google.api.services.drive.model.File getFile() throws IOException, DriveException {
 
         String id = getId();
         if (id == null) return null;
@@ -144,12 +143,11 @@ public abstract class DriveStatefulObject extends CommonStatefulObject implement
     }
 
     // See fields - https://developers.google.com/drive/v3/reference/files#resource
-    protected com.google.api.services.drive.model.File getFile(String id) throws IOException {
+    protected com.google.api.services.drive.model.File getFile(String id) throws IOException, DriveException {
 
-        return drive.files()
+        return DriveWrapper.Execute(drive.files()
                 .get(id)
-                .setFields("id, kind, name, modifiedTime, size")
-                .execute();
+                .setFields("id, kind, name, modifiedTime, size"));
     }
 
 }

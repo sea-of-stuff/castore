@@ -69,12 +69,12 @@ public class DriveFile extends DriveStatefulObject implements IFile {
             } else {
                 updateFile();
             }
-        } catch (IOException | DataException e) {
+        } catch (IOException | DataException | DriveException e) {
             throw new PersistenceException("Unable to persist file with name " + name + " Cause: " + e.getMessage());
         }
     }
 
-    private void createFile() throws IOException, DataException {
+    private void createFile() throws IOException, DataException, DriveException {
 
         String parentId = getId(getParent().getPathname());
         File file = new File()
@@ -82,12 +82,11 @@ public class DriveFile extends DriveStatefulObject implements IFile {
                 .setName(name);
         InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
 
-        drive.files()
-                .create(file, mediaContent)
-                .execute();
+        DriveWrapper.Execute(drive.files()
+                .create(file, mediaContent));
     }
 
-    private void updateFile() throws IOException, DataException {
+    private void updateFile() throws IOException, DataException, DriveException {
         File existingFile = getFile();
         InputStreamContent mediaContent = new InputStreamContent(null, new BufferedInputStream(getData().getInputStream()));
 
@@ -95,15 +94,14 @@ public class DriveFile extends DriveStatefulObject implements IFile {
         File newFile = new File();
         newFile.setTrashed(true);
 
-        drive.files()
-                .update(existingFile.getId(), newFile, mediaContent)
-                .execute();
+        DriveWrapper.Execute(drive.files()
+                .update(existingFile.getId(), newFile, mediaContent));
     }
 
     private void retrieveAndUpdateData() throws StorageException {
 
         String fileId = getId();
-        try (InputStream stream = drive.files().get(fileId).executeMediaAsInputStream()) {
+        try (InputStream stream = drive.files().get(fileId).executeMediaAsInputStream()) { // NOTE: No retry here
 
             data = new InputStreamData(stream);
 

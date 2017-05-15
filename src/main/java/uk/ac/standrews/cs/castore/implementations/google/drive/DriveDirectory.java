@@ -31,7 +31,6 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
         super(drive, parent, name);
 
         // Re-add trailing slash
-
         this.name = addTrailingSlash(name);
         this.objectPath = getPathname();
     }
@@ -66,11 +65,10 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
         try {
             String id = getId(objectPath);
-            List<File> list = drive.files()
+            List<File> list = DriveWrapper.Execute(drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
-                    .setFields("files(id, name, mimeType)")
-                    .execute()
+                    .setFields("files(id, name, mimeType)"))
                     .getFiles();
 
             if (!list.isEmpty()) {
@@ -87,7 +85,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
             throw new BindingAbsentException("Object does not exist");
 
-        } catch (IOException| StorageException e) {
+        } catch (IOException| StorageException | DriveException e) {
             throw new BindingAbsentException("Unable to return request object");
         }
 
@@ -98,16 +96,15 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
         try {
             String id = getId(objectPath);
-            List<File> list = drive.files()
+            List<File> list = DriveWrapper.Execute(drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
-                    .setFields("files(id, name)")
-                    .execute()
+                    .setFields("files(id, name)"))
                     .getFiles();
 
             return !list.isEmpty();
 
-        } catch (IOException e) {
+        } catch (IOException | DriveException e) {
             return false;
         }
 
@@ -118,19 +115,18 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
         try {
             String id = getId(objectPath);
-            List<File> list = drive.files()
+            List<File> list = DriveWrapper.Execute(drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
-                    .setFields("files(id, name)")
-                    .execute()
+                    .setFields("files(id, name)"))
                     .getFiles();
 
             if (!list.isEmpty()) {
                 File found = list.get(0); // Ignore all other results
-                drive.files().delete(found.getId()).execute();
+                DriveWrapper.Execute(drive.files().delete(found.getId()));
             }
 
-        } catch (IOException e) {
+        } catch (IOException | DriveException e) {
             throw new BindingAbsentException("Unable to delete object");
         }
     }
@@ -157,12 +153,11 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
             if (parentId != null) fileMetadata.setParents(Collections.singletonList(parentId));
 
-            drive.files()
+            DriveWrapper.Execute(drive.files()
                     .create(fileMetadata)
-                    .setFields("id")
-                    .execute();
+                    .setFields("id"));
 
-        } catch (IOException e) {
+        } catch (IOException | DriveException e) {
             throw new PersistenceException("Unable to create folder with name " + name);
         }
     }
@@ -172,15 +167,14 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
 
         try {
             String folderId = getId(objectPath);
-            FileList list = drive.files()
+            FileList list = DriveWrapper.Execute(drive.files()
                     .list()
                     .setQ("'" + folderId + "' in parents")
-                    .setFields("nextPageToken, files(id, name)")
-                    .execute();
+                    .setFields("nextPageToken, files(id, name)"));
 
 
             return new DirectoryIterator(list, folderId);
-        } catch (IOException e) {
+        } catch (IOException | DriveException e) {
             e.printStackTrace();
         }
 
@@ -215,15 +209,14 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
                     String nextToken = list.getNextPageToken();
 
                     try {
-                        list = drive.files()
+                        list = DriveWrapper.Execute(drive.files()
                                 .list()
                                 .setQ("'" + folderId + "' in parents")
                                 .setFields("nextPageToken, files(id, name)")
-                                .setPageToken(nextToken)
-                                .execute();
+                                .setPageToken(nextToken));
 
                         files = list.getFiles().iterator();
-                    } catch (IOException e) {
+                    } catch (IOException |DriveException e) {
                         return false;
                     }
                 }
@@ -242,7 +235,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
             try {
                 File file = files.next();
                 String name = file.getName();
-                StatefulObject obj = get(name); // TODO - what if it is a folder?
+                StatefulObject obj = get(name);
 
                 return new NameObjectBindingImpl(name, obj);
             } catch (BindingAbsentException e) {
