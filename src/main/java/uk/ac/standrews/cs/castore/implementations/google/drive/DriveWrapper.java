@@ -28,7 +28,7 @@ class DriveWrapper<T> {
 
         int retry = retries;
         while(retry > 0 && totalRetries > 0) {
-            System.out.println("local retries " + retry + "  ---  global retries " + totalRetries);
+            System.out.println(request.toString() + " local retries " + retry + "  ---  global retries " + totalRetries);
             try {
 
                 T t = request.execute();
@@ -42,7 +42,6 @@ class DriveWrapper<T> {
                 try {
                     Thread.sleep(COOL_DOWN_TIMER);
                 } catch (InterruptedException e1) {
-                    System.err.println("timer issue");
                     throw new DriveException();
                 }
             }

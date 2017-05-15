@@ -220,6 +220,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
                         return false;
                     }
                 }
+
             }
 
             return hasNext;
