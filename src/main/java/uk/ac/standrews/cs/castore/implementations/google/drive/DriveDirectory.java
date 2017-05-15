@@ -99,7 +99,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
             List<File> list = DriveWrapper.Execute(drive.files()
                     .list()
                     .setQ("'" + id + "' in parents and name = '" + name + "'")
-                    .setFields("files(id, name)"))
+                    .setFields("files(id, name)"), 1)
                     .getFiles();
 
             return !list.isEmpty();
@@ -216,7 +216,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
                                 .setPageToken(nextToken));
 
                         files = list.getFiles().iterator();
-                    } catch (IOException |DriveException e) {
+                    } catch (IOException | DriveException e) {
                         return false;
                     }
                 }

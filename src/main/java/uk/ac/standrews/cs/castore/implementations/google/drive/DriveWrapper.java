@@ -21,8 +21,14 @@ class DriveWrapper<T> {
 
     static <T> T Execute(DriveRequest<T> request) throws DriveException {
 
-        int retry = 3;
+        return Execute(request, 3);
+    }
+
+    static <T> T Execute(DriveRequest<T> request, int retries) throws DriveException {
+
+        int retry = retries;
         while(retry > 0 && totalRetries > 0) {
+            System.out.println("local retries " + retry + "  ---  global retries " + totalRetries);
             try {
 
                 T t = request.execute();
@@ -36,11 +42,13 @@ class DriveWrapper<T> {
                 try {
                     Thread.sleep(COOL_DOWN_TIMER);
                 } catch (InterruptedException e1) {
+                    System.err.println("timer issue");
                     throw new DriveException();
                 }
             }
         }
 
+        System.err.println("tried a few times, but not useful");
         throw new DriveException();
     }
 }
