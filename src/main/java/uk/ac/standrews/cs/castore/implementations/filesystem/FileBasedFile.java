@@ -17,8 +17,6 @@ import java.io.IOException;
  */
 public class FileBasedFile extends FileBasedStatefulObject implements IFile {
 
-    private Data data;
-
     public FileBasedFile(IDirectory parent, String name) throws StorageException {
         super(parent, name);
 
@@ -32,7 +30,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
     }
 
     public FileBasedFile(IDirectory parent, String name, Data data) throws StorageException {
-        super(parent, name);
+        super(parent, name, data);
 
         try {
             realFile = new File(parent.toFile(), name);
@@ -40,7 +38,6 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
             throw new StorageException("Unable to create file " + name, e);
         }
 
-        this.data = data;
     }
 
     @Override

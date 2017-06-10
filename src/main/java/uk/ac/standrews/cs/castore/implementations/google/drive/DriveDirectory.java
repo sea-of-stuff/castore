@@ -132,6 +132,11 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
     }
 
     @Override
+    public void rename(String oldName, String newName) throws BindingAbsentException {
+
+    }
+
+    @Override
     public void persist() throws PersistenceException {
 
         if (exists()) return;
@@ -211,9 +216,9 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
                     try {
                         list = DriveWrapper.Execute(drive.files()
                                 .list()
+                                .setPageToken(nextToken)
                                 .setQ("'" + folderId + "' in parents")
-                                .setFields("nextPageToken, files(id, name)")
-                                .setPageToken(nextToken));
+                                .setFields("nextPageToken, files(id, name)"));
 
                         files = list.getFiles().iterator();
                     } catch (IOException | DriveException e) {

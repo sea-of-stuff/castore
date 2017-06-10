@@ -1,12 +1,15 @@
 package uk.ac.standrews.cs.castore.implementations.filesystem;
 
+import uk.ac.standrews.cs.castore.data.Data;
 import uk.ac.standrews.cs.castore.exceptions.PersistenceException;
+import uk.ac.standrews.cs.castore.exceptions.RenameException;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.implementations.CommonStatefulObject;
 import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.StatefulObject;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -18,6 +21,12 @@ public abstract class FileBasedStatefulObject extends CommonStatefulObject imple
 
     FileBasedStatefulObject(IDirectory parent, String name) throws StorageException {
         super(name);
+
+        this.parent = parent;
+    }
+
+    FileBasedStatefulObject(IDirectory parent, String name, Data data) throws StorageException {
+        super(name, data);
 
         this.parent = parent;
     }
@@ -39,6 +48,20 @@ public abstract class FileBasedStatefulObject extends CommonStatefulObject imple
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void rename(String newName) throws RenameException {
+
+        try {
+            boolean renamed = realFile.renameTo(new File(parent.toFile(), newName));
+            if (!renamed) throw new RenameException();
+
+            name = newName;
+
+        } catch (IOException e) {
+            throw new RenameException();
+        }
     }
 
     @Override

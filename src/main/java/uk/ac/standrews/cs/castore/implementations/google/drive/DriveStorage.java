@@ -43,6 +43,8 @@ public class DriveStorage extends CommonStorage implements IStorage {
             GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(new java.io.File(credentialFile)))
                     .createScoped(Collections.singleton(DriveScopes.DRIVE_FILE));
 
+            // TODO - use refresh token for google credentials
+
             drive = new Drive.Builder(httpTransport, jsonFactory, credential)
                     .setApplicationName("castore/1.0")
                     .build();
@@ -60,11 +62,6 @@ public class DriveStorage extends CommonStorage implements IStorage {
     @Override
     public IDirectory createDirectory(IDirectory parent, String name) throws StorageException {
         return new DriveDirectory(drive, parent, name);
-    }
-
-    @Override
-    public IDirectory createDirectory(String name) throws StorageException {
-        return new DriveDirectory(drive, root, name);
     }
 
     @Override

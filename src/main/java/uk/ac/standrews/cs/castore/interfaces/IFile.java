@@ -11,16 +11,16 @@ public interface IFile extends StatefulObject {
     /**
      * Explicitly set the data for this file
      *
-     * @param data
-     * @throws DataException
+     * @param data for the file
+     * @throws DataException if the data could not be set
      */
     void setData(Data data) throws DataException;
 
     /**
      * Get the data for this file
      *
-     * @return
-     * @throws DataException
+     * @return the data of the file
+     * @throws DataException if the data could not be retrieved
      */
     Data getData() throws DataException;
 }

@@ -92,6 +92,11 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
     }
 
     @Override
+    public void rename(String oldName, String newName) throws BindingAbsentException {
+
+    }
+
+    @Override
     public void persist() throws PersistenceException {
         try {
             if (exists()) return;

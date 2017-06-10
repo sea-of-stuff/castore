@@ -134,6 +134,11 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
     }
 
     @Override
+    public void rename(String oldName, String newName) throws BindingAbsentException {
+
+    }
+
+    @Override
     public Iterator<NameObjectBinding> getIterator() {
         return new DirectoryIterator(false);
     }

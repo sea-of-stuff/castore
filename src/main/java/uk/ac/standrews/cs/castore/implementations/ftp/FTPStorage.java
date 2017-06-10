@@ -64,11 +64,6 @@ public class FTPStorage extends CommonStorage implements IStorage {
     }
 
     @Override
-    public IDirectory createDirectory(String name) throws StorageException {
-        return null;
-    }
-
-    @Override
     public IFile createFile(IDirectory parent, String filename) throws StorageException {
         return null;
     }

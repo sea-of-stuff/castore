@@ -1,5 +1,7 @@
 package uk.ac.standrews.cs.castore.implementations;
 
+import uk.ac.standrews.cs.castore.data.Data;
+import uk.ac.standrews.cs.castore.exceptions.RenameException;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 
 import static uk.ac.standrews.cs.castore.CastoreConstants.FOLDER_DELIMITER_CHAR;
@@ -17,6 +19,7 @@ public abstract class CommonStatefulObject {
     private static final String LEGAL_CHARS_PATTERN = "[^" + ILLEGAL_CHARS + "]*";
 
     protected String name;
+    protected Data data;
 
     public CommonStatefulObject(String name) throws StorageException {
 
@@ -25,9 +28,17 @@ public abstract class CommonStatefulObject {
         this.name = normalise(name);
     }
 
+    public CommonStatefulObject(String name, Data data) throws StorageException {
+        this(name);
+
+        this.data = data;
+    }
+
     protected CommonStatefulObject() {}
 
     public abstract String getPathname();
+
+    public void rename(String newName) throws RenameException {}
 
     @Override
     public String toString() {
@@ -67,7 +78,7 @@ public abstract class CommonStatefulObject {
      * @param name to be checked
      * @return true if the name is legal
      */
-    protected static boolean NameIsLegal(String name) {
+    static boolean NameIsLegal(String name) {
 
         return name != null && !name.isEmpty() && name.matches(LEGAL_CHARS_PATTERN);
     }

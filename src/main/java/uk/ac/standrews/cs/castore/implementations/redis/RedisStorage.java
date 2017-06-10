@@ -62,11 +62,6 @@ public class RedisStorage extends CommonStorage implements IStorage {
     }
 
     @Override
-    public IDirectory createDirectory(String name) throws StorageException {
-        return createDirectory(root, name);
-    }
-
-    @Override
     public IFile createFile(IDirectory parent, String filename) throws StorageException {
         try(Jedis jedis = pool.getResource()) {
             return new RedisFile(jedis, parent, filename);

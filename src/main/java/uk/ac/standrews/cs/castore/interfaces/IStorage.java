@@ -5,7 +5,6 @@ import uk.ac.standrews.cs.castore.exceptions.DestroyException;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 
 /**
- *
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public interface IStorage {
@@ -44,7 +43,16 @@ public interface IStorage {
     IFile createFile(IDirectory parent, String filename) throws StorageException;
 
     /**
-     * Create a file with some given data at the specified directory
+     * Create a file at the root directory
+     *
+     * @param filename
+     * @return
+     * @throws StorageException
+     */
+    IFile createFile(String filename) throws StorageException;
+
+    /**
+     * Create a file with the given data at the specified directory
      *
      * @param parent
      * @param filename
@@ -55,6 +63,24 @@ public interface IStorage {
     IFile createFile(IDirectory parent, String filename, Data data) throws StorageException;
 
     /**
+     * Create a file at the root directory with the given data
+     *
+     * @param filename
+     * @param data
+     * @return
+     * @throws StorageException
+     */
+    IFile createFile(String filename, Data data) throws StorageException;
+
+    /**
+     * Delete the object
+     *
+     * @param object
+     * @throws StorageException
+     */
+    void delete(StatefulObject object) throws StorageException;
+
+    /**
      * Persist in-memory based storages to disk
      */
     default void persist() { /* NEEDED ONLY FOR IN-MEMORY BASED STORAGES */ }
@@ -62,7 +88,7 @@ public interface IStorage {
     /**
      * Destroy this storage
      *
-     * @throws DestroyException
+     * @throws DestroyException if the storage could not be destroyed
      */
     void destroy() throws DestroyException;
 }

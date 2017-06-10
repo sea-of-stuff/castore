@@ -18,8 +18,6 @@ import java.io.IOException;
  */
 public class FileBasedStorage extends CommonStorage implements IStorage {
 
-    private IDirectory root;
-
     public FileBasedStorage(File rootDirectory) throws StorageException {
 
         root = new FileBasedDirectory(rootDirectory);
@@ -38,11 +36,6 @@ public class FileBasedStorage extends CommonStorage implements IStorage {
     @Override
     public IDirectory createDirectory(IDirectory parent, String name) throws StorageException {
         return new FileBasedDirectory(parent, name);
-    }
-
-    @Override
-    public IDirectory createDirectory(String name) throws StorageException {
-        return createDirectory(root, name);
     }
 
     @Override

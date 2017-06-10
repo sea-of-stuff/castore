@@ -1,6 +1,7 @@
 package uk.ac.standrews.cs.castore.interfaces;
 
 import uk.ac.standrews.cs.castore.exceptions.PersistenceException;
+import uk.ac.standrews.cs.castore.exceptions.RenameException;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,8 @@ public interface StatefulObject {
      * @return
      */
     String getName();
+
+    void rename(String newName) throws RenameException;
 
     /**
      * The path name for the object

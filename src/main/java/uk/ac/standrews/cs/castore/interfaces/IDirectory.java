@@ -38,6 +38,9 @@ public interface IDirectory extends StatefulObject {
      */
     void remove(String name) throws BindingAbsentException;
 
+    // TODO - work in progress. Will be needed for all impls other than filebased dir?
+    void rename(String oldName, String newName) throws BindingAbsentException;
+
     /**
      * An iterator of the Stateful objects contained in this directory.
      *

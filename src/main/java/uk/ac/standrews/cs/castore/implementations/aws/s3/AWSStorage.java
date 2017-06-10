@@ -89,11 +89,6 @@ public class AWSStorage extends CommonStorage implements IStorage {
     }
 
     @Override
-    public IDirectory createDirectory(String name) throws StorageException {
-        return createDirectory(root, name);
-    }
-
-    @Override
     public IFile createFile(IDirectory parent, String filename) throws StorageException {
         return new AWSFile(s3Client, bucketName, parent, filename);
     }

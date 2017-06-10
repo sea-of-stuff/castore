@@ -121,6 +121,11 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
     }
 
     @Override
+    public void rename(String oldName, String newName) throws BindingAbsentException {
+        // DO NOTHING
+    }
+
+    @Override
     public Iterator<NameObjectBinding> getIterator() {
         return new DirectoryIterator(realFile);
     }

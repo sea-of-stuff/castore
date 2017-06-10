@@ -54,11 +54,6 @@ public class DropboxStorage extends CommonStorage implements IStorage {
     }
 
     @Override
-    public IDirectory createDirectory(String name) throws StorageException {
-        return createDirectory(root, name);
-    }
-
-    @Override
     public IFile createFile(IDirectory parent, String filename) throws StorageException {
         return new DropboxFile(client, parent, filename);
     }
