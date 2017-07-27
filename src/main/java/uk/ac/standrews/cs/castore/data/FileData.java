@@ -34,7 +34,12 @@ public class FileData implements Data {
      * @return the underlying data
      */
     public byte[] getState() {
-        byte[] bytes = new byte[(int) getSize()];
+        int size = (int) getSize();
+        if (size == 0) {
+            return new byte[0];
+        }
+
+        byte[] bytes = new byte[size];
         try {
             new FileInputStream(theFile).read(bytes);
         } catch (FileNotFoundException e) {
