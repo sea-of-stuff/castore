@@ -9,6 +9,7 @@ import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
 import uk.ac.standrews.cs.castore.utils.IO;
+import uk.ac.standrews.cs.guid.ALGORITHM;
 import uk.ac.standrews.cs.guid.GUIDFactory;
 import uk.ac.standrews.cs.guid.IGUID;
 import uk.ac.standrews.cs.guid.exceptions.GUIDGenerationException;
@@ -73,7 +74,7 @@ public class RedisFile extends RedisStatefulObject implements IFile {
              InputStream dataFirstClone = new ByteArrayInputStream(baos.toByteArray());
              InputStream dataSecondClone = new ByteArrayInputStream(baos.toByteArray())) {
 
-            IGUID guid = GUIDFactory.generateGUID(dataFirstClone);
+            IGUID guid = GUIDFactory.generateGUID(ALGORITHM.SHA1, dataFirstClone);
 
             // Check if first time adding the data or if data has changed, thus it is an update
             String retrievedGUID = jedis.get(objectPath);
