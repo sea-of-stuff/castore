@@ -10,7 +10,7 @@ import java.io.InputStream;
  *
  * @author al, graham
  */
-public interface Data {
+public interface Data extends AutoCloseable {
 
     /**
      * Gets the object's state.

@@ -21,9 +21,12 @@ public class InputStreamData implements Data {
 
     private static final Logger log = Logger.getLogger(InputStreamData.class.getName());
 
+    private InputStream inputStream;
     private byte[] state;
 
     public InputStreamData(InputStream inputStream) {
+        this.inputStream = inputStream;
+
         // TODO - do not convert it to a byte array. This could be used for large chunks of data!
         try {
             if (inputStream.available() == 0) {
@@ -42,6 +45,7 @@ public class InputStreamData implements Data {
      * @param inputStream a stream containing the underlying data
      */
     public InputStreamData(InputStream inputStream, int expected_byte_count) {
+        this.inputStream = inputStream;
 
         state = new byte[expected_byte_count];
         int bytes_read = 0;
@@ -89,6 +93,11 @@ public class InputStreamData implements Data {
      */
     public InputStream getInputStream() {
         return new ByteArrayInputStream(state);
+    }
+
+    @Override
+    public void close() throws Exception {
+        inputStream.close();
     }
 
     /**

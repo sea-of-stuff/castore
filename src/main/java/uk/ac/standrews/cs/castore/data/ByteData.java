@@ -65,4 +65,9 @@ public class ByteData implements Data {
     public String toString() {
     	return new String(state);
     }
+
+    @Override
+    public void close() throws Exception {
+
+    }
 }

@@ -63,5 +63,10 @@ public class StringData implements Data {
     public String toString() {
         return state;
     }
+
+    @Override
+    public void close() throws Exception {
+
+    }
 }
 

@@ -13,14 +13,12 @@
         <jdk.version>1.8</jdk.version>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
 
         <testng.version>6.11</testng.version>
-        <powermock.version>1.6.6</powermock.version>
+        <powermock.version>1.7.0</powermock.version>
         <mockito.version>2.7.22</mockito.version>
 
         <commons.io.version>2.5</commons.io.version>
-        <okhttp.version>3.7.0</okhttp.version>
         <slf4j.version>1.7.25</slf4j.version>
 
         <aws.s3.version>1.11.123</aws.s3.version>
@@ -53,22 +51,6 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven-shade-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>false</minimizeJar>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -133,11 +115,6 @@
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -170,7 +147,6 @@
             <artifactId>commons-net</artifactId>
             <version>3.6</version>
         </dependency>
-
 
         <!-- Logging -->
         <dependency>

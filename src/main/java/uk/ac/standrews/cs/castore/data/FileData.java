@@ -5,6 +5,7 @@ package uk.ac.standrews.cs.castore.data;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,5 +77,18 @@ public class FileData implements Data {
      */
     public boolean equals( Object o ) {
         return o instanceof Data && Arrays.equals( getState(), ((Data)(o)).getState() );
+    }
+
+    @Override
+    public void close() throws Exception { }
+
+    public String toString() {
+
+        try {
+            return new Scanner(theFile).useDelimiter("\\Z").next();
+        } catch (FileNotFoundException e) {
+            return "";
+        }
+
     }
 }
