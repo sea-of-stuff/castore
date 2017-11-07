@@ -84,10 +84,10 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
         // Write the data to the file.
         byte[] bytes = data.getState();
 
-        try {
-            FileOutputStream output_stream = new FileOutputStream(realFile);
+        try (FileOutputStream output_stream = new FileOutputStream(realFile)){
+
             output_stream.write(bytes);
-            output_stream.close();
+
         } catch (IOException e) {
             throw new PersistenceException("IO Exception while writing to the file at " + realFile.getAbsolutePath(), e);
         }
