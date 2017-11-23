@@ -51,7 +51,7 @@ public class InputStreamData implements Data {
         int bytes_read = 0;
 
         try {
-            int available = 0;
+            int available;
             do {
                 available = inputStream.available();
                 if (available > expected_byte_count) {

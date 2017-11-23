@@ -131,7 +131,7 @@ public class DropboxDirectory extends DropboxStatefulObject implements IDirector
         }
 
         DirectoryIterator() {
-            meta = Collections.EMPTY_LIST.iterator();
+            meta = Collections.<Metadata>emptyList().iterator();
         }
 
         public boolean hasNext() {

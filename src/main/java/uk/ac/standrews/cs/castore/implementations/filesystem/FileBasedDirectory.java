@@ -112,7 +112,10 @@ public class FileBasedDirectory extends FileBasedStatefulObject implements IDire
             if (candidate.isDirectory()) {
                 FileUtils.deleteDirectory(candidate);
             } else {
-                candidate.delete(); // Ignore result - nothing to do with it.
+                boolean successful = candidate.delete(); // Ignore result - nothing to do with it.
+                if (!successful) {
+                    throw new IOException();
+                }
             }
         } catch (IOException e) {
             throw new BindingAbsentException("Unable to delete file/directory " + name);

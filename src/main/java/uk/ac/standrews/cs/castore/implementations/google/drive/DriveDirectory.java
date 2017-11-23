@@ -200,7 +200,7 @@ public class DriveDirectory extends DriveStatefulObject implements IDirectory {
         }
 
         DirectoryIterator() {
-            files = Collections.EMPTY_LIST.iterator();
+            files = Collections.<File>emptyList().iterator();
         }
 
         @Override

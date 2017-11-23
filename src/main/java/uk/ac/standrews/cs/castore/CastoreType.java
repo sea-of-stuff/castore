@@ -24,6 +24,7 @@ public enum CastoreType {
         return text;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static CastoreType getEnum(String value) {
         for(CastoreType v : values())
             if(v.toString().equalsIgnoreCase(value)) return v;

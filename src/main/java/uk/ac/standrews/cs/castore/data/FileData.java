@@ -43,9 +43,12 @@ public class FileData implements Data {
         byte[] bytes = new byte[size];
         try (FileInputStream fileInputStream = new FileInputStream(theFile)){
             fileInputStream.read(bytes);
+
         } catch (FileNotFoundException e) {
+            bytes = new byte[0];
             log.log(Level.SEVERE, "Cannot find file: " + theFile.getName(), e);
         } catch (IOException e) {
+            bytes = new byte[0];
             log.log(Level.SEVERE, "IO Exception on file: " + theFile.getName(), e);
         }
         return bytes;

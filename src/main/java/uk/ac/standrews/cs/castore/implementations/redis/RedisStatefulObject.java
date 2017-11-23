@@ -77,7 +77,7 @@ public abstract class RedisStatefulObject extends CommonStatefulObject implement
         tempFile.deleteOnExit();
 
         try (FileOutputStream output = new FileOutputStream(tempFile);
-             InputStream input = new StringInputStream(jedis.get(objectPath));) {
+             InputStream input = new StringInputStream(jedis.get(objectPath))) {
 
             IOUtils.copy(input, output);
         }
