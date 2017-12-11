@@ -2,6 +2,7 @@ package uk.ac.standrews.cs.castore.data;
 
 import org.apache.commons.io.input.NullInputStream;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -10,7 +11,7 @@ import java.io.InputStream;
  *
  * @author al, graham
  */
-public interface Data extends AutoCloseable {
+public interface Data extends Closeable {
 
     /**
      * Gets the object's state.

@@ -83,7 +83,7 @@ public class FileData implements Data {
     }
 
     @Override
-    public void close() throws Exception { }
+    public void close() throws IOException { }
 
     public String toString() {
 

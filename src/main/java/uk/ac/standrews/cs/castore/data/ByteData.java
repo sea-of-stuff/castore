@@ -4,6 +4,7 @@
 package uk.ac.standrews.cs.castore.data;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
@@ -67,7 +68,7 @@ public class ByteData implements Data {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
 
     }
 }

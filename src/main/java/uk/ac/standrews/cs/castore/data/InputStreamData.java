@@ -96,7 +96,7 @@ public class InputStreamData implements Data {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         inputStream.close();
     }
 

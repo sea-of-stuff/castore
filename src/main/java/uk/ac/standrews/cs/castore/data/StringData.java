@@ -2,6 +2,7 @@ package uk.ac.standrews.cs.castore.data;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
@@ -65,7 +66,7 @@ public class StringData implements Data {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
 
     }
 }
