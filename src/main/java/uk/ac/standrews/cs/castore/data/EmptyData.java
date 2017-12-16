@@ -1,7 +1,5 @@
 package uk.ac.standrews.cs.castore.data;
 
-import java.io.IOException;
-
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
@@ -18,7 +16,5 @@ public class EmptyData implements Data {
     }
 
     @Override
-    public void close() throws IOException {
-
-    }
+    public void close() {}
 }

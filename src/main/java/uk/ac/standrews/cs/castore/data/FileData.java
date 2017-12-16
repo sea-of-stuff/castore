@@ -42,7 +42,10 @@ public class FileData implements Data {
 
         byte[] bytes = new byte[size];
         try (FileInputStream fileInputStream = new FileInputStream(theFile)){
-            fileInputStream.read(bytes);
+            int bytesRead = fileInputStream.read(bytes);
+            if (bytesRead != size) {
+                throw new IOException("Unable to read all bytes correctly");
+            }
 
         } catch (FileNotFoundException e) {
             bytes = new byte[0];
@@ -72,18 +75,22 @@ public class FileData implements Data {
         return new FileInputStream(theFile);
     }
 
-    /**
-     * Tests equality with another instance.
-     * 
-     * @return true if the file's contents are equivalent to those of the given file
-     * @see Object#equals(Object)
-     */
-    public boolean equals( Object o ) {
-        return o instanceof Data && Arrays.equals( getState(), ((Data)(o)).getState() );
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileData fileData = (FileData) o;
+        return Arrays.equals(getState(), fileData.getState());
     }
 
     @Override
-    public void close() throws IOException { }
+    public int hashCode() {
+
+        return Arrays.hashCode(getState());
+    }
+
+    @Override
+    public void close() { }
 
     public String toString() {
 

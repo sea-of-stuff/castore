@@ -23,12 +23,12 @@ public class ByteData implements Data {
      * @param state a byte array containing the underlying data
      */
     public ByteData(byte[] state) {
-        this.state = state;
+        this.state = Arrays.copyOf(state, state.length);
     }
-    
+
     /**
      * Gets the data.
-     * 
+     *
      * @return the underlying data
      */
     public byte[] getState() {
@@ -53,16 +53,19 @@ public class ByteData implements Data {
         return new ByteArrayInputStream(state);
     }
 
-    /**
-     * Tests equality with another instance.
-     *
-     * @return true if the array's contents are equivalent to those of the given array
-     * @see Object#equals(Object)
-     */
-    public boolean equals( Object o ) {
-        return o instanceof Data && Arrays.equals( getState(), ((Data)(o)).getState() );
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ByteData byteData = (ByteData) o;
+        return Arrays.equals(state, byteData.state);
     }
-    
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(state);
+    }
+
     public String toString() {
     	return new String(state);
     }

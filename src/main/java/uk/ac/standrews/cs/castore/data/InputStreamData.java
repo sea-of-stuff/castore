@@ -100,14 +100,18 @@ public class InputStreamData implements Data {
         inputStream.close();
     }
 
-    /**
-     * Tests equality with another instance.
-     *
-     * @return true if the array's contents are equivalent to those of the given array
-     * @see Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object o) {
-        return o instanceof Data && Arrays.equals(getState(), ((Data) (o)).getState());
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InputStreamData inputStreamData = (InputStreamData) o;
+        return Arrays.equals(getState(), inputStreamData.getState());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Arrays.hashCode(getState());
     }
 
     public String toString() {

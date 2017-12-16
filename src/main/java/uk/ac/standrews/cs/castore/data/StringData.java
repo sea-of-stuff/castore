@@ -1,7 +1,6 @@
 package uk.ac.standrews.cs.castore.data;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -47,20 +46,23 @@ public class StringData implements Data {
      *
      * @return an input stream reading from the string
      */
-    public InputStream getInputStream() throws FileNotFoundException {
+    public InputStream getInputStream() {
         return new ByteArrayInputStream(state.getBytes());
     }
 
-    /**
-     * Tests equality with another instance.
-     *
-     * @return true if the string's contents are equivalent to those of the given string
-     * @see Object#equals(Object)
-     */
-    public boolean equals( Object o ) {
-        return o instanceof Data && Arrays.equals( getState(), ((Data)(o)).getState() );
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StringData stringData = (StringData) o;
+        return Arrays.equals(getState(), stringData.getState());
     }
 
+    @Override
+    public int hashCode() {
+
+        return Arrays.hashCode(getState());
+    }
     public String toString() {
         return state;
     }
