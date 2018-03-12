@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 public class StringData extends BaseData {
 
-    private String state;
+    private final String state;
 
     /**
      * Creates an instance using a given string.

@@ -3,6 +3,8 @@
  */
 package uk.ac.standrews.cs.castore.data;
 
+import org.apache.commons.io.input.NullInputStream;
+
 import java.io.*;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -70,8 +72,12 @@ public class FileData extends BaseData {
      * 
      * @return an input stream reading from the file
      */
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new FileInputStream(theFile);
+    public InputStream getInputStream() {
+        try {
+            return new FileInputStream(theFile);
+        } catch (FileNotFoundException e) {
+            return new NullInputStream(0);
+        }
     }
 
     @Override

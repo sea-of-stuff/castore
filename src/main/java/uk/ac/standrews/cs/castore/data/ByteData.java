@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class ByteData extends BaseData  {
 	
-    private byte[] state;
+    private final byte[] state;
     
     /**
      * Creates an instance using a given byte array.

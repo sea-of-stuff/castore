@@ -29,7 +29,7 @@ public interface Data extends Closeable {
     /**
      * Creates an input stream reading from the object's state.
      *
-     * @return an input stream reading from the object's state
+     * @return an input stream reading from the object's state.
      */
     default InputStream getInputStream() {
        return new NullInputStream(0);
