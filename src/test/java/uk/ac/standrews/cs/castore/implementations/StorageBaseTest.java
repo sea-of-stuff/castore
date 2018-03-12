@@ -10,10 +10,9 @@ import uk.ac.standrews.cs.castore.exceptions.DestroyException;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.interfaces.IStorage;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static uk.ac.standrews.cs.castore.CastoreType.*;
+import static uk.ac.standrews.cs.castore.CastoreType.LOCAL;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -29,10 +28,10 @@ public abstract class StorageBaseTest {
     private static final int TEST_DELAY = 100; // Needed to allow any background ops (e.g. s3 needs some time to create buckets and so on)
 
     protected abstract CastoreType getStorageType();
-    protected IStorage storage;
+    IStorage storage;
 
     @BeforeMethod
-    public void setUp(Method method) throws StorageException, InterruptedException {
+    public void setUp(Method method) throws StorageException {
 
         storage = makeStorage(); // Make it, but could have previous status from other tests
         storage.destroy();
@@ -49,16 +48,17 @@ public abstract class StorageBaseTest {
     }
 
     @DataProvider(name = "storage-manager-provider")
-    public static Object[][] indexProvider() throws IOException {
+    public static Object[][] indexProvider() {
         return new Object[][] {
                 {LOCAL},
-                {REDIS},
-                {DROPBOX},
-                {GOOGLE_DRIVE} /*, {AWS} */
+                // {REDIS},
+                // {DROPBOX},
+                // {GOOGLE_DRIVE},
+                // {AWS}
         };
     }
 
-    protected IStorage makeStorage() throws StorageException {
+    IStorage makeStorage() throws StorageException {
         CastoreType type = getStorageType();
         CastoreBuilder builder = makeBuilder(type);
         return CastoreFactory.createStorage(builder);

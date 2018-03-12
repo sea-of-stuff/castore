@@ -11,8 +11,8 @@ import uk.ac.standrews.cs.castore.interfaces.StatefulObject;
  */
 public class NameObjectBindingImpl implements NameObjectBinding {
 
-    private String name;
-    private StatefulObject obj;
+    private final String name;
+    private final StatefulObject obj;
 
     /**
      * Creates a binding between a name and a GUID.

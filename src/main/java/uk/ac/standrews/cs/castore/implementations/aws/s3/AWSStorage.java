@@ -38,9 +38,9 @@ public class AWSStorage extends CommonStorage implements IStorage {
     private static final Region DEFAULT_REGION = Region.getRegion(Regions.EU_WEST_1);
     private static final int KEYS_PER_ITERATION = 20;
 
-    private AmazonS3 s3Client;
+    private final Region region = DEFAULT_REGION;
+    private final AmazonS3 s3Client;
     private String bucketName;
-    private Region region = DEFAULT_REGION;
 
     /**
      * Crea an AWS S3 Storage using default credentials.

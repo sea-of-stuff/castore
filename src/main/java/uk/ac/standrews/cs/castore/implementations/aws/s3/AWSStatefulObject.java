@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import uk.ac.standrews.cs.castore.data.Data;
-import uk.ac.standrews.cs.castore.exceptions.PersistenceException;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.implementations.CommonStatefulObject;
 import uk.ac.standrews.cs.castore.interfaces.IDirectory;
@@ -98,7 +97,7 @@ public abstract class AWSStatefulObject extends CommonStatefulObject implements 
     }
 
     @Override
-    public void persist() throws PersistenceException {
+    public void persist() {
 
         try (InputStream inputStream = getInputStream()) {
 

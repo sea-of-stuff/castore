@@ -3,7 +3,7 @@ package uk.ac.standrews.cs.castore.data;
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
-public class EmptyData implements Data {
+public class EmptyData extends BaseData {
 
     @Override
     public byte[] getState() {
@@ -17,4 +17,5 @@ public class EmptyData implements Data {
 
     @Override
     public void close() {}
+
 }

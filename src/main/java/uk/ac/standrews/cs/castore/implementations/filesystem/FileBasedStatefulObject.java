@@ -17,7 +17,7 @@ import java.io.IOException;
 public abstract class FileBasedStatefulObject extends CommonStatefulObject implements StatefulObject {
 
     protected IDirectory parent;
-    protected File realFile;
+    File realFile;
 
     FileBasedStatefulObject(IDirectory parent, String name) throws StorageException {
         super(name);

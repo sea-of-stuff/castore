@@ -55,10 +55,12 @@ Before using the Redis-based storage, you need [Redis](https://redis.io) install
 
 ### Dropbox
 
-First you need to create a Dropbox app and get an App Token.
+First you need to create a Dropbox app and get an App access token.
 
-**Settings**: type, path to dropbox folder, token
+**Settings**: type, path to dropbox folder, access token
 
+
+More on how to generate an access token [here](https://blogs.dropbox.com/developers/2014/05/generate-an-access-token-for-your-own-account/)
 
 ### Google Drive
 

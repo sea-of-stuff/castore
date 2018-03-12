@@ -15,10 +15,10 @@ import uk.ac.standrews.cs.castore.interfaces.IStorage;
 public class Dropbox {
 
     /**
-     * java Dropbox <APP TOKEN>
+     * java Dropbox <APP ACCESS TOKEN>
      *
-     * @param args
-     * @throws StorageException
+     * @param args the app access token
+     * @throws StorageException if the Dropbox Storage could not be created or another error occurred
      */
     public static void main(String[] args) throws StorageException {
 
@@ -44,5 +44,7 @@ public class Dropbox {
 
         directory.lastModified();
         System.out.println("Just created a dir");
+        System.out.println("Directory path: " + root.getPath());
+        System.out.println("File path: " + file.getPath());
     }
 }

@@ -134,7 +134,7 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
     }
 
     @Override
-    public void rename(String oldName, String newName) throws BindingAbsentException {
+    public void rename(String oldName, String newName) {
 
     }
 
@@ -175,8 +175,8 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
         private ObjectListing listing;
         private Iterator<S3ObjectSummary> summary;
         private List<String> folders = new LinkedList<>();
-        private String prefix;
-        private String delimiter;
+        private final String prefix;
+        private final String delimiter;
         private boolean allLevels;
 
         /**
@@ -212,14 +212,12 @@ public class AWSDirectory extends AWSStatefulObject implements IDirectory {
 
         private ListObjectsRequest getListObjectRequest(String marker) {
             String path = getPathname() + prefix;
-            ListObjectsRequest objectsRequest =
-                    new ListObjectsRequest(bucketName,
-                            path,
-                            marker,
-                            delimiter,
-                            OBJECTS_PER_REQUESTS);
 
-            return objectsRequest;
+            return new ListObjectsRequest(bucketName,
+                    path,
+                    marker,
+                    delimiter,
+                    OBJECTS_PER_REQUESTS);
         }
 
         @Override

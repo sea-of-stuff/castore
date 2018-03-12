@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 import uk.ac.standrews.cs.castore.data.Data;
 import uk.ac.standrews.cs.castore.data.InputStreamData;
-import uk.ac.standrews.cs.castore.exceptions.DataException;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
@@ -72,12 +71,12 @@ public class AWSFile extends AWSStatefulObject implements IFile {
     }
 
     @Override
-    public void setData(Data data) throws DataException {
+    public void setData(Data data) {
         this.data = data;
     }
 
     @Override
-    public Data getData() throws DataException {
+    public Data getData() {
         return data;
     }
 

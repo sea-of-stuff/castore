@@ -22,9 +22,9 @@ public class CastoreFactory {
     private static final Logger log = Logger.getLogger(CastoreFactory.class.getName());
 
     /**
-     * @param builder
-     * @return
-     * @throws StorageException
+     * @param builder containing all the necessary info to create a storage
+     * @return the storage
+     * @throws StorageException if the storage object could not be created
      */
     public static IStorage createStorage(CastoreBuilder builder) throws StorageException {
         IStorage storage;

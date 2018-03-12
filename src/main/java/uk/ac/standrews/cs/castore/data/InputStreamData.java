@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 /**
  * IData implementation that gets data from an input stream.
  *
- * @author al
+ * @author al, sic2
  */
-public class InputStreamData implements Data {
+public class InputStreamData extends BaseData {
 
     private static final Logger log = Logger.getLogger(InputStreamData.class.getName());
 
@@ -74,7 +74,7 @@ public class InputStreamData implements Data {
      * @return the underlying data
      */
     public byte[] getState() {
-        return state;
+        return Arrays.copyOf(state, state.length);
     }
 
     /**
@@ -98,20 +98,6 @@ public class InputStreamData implements Data {
     @Override
     public void close() throws IOException {
         inputStream.close();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        InputStreamData inputStreamData = (InputStreamData) o;
-        return Arrays.equals(getState(), inputStreamData.getState());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Arrays.hashCode(getState());
     }
 
     public String toString() {

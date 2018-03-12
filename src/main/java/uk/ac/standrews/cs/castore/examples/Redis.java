@@ -9,14 +9,12 @@ import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
 import uk.ac.standrews.cs.castore.interfaces.IStorage;
 
-import java.io.IOException;
-
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class Redis {
 
-    public static void main(String[] args) throws IOException, StorageException {
+    public static void main(String[] args) throws StorageException {
 
         CastoreBuilder builder = new CastoreBuilder()
                 .setType(CastoreType.REDIS)

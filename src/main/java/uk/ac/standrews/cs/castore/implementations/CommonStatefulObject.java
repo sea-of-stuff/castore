@@ -48,8 +48,8 @@ public abstract class CommonStatefulObject {
     /**
      * Remove trailing slash
      *
-     * @param path
-     * @return
+     * @param path to normalise
+     * @return normalised path
      */
     protected String normalise(String path) {
         if (path.charAt(path.length() - 1) == FOLDER_DELIMITER_CHAR) {

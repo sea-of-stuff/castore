@@ -4,7 +4,6 @@
 package uk.ac.standrews.cs.castore.data;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,9 +11,9 @@ import java.util.logging.Logger;
 /**
  * IData implementation using a conventional file.
  *
- * @author al
+ * @author al, sic2
  */
-public class FileData implements Data {
+public class FileData extends BaseData {
 
     private static final Logger log = Logger.getLogger( FileData.class.getName() );
 
@@ -73,20 +72,6 @@ public class FileData implements Data {
      */
     public InputStream getInputStream() throws FileNotFoundException {
         return new FileInputStream(theFile);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FileData fileData = (FileData) o;
-        return Arrays.equals(getState(), fileData.getState());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Arrays.hashCode(getState());
     }
 
     @Override

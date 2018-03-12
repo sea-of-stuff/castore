@@ -3,7 +3,6 @@ package uk.ac.standrews.cs.castore.data;
 import org.apache.commons.io.input.NullInputStream;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -31,9 +30,8 @@ public interface Data extends Closeable {
      * Creates an input stream reading from the object's state.
      *
      * @return an input stream reading from the object's state
-     * @throws IOException if the object's state could not be read
      */
-    default InputStream getInputStream() throws IOException {
+    default InputStream getInputStream() {
        return new NullInputStream(0);
     }
 

@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class FileBasedFile extends FileBasedStatefulObject implements IFile {
 
-    public FileBasedFile(IDirectory parent, String name) throws StorageException {
+    FileBasedFile(IDirectory parent, String name) throws StorageException {
         super(parent, name);
 
         try {
@@ -29,7 +29,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
         this.data = new FileData(realFile);
     }
 
-    public FileBasedFile(IDirectory parent, String name, Data data) throws StorageException {
+    FileBasedFile(IDirectory parent, String name, Data data) throws StorageException {
         super(parent, name, data);
 
         try {
@@ -94,7 +94,7 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
     }
 
     @Override
-    public void setData(Data data) throws DataException {
+    public void setData(Data data) {
         this.data = data;
     }
 

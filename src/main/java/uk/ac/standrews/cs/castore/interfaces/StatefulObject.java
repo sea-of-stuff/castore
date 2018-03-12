@@ -5,6 +5,8 @@ import uk.ac.standrews.cs.castore.exceptions.RenameException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * The stateful object interface defines the set of common operations for Files and Directories
@@ -16,7 +18,7 @@ public interface StatefulObject {
     /**
      * Returns the parent of an object
      *
-     * @return
+     * @return parent (as IDirectory) for this object
      */
     IDirectory getParent();
 
@@ -32,32 +34,52 @@ public interface StatefulObject {
     /**
      * The name of the object
      *
-     * @return
+     * @return name
      */
     String getName();
 
+    /**
+     *
+     * @param newName new name for this object
+     * @throws RenameException if object could not be renamed
+     */
     void rename(String newName) throws RenameException;
 
     /**
      * The path name for the object
-     * @return
+     *
+     * @return pathname
      */
     String getPathname();
 
     /**
+     * Path for this object
+     *
+     * @return path
+     */
+    default Path getPath() {
+        return Paths.get(getPathname());
+    }
+
+    /**
      * The time when the object was last modified
      *
-     * @return
+     * @return last modified timestamp
      */
     long lastModified();
 
-    // TODO - is this method necessary?
+    /**
+     * Java.io File representation for this current object
+     *
+     * @return file
+     * @throws IOException if the file could not be returned
+     */
     File toFile() throws IOException;
 
     /**
      * Persist the object into the storage
      *
-     * @throws PersistenceException
+     * @throws PersistenceException if the object could not be persisted
      */
     void persist() throws PersistenceException;
 

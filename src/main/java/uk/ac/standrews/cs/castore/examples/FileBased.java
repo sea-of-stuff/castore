@@ -33,5 +33,7 @@ public class FileBased {
         file.setData(new StringData("Example Data"));
 
         System.out.println("Just created a file named " + file.getName() + " at the following path " + file.getPathname());
+        System.out.println("Directory path: " + root.getPath());
+        System.out.println("File path: " + file.getPath());
     }
 }

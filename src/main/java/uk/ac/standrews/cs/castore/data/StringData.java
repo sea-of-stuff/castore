@@ -1,7 +1,6 @@
 package uk.ac.standrews.cs.castore.data;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
@@ -10,7 +9,7 @@ import java.util.Arrays;
  *
  * @author al
  */
-public class StringData implements Data {
+public class StringData extends BaseData {
 
     private String state;
 
@@ -29,7 +28,7 @@ public class StringData implements Data {
      * @return the underlying data
      */
     public byte[] getState() {
-        return state.getBytes();
+        return Arrays.copyOf(state.getBytes(), state.getBytes().length);
     }
 
     /**
@@ -50,26 +49,11 @@ public class StringData implements Data {
         return new ByteArrayInputStream(state.getBytes());
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StringData stringData = (StringData) o;
-        return Arrays.equals(getState(), stringData.getState());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Arrays.hashCode(getState());
-    }
     public String toString() {
         return state;
     }
 
     @Override
-    public void close() throws IOException {
-
-    }
+    public void close() {}
 }
 

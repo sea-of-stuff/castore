@@ -9,14 +9,12 @@ import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
 import uk.ac.standrews.cs.castore.interfaces.IStorage;
 
-import java.io.IOException;
-
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
 public class AWSS3 {
 
-    public static void main(String[] args) throws IOException, StorageException {
+    public static void main(String[] args) throws StorageException {
 
         CastoreBuilder builder = new CastoreBuilder()
                 .setType(CastoreType.AWS_S3)
@@ -31,6 +29,8 @@ public class AWSS3 {
         file.persist();
 
         System.out.println("Just created a file named " + file.getName() + " at the following path " + file.getPathname());
+        System.out.println("Directory path: " + root.getPath());
+        System.out.println("File path: " + file.getPath());
     }
 
 }

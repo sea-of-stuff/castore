@@ -11,18 +11,18 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 
         <testng.version>6.11</testng.version>
         <powermock.version>1.7.0</powermock.version>
         <mockito.version>2.7.22</mockito.version>
 
-        <commons.io.version>2.5</commons.io.version>
+        <commons.io.version>2.6</commons.io.version>
         <slf4j.version>1.7.25</slf4j.version>
 
-        <aws.s3.version>1.11.123</aws.s3.version>
-        <dropbox.version>3.0.2</dropbox.version>
+        <aws.s3.version>1.11.292</aws.s3.version>
+        <dropbox.version>3.0.6</dropbox.version>
         <jedis.version>2.9.0</jedis.version>
 
         <!-- http://stackoverflow.com/questions/3017695/how-to-configure-encoding-in-maven -->
@@ -59,7 +59,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
+                <version>0.8.0</version>
                 <executions>
                     <execution>
                         <goals>
