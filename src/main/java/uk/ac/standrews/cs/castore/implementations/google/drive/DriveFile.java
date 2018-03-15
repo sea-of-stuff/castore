@@ -15,6 +15,7 @@ import uk.ac.standrews.cs.castore.interfaces.IFile;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 
 /**
@@ -53,6 +54,12 @@ public class DriveFile extends DriveStatefulObject implements IFile {
     @Override
     public Data getData() throws DataException {
         return data;
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+
+        throw new UnsupportedOperationException();
     }
 
     @Override

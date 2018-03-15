@@ -15,10 +15,7 @@ import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,6 +60,16 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
     @Override
     public Data getData() throws DataException {
         return data;
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+
+        try {
+            return client.files().upload(objectPath).getOutputStream();
+        } catch (DbxException e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
@@ -113,7 +120,6 @@ public class DropboxFile extends DropboxStatefulObject implements IFile {
 
     @Override
     public File toFile() throws IOException {
-
 
         final File tempFile = File.createTempFile(TMP_FILE_PREFIX, TMP_FILE_SUFFIX);
         tempFile.deleteOnExit();

@@ -3,6 +3,9 @@ package uk.ac.standrews.cs.castore.interfaces;
 import uk.ac.standrews.cs.castore.data.Data;
 import uk.ac.standrews.cs.castore.exceptions.DataException;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
  */
@@ -23,4 +26,11 @@ public interface IFile extends StatefulObject {
      * @throws DataException if the data could not be retrieved
      */
     Data getData() throws DataException;
+
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
+    OutputStream getOutputStream() throws IOException;
 }

@@ -14,10 +14,7 @@ import uk.ac.standrews.cs.guid.GUIDFactory;
 import uk.ac.standrews.cs.guid.IGUID;
 import uk.ac.standrews.cs.guid.exceptions.GUIDGenerationException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -49,6 +46,12 @@ public class RedisFile extends RedisStatefulObject implements IFile {
     @Override
     public Data getData() throws DataException {
         return data;
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+
+        throw new UnsupportedOperationException();
     }
 
     @Override

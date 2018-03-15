@@ -3,13 +3,17 @@ package uk.ac.standrews.cs.castore.implementations.aws.s3;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
+import org.apache.commons.io.IOUtils;
 import uk.ac.standrews.cs.castore.data.Data;
 import uk.ac.standrews.cs.castore.data.InputStreamData;
 import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,14 +24,14 @@ public class AWSFile extends AWSStatefulObject implements IFile {
 
     private static final Logger log = Logger.getLogger(AWSFile.class.getName());
 
-    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
+    AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent, String name) throws StorageException {
         super(s3Client, bucketName, parent, name);
 
         if (exists()) retrieveAndUpdateData();
 
     }
 
-    public AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent, String name, Data data) throws StorageException {
+    AWSFile(AmazonS3 s3Client, String bucketName, IDirectory parent, String name, Data data) throws StorageException {
         super(s3Client, bucketName, parent, name);
 
         this.data = data;
@@ -78,6 +82,18 @@ public class AWSFile extends AWSStatefulObject implements IFile {
     @Override
     public Data getData() {
         return data;
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+
+        // Not optimal, but it should do the job
+        try (OutputStream out = new ByteArrayOutputStream();
+             InputStream in = s3Client.getObject(getObjectRequest).getObjectContent()) {
+
+            IOUtils.copy(in, out);
+            return out;
+        }
     }
 
     private void retrieveAndUpdateData() {

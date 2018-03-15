@@ -8,9 +8,7 @@ import uk.ac.standrews.cs.castore.exceptions.StorageException;
 import uk.ac.standrews.cs.castore.interfaces.IDirectory;
 import uk.ac.standrews.cs.castore.interfaces.IFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author Simone I. Conte "sic2@st-andrews.ac.uk"
@@ -105,5 +103,10 @@ public class FileBasedFile extends FileBasedStatefulObject implements IFile {
         }
 
         return data;
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws FileNotFoundException {
+        return new FileOutputStream(toFile());
     }
 }
